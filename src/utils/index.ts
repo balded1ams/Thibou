@@ -2,13 +2,13 @@ export const theme = {
     light: {
         name: 'light',
         background: {
-            primary: '#EEEEEE',
-            secondary: '#DDDDDD',
+            primary: '#FAF1E4',
+            secondary: '#E5C5AE',
         },
         text: {
-            primary: '#B4B4B4',
-            secondary: '#444444',
-            title: '#444444',
+            primary: '#453222',
+            secondary: '#886f59',
+            title: '#453222',
         },
     },
     dark: {

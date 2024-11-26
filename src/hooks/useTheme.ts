@@ -10,8 +10,8 @@ export const useTheme = () => {
     const { getLocalStorageValue, setLocalStorageValue } = useLocalStorage();
 
     const [systemTheme, setSystemTheme] = useState<Theme>(() => {
-        const localTheme = getLocalStorageValue('theme');
-        return localTheme ? localTheme : theme.dark;
+        const localTheme = getLocalStorageValue('theme'); //TODO: fix cette ligne qui load des courleur inconnue paper?
+        return theme.light;
     });
 
     const setTheme = useCallback(

@@ -20,11 +20,14 @@ const Header = () => {
             </div>
             <div className='flex gap-4'>
                 <h1 className={'hover:underline text-lg'}
-                style={{color : "#444444"}}>
+                style={{color: systemTheme.text.primary}}>
                     connection
                 </h1>
-                <h1 className={'hover:underline rounded-lg bg-[#dddddd] px-2 text-lg'}
-                style={{color : "white"}}>
+                <h1 className={'hover:underline rounded-lg px-2 text-lg'}
+                style={{
+                    color : systemTheme.text.primary,
+                    backgroundColor: systemTheme.background.secondary,
+                }}>
                     inscription
                 </h1>
             </div>
