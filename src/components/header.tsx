@@ -1,7 +1,8 @@
 import {useThemeContext} from "../hooks/useTheme.ts";
+import {theme} from "../utils/index.ts";
 
 const Header = () => {
-    const { systemTheme } = useThemeContext();
+    const { systemTheme, setTheme } = useThemeContext();
 
     return (
         <header className='flex items-center justify-between py-8 '>
@@ -30,6 +31,9 @@ const Header = () => {
                 }}>
                     inscription
                 </h1>
+                <button onClick={() => setTheme(systemTheme === theme.light ? theme.dark : theme.light)}>
+                    theme
+                </button>
             </div>
         </header>
     );

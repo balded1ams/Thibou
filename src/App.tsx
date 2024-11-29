@@ -4,6 +4,7 @@ import Title from "./components/title.tsx"
 import Intro from "./components/introduction.tsx";
 import Samples from "./components/samples.tsx";
 import {useThemeContext} from "./hooks/useTheme.ts";
+import Footer from "./components/footer.tsx";
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
                 <Start />
                 <Intro/>
                 <Samples/>
-
+                <Footer/>
             </main>
         </div>
     );
