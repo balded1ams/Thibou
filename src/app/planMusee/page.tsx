@@ -1,10 +1,12 @@
-'use client'
+'use client';
 
-import React from 'react'
-import dynamic from 'next/dynamic'
+import React from 'react';
+import dynamic from 'next/dynamic';
 
-const App = dynamic(() => import('./App'), { ssr: false })
+// Dynamically import the App component with SSR disabled
+const App = dynamic(() => import('./App'), { ssr: false });
 
-export function ClientOnly() {
-    return <App/>
+// Convert ClientOnly to the default export
+export default function ClientOnly() {
+    return <App />;
 }
