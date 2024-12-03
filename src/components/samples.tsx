@@ -1,4 +1,4 @@
-import {useThemeContext} from "../hooks/useTheme.ts";
+import {useThemeContext} from "@/hooks/useTheme";
 
 const Samples = () => {
     const { systemTheme } = useThemeContext();

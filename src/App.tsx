@@ -1,11 +1,10 @@
-import Header from "./components/header.tsx";
-import Start from  "./components/getStarted.tsx"
-import Title from "./components/title.tsx"
-import Intro from "./components/introduction.tsx";
-import Samples from "./components/samples.tsx";
-import {useThemeContext} from "./hooks/useTheme.ts";
-import Footer from "./components/footer.tsx";
-
+import Header from "./components/header";
+import Start from  "./components/getStarted"
+import Title from "./components/title"
+import Intro from "./components/introduction";
+import Samples from "./components/samples";
+import {useThemeContext} from "./hooks/useTheme";
+import Footer from "./components/footer";
 
 function App() {
     const { systemTheme } = useThemeContext();

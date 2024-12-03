@@ -1,5 +1,5 @@
-import {useThemeContext} from "../hooks/useTheme.ts";
-import {theme} from "../utils/index.ts";
+import {useThemeContext} from "@/hooks/useTheme";
+import {theme} from "@/utils";
 
 const Header = () => {
     const { systemTheme, setTheme } = useThemeContext();
