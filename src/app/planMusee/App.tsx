@@ -1,31 +1,28 @@
-import React from 'react';
-import { useFindCompletePath } from '@/hooks/useastart';
+import Header from "@/components/header";
+import Plan from  "@/components/plan"
+import Footer from "@/components/footer";
+import {useThemeContext} from "@/hooks/useTheme";
 
-const MazeSolver: React.FC = () => {
-    const { findPoints, findCompletePath } = useFindCompletePath();
-
-    const maze: number[][] = [
-        [0, 0, 1, 0],
-        [1, 0, 1, 0],
-        [0, 0, 0, 2],
-        [0, 1, 0, 0],
-    ];
-
-    const start: [number, number] = [0, 0];
-    const interestPoints = findPoints(maze, 2);
-
-    const path = findCompletePath(maze, start, interestPoints);
-
+function App() {
+    const { systemTheme } = useThemeContext();
     return (
-        <div>
-            <h1>Résultat du chemin :</h1>
-            {path ? (
-                <pre>{JSON.stringify(path, null, 2)}</pre>
-            ) : (
-                <p>Pas de chemin trouvé.</p>
-            )}
+        <div
+            className='h-screen w-full overflow-y-auto'
+            style={{
+                backgroundColor: systemTheme.background.primary,
+                color: systemTheme.text.primary,
+            }}
+        >
+            <main
+                className=' mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0'
+                style={{}}
+            >
+                <Header/>
+                <Plan/>
+                <Footer/>
+            </main>
         </div>
     );
-};
+}
 
-export default MazeSolver;
+export default App;

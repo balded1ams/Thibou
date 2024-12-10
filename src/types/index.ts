@@ -10,3 +10,13 @@ export interface Theme {
         title: string;
     };
 }
+export interface Musee {
+    name: string;
+    map: number[][]; // Représentation de la matrice du musée
+}
+
+export interface Oeuvre {
+    name: string;
+    description: string;
+    coordinates: [number, number];
+}

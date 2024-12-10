@@ -1,10 +1,10 @@
-'use client'
+import '@/index.css'
+import { ClientOnly } from './client'
 
-import React from 'react'
-import dynamic from 'next/dynamic'
+export function generateStaticParams() {
+    return [{ slug: [''] }]
+}
 
-const App = dynamic(() => import('./App'), { ssr: false })
-
-export function ClientOnly() {
-    return <App/>
+export default function Page() {
+    return <ClientOnly />
 }

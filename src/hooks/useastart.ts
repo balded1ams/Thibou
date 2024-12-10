@@ -1,116 +1,136 @@
-import { useCallback } from 'react';
+import { Oeuvre } from '@/types';
+import { musee } from "@/utils";
+import { oeuvres } from '@/utils';
 
-// Définir les types
-type Maze = number[][];
-type Point = [number, number];
+// Fonction principale
+export const useSimplePathfinding = (): number[][] => {
+    const start: [number, number] = [0, 0];
+    const end: [number, number] = [0, 0];
 
-export const useFindCompletePath = () => {
-    // Directions pour le BFS (haut, bas, gauche, droite)
-    const directions: Point[] = [
-        [0, 1], [1, 0], [0, -1], [-1, 0],
-    ];
-
-    // Trouver tous les points d'intérêt ayant une valeur spécifique
-    const findPoints = useCallback((maze: Maze, value: number): Point[] => {
-        const points: Point[] = [];
-        maze.forEach((row, i) => {
-            row.forEach((cell, j) => {
-                if (cell === value) {
-                    points.push([i, j]);
-                }
-            });
-        });
-        return points;
-    }, []);
-
-    // BFS pour trouver un chemin entre deux points
-    const bfs = useCallback(
-        (maze: Maze, start: Point, goal: Point): Point[] | null => {
-            const queue: [Point, Point[]][] = [[start, []]];
-            const visited = new Set<string>();
-
-            while (queue.length > 0) {
-                const [[x, y], path] = queue.shift()!;
-
-                if (x === goal[0] && y === goal[1]) {
-                    return [...path, [x, y]];
-                }
-
-                directions.forEach(([dx, dy]) => {
-                    const nx = x + dx;
-                    const ny = y + dy;
-
-                    if (
-                        nx >= 0 &&
-                        ny >= 0 &&
-                        nx < maze.length &&
-                        ny < maze[0].length &&
-                        maze[nx][ny] !== 1 &&
-                        !visited.has(`${nx},${ny}`)
-                    ) {
-                        visited.add(`${nx},${ny}`);
-                        queue.push([[nx, ny], [...path, [x, y]]]);
-                    }
-                });
-            }
-
-            return null;
-        },
-        [directions]
-    );
-
-    // Trouver le chemin complet en visitant tous les points d'intérêt
-    const findCompletePath = useCallback(
-        (maze: Maze, start: Point, interestPoints: Point[]): Point[] | null => {
-            const points = [start, ...interestPoints, start];
-            let minPath: Point[] | null = null;
-            let minDistance = Infinity;
-
-            const permute = (arr: Point[]): Point[][] => {
-                if (arr.length <= 1) return [arr];
-                return arr.flatMap((item, i) =>
-                    permute([...arr.slice(0, i), ...arr.slice(i + 1)]).map((perm) => [
-                        item,
-                        ...perm,
-                    ])
-                );
-            };
-
-            const permutations = permute(points.slice(1, -1));
-
-            permutations.forEach((perm) => {
-                let currentPath: Point[] = [];
-                let totalDistance = 0;
-                let currentPoint = start;
-
-                for (const nextPoint of perm) {
-                    const segment = bfs(maze, currentPoint, nextPoint);
-                    if (!segment) break;
-
-                    totalDistance += segment.length;
-                    currentPath = [...currentPath, ...segment.slice(0, -1)];
-                    currentPoint = nextPoint;
-                }
-
-                const segmentToStart = bfs(maze, currentPoint, start);
-                if (segmentToStart) {
-                    totalDistance += segmentToStart.length;
-                    currentPath = [...currentPath, ...segmentToStart];
-
-                    if (totalDistance < minDistance) {
-                        minDistance = totalDistance;
-                        minPath = currentPath;
-                    }
-                }
-            });
-
-            return minPath;
-        },
-        [bfs]
-    );
-
-    return {
-        findPoints,
-        findCompletePath,
-    };
+    const cheminComplet = calculerCheminComplet(oeuvres, start, end, musee.map);
+    return genererMatriceAvecChemin(musee.map, cheminComplet);
 };
+
+// Fonction pour calculer un chemin passant par toutes les œuvres
+function calculerCheminComplet(
+    oeuvres: Oeuvre[],
+    start: [number, number],
+    end: [number, number],
+    matrix: number[][]
+): [number, number][] {
+    let chemin: [number, number][] = [];
+    let currentStart = start;
+
+    for (const oeuvre of oeuvres) {
+        const oeuvreChemin = bfs(currentStart, oeuvre.coordinates, matrix);
+        if (oeuvreChemin.length === 0) {
+            console.error(`Impossible d'atteindre l'œuvre : ${oeuvre.name}`);
+            return [];
+        }
+        chemin = chemin.concat(oeuvreChemin.slice(1)); // Éviter les doublons sur le point de départ
+        currentStart = oeuvre.coordinates;
+    }
+
+    const cheminVersSortie = bfs(currentStart, end, matrix);
+    if (cheminVersSortie.length === 0) {
+        console.error("Impossible d'atteindre la sortie");
+        return [];
+    }
+
+    chemin = chemin.concat(cheminVersSortie.slice(1));
+    return chemin;
+}
+
+// Fonction pour générer une matrice avec le chemin
+function genererMatriceAvecChemin(matrix: number[][], chemin: [number, number][]): number[][] {
+    const nouvelleMatrice = matrix.map(row => [...row]);
+
+    for (const [x, y] of chemin) {
+        if (nouvelleMatrice[x][y] === 0) {
+            nouvelleMatrice[x][y] = 3; // Inscrire le chemin avec des 3
+        }
+    }
+
+    return nouvelleMatrice;
+}
+
+// Algorithme BFS pour calculer un chemin entre deux points
+function bfs(
+    start: [number, number],
+    end: [number, number],
+    matrix: number[][]
+): [number, number][] {
+    console.log(`Début du BFS de ${start} à ${end}`);
+
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+
+    if (matrix[start[0]][start[1]] === 1) {
+        console.error(`Point de départ bloqué : ${start}`);
+        return [];
+    }
+    if (matrix[end[0]][end[1]] === 1) {
+        console.error(`Point d'arrivée bloqué : ${end}`);
+        return [];
+    }
+
+    const queue: [number, number][] = [start];
+    const visited = new Set<string>();
+    const cameFrom = new Map<string, [number, number]>();
+    visited.add(start.join(','));
+
+    while (queue.length > 0) {
+        const current = queue.shift()!;
+        console.log(`Visite du nœud : ${current}`);
+
+        if (current[0] === end[0] && current[1] === end[1]) {
+            console.log("Chemin trouvé !");
+            return reconstructPath(cameFrom, current);
+        }
+
+        for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) {
+            const neighbor: [number, number] = [current[0] + dx, current[1] + dy];
+
+            if (
+                neighbor[0] >= 0 && neighbor[0] < rows &&
+                neighbor[1] >= 0 && neighbor[1] < cols &&
+                matrix[neighbor[0]][neighbor[1]] === 0 &&
+                !visited.has(neighbor.join(','))
+            ) {
+                queue.push(neighbor);
+                visited.add(neighbor.join(','));
+                cameFrom.set(neighbor.join(','), current);
+                console.log(`Ajout de ${neighbor} à la file`);
+            }
+        }
+    }
+
+    console.error("Aucun chemin trouvé" + matrix);
+    return [];
+}
+
+// Reconstruction du chemin
+function reconstructPath(
+    cameFrom: Map<string, [number, number]>,
+    current: [number, number]
+): [number, number][] {
+    const path = [current];
+    while (cameFrom.has(current.join(','))) {
+        current = cameFrom.get(current.join(','))!;
+        path.unshift(current);
+    }
+    return path;
+}
+
+
+function testBfs() {
+    const start: [number, number] = [0, 0];
+    const end: [number, number] = oeuvres[0].coordinates;
+
+    console.log("Test BFS 1 : Chemin simple");
+    const result1 = bfs(start, end, musee.map);
+    console.log("Chemin trouvé :", result1);
+}
+
+// Appeler les tests
+testBfs();
