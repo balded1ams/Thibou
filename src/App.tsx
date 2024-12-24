@@ -5,6 +5,7 @@ import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import {useThemeContext} from "./hooks/useTheme";
 import Footer from "./components/footer";
+import ParcoursFrag from "./components/parcoursFrag";
 
 function App() {
     const { systemTheme } = useThemeContext();
@@ -20,12 +21,7 @@ function App() {
                 className=' mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0'
                 style={{}}
             >
-                <Header/>
-                <Title/>
-                <Start />
-                <Intro/>
-                <Samples/>
-                <Footer/>
+                <ParcoursFrag/>
             </main>
         </div>
     );
