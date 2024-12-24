@@ -1,32 +1,33 @@
 import {useThemeContext} from "@/hooks/useTheme";
 
-const parcoursFrag = () => {
+const ParcoursFrag = () => {
     const { systemTheme } = useThemeContext();
 
     return (
-        <body style={{
+        <body className="ml-5" style={{
+            color: systemTheme.text.primary,
             backgroundColor: systemTheme.background.primary,
         }}>
             
-            <nav>
+            <nav className="flex">
                 <button>Retour</button>
                 <h1>Choisissez votre type de parcours</h1>
             </nav>
-            <section>
-                <div>
-                    <img src="" alt="Parcours complet" />
-                    <h2>Parcours complet</h2>
-                    <div>
+            <section className="flex flex-wrap justify-evenly text-sm">
+                <div className="flex flex-col justify-center items-center w-2/5 h-200">
+                    <img src="src/ressources/img_tmp.jpg" alt="Parcours complet" className="h-100" />
+                    <h2 className="text-xl">Parcours complet</h2>
+                    <div className="flex">
                         <p>Temps estimé : </p>
                         <span>30 min</span>
                     </div>
                 </div>
-                <div>
-                    <img src="" alt="Parcours fractionné" />
-                    <h2>Parcours fractionné</h2>
-                    <div>
+                <div className="flex flex-col justify-center items-center w-2/5 h-200">
+                    <img src="@/resources/img_tmp.jpg" alt="Parcours fractionné" />
+                    <h2 className="text-xl">Parcours fractionné</h2>
+                    <div className="flex">
                         <p>Nombre de parties souhaité : </p>
-                        <input type="number" />
+                        <input type="textfield" value={4} className="w-5 h-5" />
                         <p>Temps estimé par partie : </p>
                         <span>30 min</span>
                     </div>
@@ -36,4 +37,4 @@ const parcoursFrag = () => {
     );
 };
 
-export default parcoursFrag;
+export default ParcoursFrag;
