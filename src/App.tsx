@@ -5,6 +5,8 @@ import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import {useThemeContext} from "./hooks/useTheme";
 import Footer from "./components/footer";
+import BoutonDirection from "@/components/boutonDirection";
+import BoutonText from "@/components/boutonText";
 
 function App() {
     const { systemTheme } = useThemeContext();
