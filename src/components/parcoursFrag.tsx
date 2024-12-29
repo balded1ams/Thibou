@@ -1,10 +1,21 @@
 import {useThemeContext} from "@/hooks/useTheme";
+import { kMaxLength } from "buffer";
+import { color } from "bun";
+import Image from "next/image";
+import { isNumberObject } from "util/types";
 
 const ParcoursFrag = () => {
     const { systemTheme } = useThemeContext();
 
+    const onFragClick = async () => {
+        let nbFrag = prompt('En combien de parties voulez-vous diviser le parcours ?');
+        while (!(typeof nbFrag === "number") || !Number.isInteger(nbFrag) || nbFrag < 2 || nbFrag > 10) {
+            nbFrag = prompt('En combien de parties voulez-vous diviser le parcours ?');
+        }
+    }
+
     return (
-        <body className="ml-5" style={{
+        <main className="ml-5" style={{
             color: systemTheme.text.primary,
             backgroundColor: systemTheme.background.primary,
         }}>
@@ -14,26 +25,46 @@ const ParcoursFrag = () => {
                 <h1>Choisissez votre type de parcours</h1>
             </nav>
             <section className="flex flex-wrap justify-evenly text-sm">
-                <div className="flex flex-col justify-center items-center w-2/5 h-200">
-                    <img src="src/ressources/img_tmp.jpg" alt="Parcours complet" className="h-100" />
-                    <h2 className="text-xl">Parcours complet</h2>
+                <div className="flex flex-col justify-center items-center w-2/5 h-200" style={{
+                    backgroundColor: systemTheme.background.secondary,
+                }}>
+                    <a href="#">
+                        <Image 
+                        loader={({ src, width }) =>
+                            `/plan-w-parcours-complet.jpg/${src}?w=${width}`
+                          }
+                          width={kMaxLength}
+                          height={300}
+                          src="/plan-w-parcours-complet.jpg" 
+                          alt="Parcours non divisé"/>
+                        <h2 className="text-xl">Parcours complet</h2>
+                    </a>
                     <div className="flex">
                         <p>Temps estimé : </p>
                         <span>30 min</span>
                     </div>
                 </div>
-                <div className="flex flex-col justify-center items-center w-2/5 h-200">
-                    <img src="@/resources/img_tmp.jpg" alt="Parcours fractionné" />
-                    <h2 className="text-xl">Parcours fractionné</h2>
+                <div className="flex flex-col justify-center items-center w-2/5 h-200" style={{
+                    backgroundColor: systemTheme.background.secondary,
+                }}>
+                    <a href="#" onClick={onFragClick}>
+                        <Image 
+                        loader={({ src, width }) =>
+                            `/plan-w-parcours-frag-1.jpg/${src}?w=${width}`
+                          }
+                        src="/plan-w-parcours-frag-1.jpg"
+                        width={kMaxLength}
+                        height={300} 
+                        alt="Parcours non divisé"/>
+                        <h2 className="text-xl">Parcours fractionné</h2>
+                    </a>
                     <div className="flex">
-                        <p>Nombre de parties souhaité : </p>
-                        <input type="textfield" value={4} className="w-5 h-5" />
                         <p>Temps estimé par partie : </p>
                         <span>30 min</span>
                     </div>
                 </div>
             </section>
-        </body>
+        </main>
     );
 };
 
