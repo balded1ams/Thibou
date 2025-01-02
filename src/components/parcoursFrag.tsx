@@ -3,17 +3,10 @@ import { kMaxLength } from "buffer";
 import { color } from "bun";
 import Image from 'next/image'
 import parcoursCplt from '/public/plan-w-parcours-complet.jpg'
-import parcoursFrag from '/public/plan-w-parcours-frag-1.jpg'
+import parcoursFrag from '/public/plan-w-parcours-frag.jpg'
 
 const ParcoursFrag = () => {
     const { systemTheme } = useThemeContext();
-
-    const onFragClick = async () => {
-        let nbFrag = prompt('En combien de parties voulez-vous diviser le parcours ?');
-        while (!(typeof nbFrag === "number") || !Number.isInteger(nbFrag) || nbFrag < 2 || nbFrag > 10) {
-            nbFrag = prompt('En combien de parties voulez-vous diviser le parcours ?');
-        }
-    }
 
     return (
         <div className="ml-5" style={{
@@ -22,10 +15,15 @@ const ParcoursFrag = () => {
         }}>
             
             <nav className="flex my-10">
-                <button className="px-3 border-2 border-solid border-black rounded" style={{
-                    color: systemTheme.text.primary,
-                    backgroundColor: systemTheme.background.secondary,
-                }}>Retour</button>
+            <button     // Bouton retour
+                className="rounded-xl px-4 py-1 text-lg"
+                style={{
+                    color: systemTheme.text.secondary,
+                    backgroundColor: systemTheme.background.button,
+                }}
+            >
+                Retour
+            </button>
                 <h1 className="text-3xl text-center grow mr-10">Choisissez votre type de parcours</h1>
             </nav>
             <section className="flex flex-wrap justify-evenly text-sm">
@@ -47,7 +45,14 @@ const ParcoursFrag = () => {
                 <div className="flex flex-col justify-center items-center w-2/5 h-200 pb-3 border-2 border-hidden rounded-3xl" style={{
                     backgroundColor: systemTheme.background.secondary,
                 }}>
-                    <a href="#" onClick={onFragClick}>
+                    <a href="#" onClick={ () => {
+                        // Prompt s'exécutant en choisissant un parcours fragmenté
+                        let nbFrag = parseInt(prompt('En combien de parties voulez-vous diviser le parcours ? (Nombre entre 2 et 10)') || '', 10);
+
+                        while (isNaN(nbFrag) || nbFrag < 2 || nbFrag > 10) {
+                            nbFrag = parseInt(prompt('En combien de parties voulez-vous diviser le parcours ? (Nombre entre 2 et 10)') || '', 10);
+                        }}
+                    }>
                     <Image className="p-10"
                         src={parcoursFrag}
                         alt="Parcours divisé"
