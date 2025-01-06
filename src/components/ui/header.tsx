@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                 </h1>
             </div>
 
-      <BurgerMenu />
+            <BurgerMenu />
 
             {/* Menu desktop (visible sur grand écran) */}
             <div className="hidden items-center gap-4 lg:flex">
@@ -49,33 +49,44 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                                 : theme.light
                         )
                     }
-                    className="rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
+                    className="rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
+                    style={{
+                        backgroundColor: systemTheme.background.secondary,
+                        color: systemTheme.text.primary,
+                    }}
                 >
                     Theme
                 </button>
 
-        {/* Boutons "Connexion" et "Inscription" */}
-        {showAuthButtons && (
-          <>
-            <h1
-              className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
-              onClick={() => router.push("/login")}
-            >
-              Connexion
-            </h1>
+                {/* Boutons "Connexion" et "Inscription" */}
+                {showAuthButtons && (
+                    <>
+                        <h1
+                            className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
+                            onClick={() => router.push("/login")}
+                            style={{
+                                color: systemTheme.text.primary,
+                                backgroundColor: systemTheme.background.secondary,
+                            }}
+                        >
+                            Connexion
+                        </h1>
 
-            <h1
-              className="cursor-pointer rounded-lg bg-light-button px-4 py-1 text-lg text-light-textSecondary
-                                transition hover:bg-light-buttonHover"
-              onClick={() => router.push("/signup")}
-            >
-              Inscription
-            </h1>
-          </>
-        )}
-      </div>
-    </header>
-  );
+                        <h1
+                            className="cursor-pointer rounded-lg px-4 py-1 text-lg transition hover:opacity-80"
+                            onClick={() => router.push("/signup")}
+                            style={{
+                                color: systemTheme.text.secondary,
+                                backgroundColor: systemTheme.background.button,
+                            }}
+                        >
+                            Inscription
+                        </h1>
+                    </>
+                )}
+            </div>
+        </header>
+    );
 };
 
 export default Header;
