@@ -13,44 +13,46 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
   const { systemTheme, setTheme } = useThemeContext();
   const router = useRouter(); // Initialiser le hook de navigation
 
-  return (
-    <header className="relative flex items-center justify-between py-8">
-      {/* Logo et titre */}
-      <div
-        className="flex cursor-pointer items-center gap-3 hover:underline"
-        style={{
-          color: systemTheme.text.title,
-        }}
-      >
-        <img
-          className={"max-w-16"}
-          src={"/thibou.png"}
-          alt={"Thibou logo"}
-        />
-        <h1
-          className={`text-2xl font-bold hover:underline lg:text-3xl`}
-        >
-          Thibou.
-        </h1>
-      </div>
+    return (
+        <header className="relative flex items-center justify-between py-8">
+            {/* Logo et titre */}
+            <div
+                className="flex cursor-pointer items-center gap-3 hover:underline"
+                style={{
+                    color: systemTheme.text.title,
+                }}
+                onClick={() => router.push("/")}
+            >
+                <img
+                    className={"max-w-16"}
+                    src={"/thibou.png"}
+                    alt={"Thibou logo"}
+                />
+                <h1
+                    className={`text-2xl font-bold hover:underline lg:text-3xl`}
+                >
+
+                    Thibou.
+                </h1>
+            </div>
 
       <BurgerMenu />
 
-      {/* Menu desktop (visible sur grand écran) */}
-      <div className="hidden items-center gap-4 lg:flex">
-        {/* Bouton pour changer de thème */}
-        <button
-          onClick={() =>
-            setTheme(
-              systemTheme === theme.light
-                ? theme.dark
-                : theme.light
-            )
-          }
-          className="rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
-        >
-          Theme
-        </button>
+            {/* Menu desktop (visible sur grand écran) */}
+            <div className="hidden items-center gap-4 lg:flex">
+                {/* Boutons du menu */}
+                <button
+                    onClick={() =>
+                        setTheme(
+                            systemTheme === theme.light
+                                ? theme.dark
+                                : theme.light
+                        )
+                    }
+                    className="rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
+                >
+                    Theme
+                </button>
 
         {/* Boutons "Connexion" et "Inscription" */}
         {showAuthButtons && (
