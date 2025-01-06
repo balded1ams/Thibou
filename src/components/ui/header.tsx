@@ -1,9 +1,13 @@
+"use client";
+
 import { useThemeContext } from "@/hooks/useTheme";
 import { theme } from "@/utils";
 import BurgerMenu from "@/components/ui/burgerMenu";
+import { useRouter } from "next/navigation"; // Hook pour la navigation
 
 const Header = () => {
     const { systemTheme, setTheme } = useThemeContext();
+    const router = useRouter(); // Initialiser le hook de navigation
 
     return (
         <header className="relative flex items-center justify-between py-8">
@@ -44,7 +48,10 @@ const Header = () => {
                     Theme
                 </button>
 
-                <h1 className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary">
+                <h1
+                    className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
+                    onClick={() => router.push("/login")}
+                >
                     Connection
                 </h1>
 
