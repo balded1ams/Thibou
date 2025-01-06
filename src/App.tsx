@@ -20,7 +20,7 @@ function App() {
                 className=" mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
                 style={{}}
             >
-                <Header />
+                <Header showAuthButtons={true}/>
                 <Title />
                 <Start />
                 <Intro />
