@@ -3,13 +3,21 @@
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 
-const Login: React.FC = () => {
-    const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
+const Signup: React.FC = () => {
+    const { systemTheme } = useThemeContext();
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        if (password !== confirmPassword) {
+            alert("Les mots de passe ne correspondent pas !");
+            return;
+        }
+        // Logique de soumission
+        console.log("Username:", username);
         console.log("Email:", email);
         console.log("Password:", password);
     };
@@ -30,9 +38,32 @@ const Login: React.FC = () => {
                     className="mb-6 text-center text-3xl font-bold"
                     style={{ color: systemTheme.text.title }}
                 >
-                    Connexion
+                    Créer un compte
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label
+                            htmlFor="username"
+                            className="block text-sm font-bold"
+                            style={{ color: systemTheme.text.title }}
+                        >
+                            Nom d'utilisateur
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
+                            style={{
+                                backgroundColor: systemTheme.background.primary,
+                                borderColor: systemTheme.background.button,
+                                color: systemTheme.text.primary,
+                            }}
+                            placeholder="Entrez votre nom d'utilisateur"
+                            required
+                        />
+                    </div>
                     <div>
                         <label
                             htmlFor="email"
@@ -46,7 +77,7 @@ const Login: React.FC = () => {
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-2 w-full rounded-lg border p-3 text-light-title placeholder-opacity-50 shadow-sm focus:outline-none focus:ring-2"
+                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                             style={{
                                 backgroundColor: systemTheme.background.primary,
                                 borderColor: systemTheme.background.button,
@@ -69,13 +100,36 @@ const Login: React.FC = () => {
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-2 w-full rounded-lg border p-3 placeholder-opacity-50 shadow-sm focus:outline-none focus:ring-2"
+                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                             style={{
                                 backgroundColor: systemTheme.background.primary,
                                 borderColor: systemTheme.background.button,
                                 color: systemTheme.text.primary,
                             }}
                             placeholder="Entrez votre mot de passe"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label
+                            htmlFor="confirm-password"
+                            className="block text-sm font-bold"
+                            style={{ color: systemTheme.text.title }}
+                        >
+                            Confirmez votre mot de passe
+                        </label>
+                        <input
+                            type="password"
+                            id="confirm-password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
+                            style={{
+                                backgroundColor: systemTheme.background.primary,
+                                borderColor: systemTheme.background.button,
+                                color: systemTheme.text.primary,
+                            }}
+                            placeholder="Confirmez votre mot de passe"
                             required
                         />
                     </div>
@@ -87,22 +141,22 @@ const Login: React.FC = () => {
                             color: systemTheme.text.secondary,
                         }}
                     >
-                        Se connecter
+                        S'inscrire
                     </button>
                 </form>
                 <p
                     className="mt-4 text-center text-sm"
                     style={{ color: systemTheme.text.primary }}
                 >
-                    Pas encore de compte ?{" "}
+                    Vous avez déjà un compte ?{" "}
                     <a
-                        href="/signup"
+                        href="/login"
                         className="font-bold transition-all hover:underline"
                         style={{
                             color: systemTheme.text.title,
                         }}
                     >
-                        Inscrivez-vous
+                        Connectez-vous
                     </a>
                 </p>
             </div>
@@ -110,4 +164,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Signup;

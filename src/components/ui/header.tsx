@@ -55,7 +55,10 @@ const Header = () => {
                     Connection
                 </h1>
 
-                <h1 className="cursor-pointer rounded-lg bg-light-button px-4 py-1 text-lg text-light-textSecondary transition hover:bg-light-buttonHover">
+                <h1
+                    className="cursor-pointer rounded-lg bg-light-button px-4 py-1 text-lg text-light-textSecondary transition hover:bg-light-buttonHover"
+                    onClick={() => router.push("/signup")}
+                >
                     Inscription
                 </h1>
             </div>
