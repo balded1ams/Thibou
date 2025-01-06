@@ -1,6 +1,6 @@
-import Header from "@/components/header";
-import Plan from  "@/components/plan"
-import Footer from "@/components/footer";
+import Header from "@/components/ui/header";
+import Plan from "@/components/ui/plan"
+import Footer from "@/components/ui/footer";
 import NextOeuvre from "@/components/NextOeuvre";
 import {useThemeContext} from "@/hooks/useTheme";
 

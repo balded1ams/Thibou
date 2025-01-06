@@ -1,6 +1,6 @@
 import { useThemeContext } from "@/hooks/useTheme";
 import { theme } from "@/utils";
-import BurgerMenu from "@/components/burgerMenu";
+import BurgerMenu from "@/components/ui/burgerMenu";
 
 const Header = () => {
     const { systemTheme, setTheme } = useThemeContext();
