@@ -25,8 +25,9 @@ function App() {
                 <Start />
                 <Intro />
                 <Samples />
-                <Footer />
             </main>
+            <Footer />
+
         </div>
     );
 }

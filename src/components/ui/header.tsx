@@ -17,6 +17,7 @@ const Header = () => {
                 style={{
                     color: systemTheme.text.title,
                 }}
+                onClick={() => router.push("/")}
             >
                 <img
                     className={"max-w-16"}
@@ -26,6 +27,7 @@ const Header = () => {
                 <h1
                     className={`text-2xl font-bold hover:underline lg:text-3xl`}
                 >
+
                     Thibou.
                 </h1>
             </div>
