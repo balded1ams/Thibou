@@ -2,7 +2,6 @@ import React from 'react';
 import { Musee, Oeuvre } from '@/types';
 import {musee as museeMap} from '@/utils/index'
 import {oeuvres as oeuvresDefault} from "@/utils/index";
-import {useAStarPathfinding, useSimplePathfinding} from "@/hooks/useastart";
 
 
 interface MuseeDisplayProps {
@@ -17,7 +16,6 @@ const Plan: React.FC<MuseeDisplayProps> = ({
                                                start = [0, 0],
                                                end = [0, 0],
                                                oeuvres = oeuvresDefault}) => {
-    musee.map = useSimplePathfinding();
     const { map } = musee;
 
     const getColor = (row: number, col: number): string => {

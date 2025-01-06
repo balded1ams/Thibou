@@ -1,17 +1,18 @@
-import {useThemeContext} from "@/hooks/useTheme";
+import { useThemeContext } from "@/hooks/useTheme";
 
 const Samples = () => {
     const { systemTheme } = useThemeContext();
 
     return (
-        <div className="flex items-center py-8 "
-        style={{
-            color: systemTheme.text.secondary,
-        }}>
+        <div
+            className="flex items-center py-8 "
+            style={{
+                color: systemTheme.text.primary,
+            }}
+        >
             <h1>Some samples: </h1>
         </div>
     );
 };
 
 export default Samples;
-

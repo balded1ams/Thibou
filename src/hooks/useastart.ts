@@ -6,9 +6,7 @@ import { oeuvres } from '@/utils';
 export const useSimplePathfinding = (): number[][] => {
     const start: [number, number] = [0, 0];
     const end: [number, number] = [0, 0];
-
-    const cheminComplet = calculerCheminComplet(oeuvres, start, end, musee.map);
-    return genererMatriceAvecChemin(musee.map, cheminComplet);
+    calculerCheminComplet(oeuvres, start, end, musee.map);
 };
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
@@ -39,19 +37,6 @@ function calculerCheminComplet(
 
     chemin = chemin.concat(cheminVersSortie.slice(1));
     return chemin;
-}
-
-// Fonction pour générer une matrice avec le chemin
-function genererMatriceAvecChemin(matrix: number[][], chemin: [number, number][]): number[][] {
-    const nouvelleMatrice = matrix.map(row => [...row]);
-
-    for (const [x, y] of chemin) {
-        if (nouvelleMatrice[x][y] === 0) {
-            nouvelleMatrice[x][y] = 3; // Inscrire le chemin avec des 3
-        }
-    }
-
-    return nouvelleMatrice;
 }
 
 // Algorithme BFS pour calculer un chemin entre deux points
@@ -129,7 +114,11 @@ function testBfs() {
 
     console.log("Test BFS 1 : Chemin simple");
     const result1 = bfs(start, end, musee.map);
-    console.log("Chemin trouvé :", result1);
+    console.log("fin", result1, "\n\n\n");
+
+    console.log("Test chemin complet")
+    const result2 = calculerCheminComplet(oeuvres, start, start, musee.map)
+    console.log("fin", result2);
 }
 
 // Appeler les tests
