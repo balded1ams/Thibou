@@ -1,39 +1,56 @@
-import {useThemeContext} from "@/hooks/useTheme";
-import {theme} from "@/utils";
+import { useThemeContext } from "@/hooks/useTheme";
+import { theme } from "@/utils";
+import BurgerMenu from "@/components/burgerMenu";
 
 const Header = () => {
     const { systemTheme, setTheme } = useThemeContext();
 
     return (
-        <header className='flex items-center justify-between py-8 '>
+        <header className="relative flex items-center justify-between py-8">
+            {/* Logo et titre */}
             <div
-                className='flex cursor-pointer items-center gap-3'
+                className="flex cursor-pointer items-center gap-3 hover:underline"
                 style={{
                     color: systemTheme.text.title,
                 }}
             >
-
+                <img
+                    className={"max-w-16"}
+                    src={"/thibou.png"}
+                    alt={"Thibou logo"}
+                />
                 <h1
-                    className={`font-mono text-2xl font-bold hover:underline lg:text-3xl`}
+                    className={`text-2xl font-bold hover:underline lg:text-3xl`}
                 >
                     Thibou.
                 </h1>
             </div>
-            <div className='flex gap-4'>
-                <h1 className={'hover:underline text-lg'}
-                style={{color: systemTheme.text.primary}}>
-                    connection
-                </h1>
-                <h1 className={'hover:underline rounded-lg px-2 text-lg'}
-                style={{
-                    color : systemTheme.text.primary,
-                    backgroundColor: systemTheme.background.secondary,
-                }}>
-                    inscription
-                </h1>
-                <button onClick={() => setTheme(systemTheme === theme.light ? theme.dark : theme.light)}>
-                    theme
+
+            <BurgerMenu />
+
+            {/* Menu desktop (visible sur grand écran) */}
+            <div className="hidden items-center gap-4 lg:flex">
+                {/* Boutons du menu */}
+                <button
+                    onClick={() =>
+                        setTheme(
+                            systemTheme === theme.light
+                                ? theme.dark
+                                : theme.light
+                        )
+                    }
+                    className="rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary"
+                >
+                    Theme
                 </button>
+
+                <h1 className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:bg-light-secondary">
+                    Connection
+                </h1>
+
+                <h1 className="cursor-pointer rounded-lg bg-light-button px-4 py-1 text-lg text-light-textSecondary transition hover:bg-light-buttonHover">
+                    Inscription
+                </h1>
             </div>
         </header>
     );

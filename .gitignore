@@ -2,6 +2,7 @@
 .next
 next-env.d.ts
 dist
+<<<<<<< HEAD
 node_modules/
 .next/
 .env
@@ -10,3 +11,9 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+=======
+node_modules
+.idea
+bun.lockb
+package-lock.json
+>>>>>>> gitignore
