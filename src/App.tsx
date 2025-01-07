@@ -1,10 +1,10 @@
-import Header from "./components/header";
+import Header from "./components/ui/header";
 import Start from "./components/getStarted";
-import Title from "./components/title";
+import Title from "./components/ui/title";
 import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
-import Footer from "./components/footer";
+import Footer from "./components/ui/footer";
 
 function App() {
     const { systemTheme } = useThemeContext();
@@ -20,13 +20,14 @@ function App() {
                 className=" mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
                 style={{}}
             >
-                <Header />
+                <Header showAuthButtons={true}/>
                 <Title />
                 <Start />
                 <Intro />
                 <Samples />
-                <Footer />
             </main>
+            <Footer />
+
         </div>
     );
 }

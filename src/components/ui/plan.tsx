@@ -1,7 +1,7 @@
 import React from 'react';
 import { Musee, Oeuvre } from '@/types';
-import {musee as museeMap} from '@/utils/index'
-import {oeuvres as oeuvresDefault} from "@/utils/index";
+import {musee as museeMap} from '@/utils'
+import {oeuvres as oeuvresDefault} from "@/utils";
 
 
 interface MuseeDisplayProps {
