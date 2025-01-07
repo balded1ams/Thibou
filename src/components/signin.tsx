@@ -2,11 +2,14 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import {useRouter} from "next/navigation";
 
 const Signin: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter();
+
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -97,15 +100,15 @@ const Signin: React.FC = () => {
                     style={{ color: systemTheme.text.primary }}
                 >
                     Pas encore de compte ?{" "}
-                    <a
-                        href="/signup"
-                        className="font-bold transition-all hover:underline"
+                    <span
+                        onClick={() => router.push("/signup")}
+                        className="font-bold transition-all cursor-pointer hover:underline"
                         style={{
                             color: systemTheme.text.title,
                         }}
                     >
                         Inscrivez-vous
-                    </a>
+                    </span>
                 </p>
             </div>
         </div>
