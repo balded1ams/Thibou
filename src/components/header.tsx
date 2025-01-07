@@ -2,19 +2,23 @@
 
 import { useThemeContext } from "@/hooks/useTheme";
 import { theme } from "@/utils";
-import BurgerMenu from "@/components/ui/burgerMenu";
-import { useRouter } from "next/navigation"; // Hook pour la navigation
+import BurgerMenu from "@/components/burgerMenu";
+import { useRouter } from "next/navigation";
+import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
 
 interface HeaderProps {
-  showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
+    showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
 }
 
 const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
-  const { systemTheme, setTheme } = useThemeContext();
-  const router = useRouter(); // Initialiser le hook de navigation
+    const { systemTheme, setTheme } = useThemeContext();
+    const router = useRouter(); // Initialiser le hook de navigation
 
     return (
-        <header className="relative flex items-center justify-between py-8">
+        <header
+            className="relative flex items-center justify-between py-8 "
+            style={{ backgroundColor: systemTheme.background.primary }}
+        >
             {/* Logo et titre */}
             <div
                 className="flex cursor-pointer items-center gap-3 hover:underline"
@@ -36,27 +40,13 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                 </h1>
             </div>
 
+            {/* Menu burger pour mobile */}
             <BurgerMenu />
 
             {/* Menu desktop (visible sur grand écran) */}
             <div className="hidden items-center gap-4 lg:flex">
-                {/* Boutons du menu */}
-                <button
-                    onClick={() =>
-                        setTheme(
-                            systemTheme === theme.light
-                                ? theme.dark
-                                : theme.light
-                        )
-                    }
-                    className="rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
-                    style={{
-                        backgroundColor: systemTheme.background.secondary,
-                        color: systemTheme.text.primary,
-                    }}
-                >
-                    Theme
-                </button>
+
+                <ThemeDropdown />
 
                 {/* Boutons "Connexion" et "Inscription" */}
                 {showAuthButtons && (

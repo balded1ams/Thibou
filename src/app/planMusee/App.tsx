@@ -1,6 +1,6 @@
-import Header from "@/components/ui/header";
+import Header from "@/components/header";
 import Plan from "@/components/plan"
-import Footer from "@/components/ui/footer";
+import Footer from "@/components/footer";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
@@ -22,8 +22,9 @@ function App() {
             >
                 <Header/>
                 <Plan imageUrl={"/logo.jpg"}/>
-                <Footer/>
+
             </main>
+            <Footer/>
         </div>
     );
 }
