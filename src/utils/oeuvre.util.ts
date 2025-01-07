@@ -1,29 +1,37 @@
-import { OeuvreClass } from "@/types/oeuvre.class";
+import { Oeuvre } from "@/types/oeuvre.class";
 
 export class OeuvreUtilitaire {
     /**
      * Récupération d'une oeuvre dans la base de données en connaissant ses coordonnées et instanciation.
      * @param coords Coordonnées de l'oeuvre
      */
-    public static getOeuvreCoords(coords: number[]): Array<OeuvreClass> {
+    public static getOeuvreCoords(coords: number[]): Oeuvre[] {
         let aExecuter: string = "SELECT * FROM Oeuvre o, Emplacement e WHERE o.idOeuvre = e.idOeuvre AND (abscisse, ordonnee) = (";
         aExecuter += coords[0] + ", " + coords[1] + ")";
 
-        // TODO: exécuter la requête aExecuter et retourner toutes les OeuvresClass dans un Array
+        // TODO: exécuter la requête aExecuter et mettre le résultat dans table
+        let table: Oeuvre[]; 
+        return table;
     }
 
     /**
      * Récupération d'une oeuvre dans la base de données en connaissant son nom et instanciation.
      * @param coords Coordonnées de l'oeuvre
      */
-    public static getOeuvreNom(nom: string): OeuvreClass {
+    public static getOeuvreNom(nom: string): Oeuvre {
         let aExecuter: string = "SELECT * FROM Oeuvre WHERE nom = '" + nom + "'";
 
-        /* TODO: exécuter la requête aExecuter et retourner :
-            - Une erreur si le nombre d'oeuvre est > 1.
-            - Une autre erreur si le nombre d'oeuvre est 0.
-            - L'OeuvreClass trouvée sinon.
-        */
+        // TODO: exécuter la requête aExecuter et mettre le résultat dans table
+        let table: Oeuvre[];
+
+        let nbresult: number = table.length;
+        if (nbresult === 0) {
+            throw Error("Il n'y a aucune oeuvre de nom " + nom);
+        } else if (nbresult > 1) {
+            throw Error("Il y a " + nbresult + " oeuvres de nom " + nom);
+        } else {
+            return table[0];
+        }
     }
 
     /**
@@ -37,8 +45,8 @@ export class OeuvreUtilitaire {
         // Tant qu'il n'y a qu'un seul résultat.
         while (nbResult === 1) {
             pointeur++;
-            let reqCour = corpReq + pointeur;
-            // Ajouter la requête ici et récupérer le nombre de résultats dans nbResult
+            let reqCour: string = corpReq + pointeur;
+            // TODO: Ajouter la requête ici et récupérer le nombre de résultats dans nbResult
         }
 
         if (nbResult != 1) {
