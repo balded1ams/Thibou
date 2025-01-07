@@ -1,13 +1,10 @@
 import Header from "@/components/ui/header";
 import Plan from "@/components/ui/plan"
 import Footer from "@/components/ui/footer";
-import NextOeuvre from "@/components/NextOeuvre";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
-    const roomNumber = 5; //exemple de numéro de salle
-    const directions = ["Tournez à gauche", "Continuez tout droit", "Tournez à droite"]; //exemple de liste d'indications, a remplacer à terme par un appel a la BD ?
 
     return (
         <div
@@ -23,7 +20,6 @@ function App() {
             >
                 <Header/>
                 <Plan/>
-                <NextOeuvre roomNumber={roomNumber} directions={directions} />
                 <Footer/>
             </main>
         </div>
