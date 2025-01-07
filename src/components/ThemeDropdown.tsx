@@ -22,7 +22,7 @@ const ThemeDropdown = ({ isMobile = false }: ThemeDropdownProps) => {
             }`}
             style={{
               color: isMobile
-                ? systemTheme.background.button
+                ? systemTheme.text.primary
                 : systemTheme.text.primary,
               backgroundColor: isMobile
                 ? systemTheme.background.primary
@@ -39,15 +39,15 @@ const ThemeDropdown = ({ isMobile = false }: ThemeDropdownProps) => {
             <div className="flex items-center gap-2">
               <div
                 style={{ backgroundColor: systemTheme.background.primary }}
-                className={`aspect-square w-3 rounded-full`}
+                className={`aspect-square w-3 rounded-full border`}
               ></div>
               <div
                 style={{ backgroundColor: systemTheme.text.primary }}
-                className={`aspect-square w-3 rounded-full`}
+                className={`aspect-square w-3 rounded-full border`}
               ></div>
               <div
                 style={{ backgroundColor: systemTheme.text.secondary }}
-                className={`aspect-square w-3 rounded-full`}
+                className={`aspect-square w-3 rounded-full border`}
               ></div>
             </div>
             <svg

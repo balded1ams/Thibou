@@ -41,9 +41,9 @@ const BurgerMenu = () => {
                         <button
                             className="block w-full cursor-pointer rounded-lg border px-4 py-2 text-center text-lg transition-all hover:opacity-90"
                             style={{
-                                color: systemTheme.background.button, // Texte secondaire
-                                backgroundColor: systemTheme.background.primary, // Fond principal
-                                borderColor: systemTheme.background.button, // Couleur de bordure du bouton
+                                color: systemTheme.text.primary,
+                                backgroundColor: systemTheme.background.primary,
+                                borderColor: systemTheme.background.button,
                             }}
                             onClick={() => router.push("/login")}
                         >
@@ -53,8 +53,8 @@ const BurgerMenu = () => {
                         <button
                             className="block w-full cursor-pointer rounded-lg px-4 py-2 text-center text-lg transition-all hover:opacity-90"
                             style={{
-                                color: systemTheme.text.secondary, // Texte secondaire
-                                backgroundColor: systemTheme.background.button, // Bouton
+                                color: systemTheme.text.secondary,
+                                backgroundColor: systemTheme.background.button,
                             }}
                             onClick={() => router.push("/signup")}
                         >
