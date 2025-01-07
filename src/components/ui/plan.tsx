@@ -1,47 +1,46 @@
-import React from 'react';
-import { Musee, Oeuvre } from '@/types';
-import {musee as museeMap} from '@/utils'
-import {oeuvres as oeuvresDefault} from "@/utils";
+import React from "react";
+import { musee } from "@/utils";
+import { pathing } from "@/hooks/useBFS";
 
+const MatrixDisplay = () => {
 
-interface MuseeDisplayProps {
-    musee: Musee;
-    start: [number, number];
-    end: [number, number];
-    oeuvres: Oeuvre[];
-}
+  const rows = musee.map.length;
+  const cols = musee.map[1].length;
 
-const Plan: React.FC<MuseeDisplayProps> = ({
-                                               musee = museeMap,
-                                               start = [0, 0],
-                                               end = [0, 0],
-                                               oeuvres = oeuvresDefault}) => {
-    const { map } = musee;
+  const points = pathing();
 
-    const getColor = (row: number, col: number): string => {
-        if (row === start[0] && col === start[1]) return 'blue'; // Entrée
-        if (row === end[0] && col === end[1]) return 'blue'; // Sortie
-        if (oeuvres.some(o => o.coordinates[0] === row && o.coordinates[1] === col)) return 'yellow'; // Oeuvres
-        return map[row][col] === 1 ? 'black' : 'white'; // Mur ou espace vide
-    };
+  const matrix = Array.from({ length: rows }, () => Array(cols).fill(false));
 
-    return (
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${map[0].length}, 20px)`, gap: '2px' }}>
-            {map.map((row, rowIndex) =>
-                row.map((cell, colIndex) => (
-                    <div
-                        key={`${rowIndex}-${colIndex}`}
-                        style={{
-                            width: '20px',
-                            height: '20px',
-                            backgroundColor: getColor(rowIndex, colIndex),
-                            border: '1px solid #ccc',
-                        }}
-                    ></div>
-                ))
-            )}
-        </div>
-    );
+  // Remplit les positions spécifiées en noir (true)
+  points.forEach(([x, y]) => {
+    if (x >= 0 && x < rows && y >= 0 && y < cols) {
+      matrix[x][y] = true;
+    }
+  });
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateRows: `repeat(${rows}, 20px)`,
+        gridTemplateColumns: `repeat(${cols}, 20px)`,
+        gap: "2px",
+      }}
+    >
+      {matrix.map((row, rowIndex) =>
+        row.map((cell, colIndex) => (
+          <div
+            key={`${rowIndex}-${colIndex}`}
+            style={{
+              width: "20px",
+              height: "20px",
+              backgroundColor: cell ? "black" : "white",
+            }}
+          ></div>
+        ))
+      )}
+    </div>
+  );
 };
 
-export default Plan;
+export default MatrixDisplay;
