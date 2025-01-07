@@ -14,10 +14,19 @@ export interface Theme {
 export interface Musee {
     name: string;
     map: number[][]; // Représentation de la matrice du musée
+    rooms: Salle[];
 }
+
+
 
 export interface Oeuvre {
     name: string;
     description: string;
     coordinates: [number, number];
+}
+
+export interface Salle {
+    name: string;
+    cooUpLeft: [number, number];
+    cooDownRight: [number, number];
 }
