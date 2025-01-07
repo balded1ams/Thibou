@@ -21,7 +21,7 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <Plan/>
+                <Plan imageUrl={"/logo.jpg"}/>
                 <Footer/>
             </main>
         </div>
