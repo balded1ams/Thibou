@@ -1,7 +1,6 @@
 import Header from "@/components/ui/header";
 import Plan from "@/components/ui/plan"
 import Footer from "@/components/ui/footer";
-import NextOeuvre from "@/components/NextOeuvre";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
             >
                 <Header/>
                 <Plan/>
-                <NextOeuvre roomNumber={roomNumber} directions={directions} />
                 <Footer/>
             </main>
         </div>

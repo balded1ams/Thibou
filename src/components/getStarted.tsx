@@ -1,7 +1,9 @@
 import { useThemeContext } from "@/hooks/useTheme";
+import { useRouter } from "next/navigation"; // Hook pour la navigation
 
 const Start = () => {
     const { systemTheme } = useThemeContext();
+    const router = useRouter();
 
     return (
         <div className="flex items-center justify-center py-8 ">
@@ -11,6 +13,7 @@ const Start = () => {
                     color: systemTheme.text.secondary,
                     backgroundColor: systemTheme.background.button,
                 }}
+                onClick={() => router.push("/planMusee")}
             >
                 Commencer en tant qu’invité
             </button>
