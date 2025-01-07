@@ -2,12 +2,6 @@ import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
 
-// Fonction principale
-export const useSimplePathfinding = (): number[][] => {
-    const start: [number, number] = [0, 0];
-    const end: [number, number] = [0, 0];
-    calculerCheminComplet(oeuvres, start, end, musee.map);
-};
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
 function calculerCheminComplet(
@@ -107,6 +101,9 @@ function reconstructPath(
     return path;
 }
 
+export function pathing() {
+    return calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
+}
 
 function testBfs() {
     const start: [number, number] = [0, 0];
@@ -117,7 +114,7 @@ function testBfs() {
     console.log("fin", result1, "\n\n\n");
 
     console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, start, start, musee.map)
+    const result2 = calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
     console.log("fin", result2);
 }
 

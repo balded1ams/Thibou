@@ -1,12 +1,22 @@
-import Signin from "@/components/signin";
-import Footer from "@/components/ui/footer";
-import Header from "@/components/ui/header";
+import AuthThibou from "../../components/login";
+import { useSearchParams, useRouter } from "next/navigation";
+import Footer from "@/components/footer";
+import Header from "@/components/header";
 import { useThemeContext } from "@/hooks/useTheme";
 
 
 function App() {
     const { systemTheme } = useThemeContext();
+    const searchParams = useSearchParams(); // Accéder aux paramètres GET
+    const router = useRouter(); // Router pour changer le paramètre
 
+    // Récupérer la valeur du paramètre "view" (ex: ?view=signup)
+    const view = searchParams.get("view") || "login";
+
+    // Fonction pour basculer entre les vues
+    const handleSwitchView = (newView: "login" | "signup") => {
+        router.push(`?view=${newView}`); // Met à jour l'URL avec le paramètre GET
+    };
     return (
         <div style={{
             backgroundColor: systemTheme.background.primary,
@@ -16,7 +26,7 @@ function App() {
                 backgroundColor: systemTheme.background.primary,
             }}>
                 <Header />
-                <Signin />
+                <AuthThibou />
             </main>
             <Footer />
         </div>

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 
-const Login: React.FC = () => {
+const Signin: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -112,4 +112,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Signin;

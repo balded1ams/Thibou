@@ -1,7 +1,6 @@
-import Header from "@/components/ui/header";
-import Plan from "@/components/ui/plan"
-import Footer from "@/components/ui/footer";
-import NextOeuvre from "@/components/NextOeuvre";
+import Header from "@/components/header";
+import Plan from "@/components/plan"
+import Footer from "@/components/footer";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
@@ -22,10 +21,10 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <Plan/>
-                <NextOeuvre roomNumber={roomNumber} directions={directions} />
-                <Footer/>
+                <Plan imageUrl={"/logo.jpg"}/>
+
             </main>
+            <Footer/>
         </div>
     );
 }
