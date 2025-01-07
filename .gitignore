@@ -6,3 +6,4 @@ node_modules
 .idea
 bun.lockb
 package-lock.json
+node_modules
