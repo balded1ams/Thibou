@@ -20,7 +20,7 @@ export const theme = {
         background: {
             primary: "#011926",
             secondary: "#000C13",
-            button: "#00E980",
+            button: "#1e6042",
         },
         text: {
             primary: "#235A68",
