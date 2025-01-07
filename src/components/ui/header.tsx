@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                     <>
                         <h1
                             className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
-                            onClick={() => router.push("/login")}
+                            onClick={() => router.push("/signin")}
                             style={{
                                 color: systemTheme.text.primary,
                                 backgroundColor: systemTheme.background.secondary,
