@@ -2,8 +2,9 @@
 
 import { useThemeContext } from "@/hooks/useTheme";
 import { theme } from "@/utils";
-import BurgerMenu from "@/components/ui/burgerMenu";
-import { useRouter } from "next/navigation"; // Hook pour la navigation
+import BurgerMenu from "@/components/burgerMenu";
+import { useRouter } from "next/navigation";
+import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
 
 interface HeaderProps {
     showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
@@ -41,23 +42,8 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
 
             {/* Menu desktop (visible sur grand écran) */}
             <div className="hidden items-center gap-4 lg:flex">
-                {/* Bouton pour changer de thème */}
-                <button
-                    onClick={() =>
-                        setTheme(
-                            systemTheme === theme.light
-                                ? theme.dark
-                                : theme.light
-                        )
-                    }
-                    className="rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
-                    style={{
-                        backgroundColor: systemTheme.background.secondary,
-                        color: systemTheme.text.primary,
-                    }}
-                >
-                    Theme
-                </button>
+
+                <ThemeDropdown />
 
                 {/* Boutons "Connexion" et "Inscription" */}
                 {showAuthButtons && (
