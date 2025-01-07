@@ -1,5 +1,5 @@
 import Header from "@/components/ui/header";
-import Plan from "@/components/ui/plan"
+import Plan from "@/components/plan"
 import Footer from "@/components/ui/footer";
 import {useThemeContext} from "@/hooks/useTheme";
 
