@@ -1,4 +1,4 @@
-import AuthThibou from "../../components/singin";
+import Signin from "@/components/signin";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
 import { useThemeContext } from "@/hooks/useTheme";
@@ -16,7 +16,7 @@ function App() {
                 backgroundColor: systemTheme.background.primary,
             }}>
                 <Header />
-                <AuthThibou />
+                <Signin />
             </main>
             <Footer />
         </div>
