@@ -1,3 +1,5 @@
+"use client";
+
 import { useThemeContext } from "@/hooks/useTheme";
 import { theme } from "@/utils";
 import { useState } from "react";
@@ -31,9 +33,11 @@ const BurgerMenu = () => {
                 >
                     <div
                         className="fixed top-28 flex w-4/5 flex-col gap-2 rounded-3xl p-4 shadow-lg backdrop-blur-xl md:w-1/3"
+                        style={{
+                            border: `1px solid ${systemTheme.background.secondary}`,
+                        }}
                         onClick={(e) => e.stopPropagation()} // Empêche la fermeture du menu quand on clique à l'intérieur
                     >
-
                         {/* Boutons du menu */}
 
                         <ThemeDropdown isMobile={true}/>
@@ -46,6 +50,10 @@ const BurgerMenu = () => {
                                 borderColor: systemTheme.background.button,
                             }}
                             onClick={() => router.push("/login")}
+                            style={{
+                                color: systemTheme.background.button,
+                                border: `1px solid ${systemTheme.background.button}`,
+                            }}
                         >
                             Connexion
                         </button>
