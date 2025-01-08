@@ -1,9 +1,9 @@
 import Header from "@/components/header";
-import CustomPage from "@/components/customPage";
 import Footer from "@/components/footer";
 import { useThemeContext } from "@/hooks/useTheme";
 import Category from "@/components/Category";
 import Item from "@/components/Item";
+import Title from "@/components/title";
 
 
 function App() {
@@ -13,12 +13,15 @@ function App() {
         <div style={{
             backgroundColor: systemTheme.background.primary,
         }}>
-            <main className={"max-w-5xl mx-auto flex h-full flex-col gap-4 px-4"}
+            <main className={"max-w-5xl mx-auto flex h-full flex-col gap-4 px-4 min-h-screen"}
                   style={{
                       backgroundColor: systemTheme.background.primary,
                   }}>
                 <Header/>
-                <CustomPage/>
+
+                <Title>Choisissez vos préferences</Title>
+
+                {/*<CustomPage/>*/}
                 <div style={{padding: "2rem", fontFamily: "Arial, sans-serif"}}>
                     <Category title="Type d'œuvre">
                         <Item name="Peinture"/>

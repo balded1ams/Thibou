@@ -16,65 +16,71 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
 
     return (
         <header
-            className="relative flex items-center justify-between py-8 "
-            style={{ backgroundColor: systemTheme.background.primary }}
+            className="relative flex flex-col items-center justify-between py-8"
+            style={{
+                backgroundColor: systemTheme.background.primary ,
+            }}
         >
-            {/* Logo et titre */}
-            <div
-                className="flex cursor-pointer items-center gap-3 hover:underline"
-                style={{
-                    color: systemTheme.text.title,
-                }}
-                onClick={() => router.push("/")}
-            >
-                <img
-                    className={"max-w-16"}
-                    src={"/thibou.png"}
-                    alt={"Thibou logo"}
-                />
-                <h1
-                    className={`text-2xl font-bold hover:underline lg:text-3xl`}
+            <div className="flex w-full items-center justify-between px-4 lg:px-8">
+                {/* Logo et titre */}
+                <div
+                    className="flex cursor-pointer items-center gap-3 hover:underline"
+                    style={{
+                        color: systemTheme.text.title,
+                    }}
+                    onClick={() => router.push("/")}
                 >
+                    <img
+                        className={"max-w-16"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
+                    />
+                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
+                        Thibou.
+                    </h1>
+                </div>
 
-                    Thibou.
-                </h1>
+                {/* Menu burger pour mobile */}
+                <BurgerMenu />
+
+                {/* Menu desktop (visible sur grand écran) */}
+                <div className="hidden items-center gap-4 lg:flex">
+                    <ThemeDropdown />
+                    {/* Boutons "Connexion" et "Inscription" */}
+                    {showAuthButtons && (
+                        <>
+                            <h1
+                                className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
+                                onClick={() => router.push("/signin")}
+                                style={{
+                                    color: systemTheme.text.primary,
+                                    backgroundColor: systemTheme.background.secondary,
+                                }}
+                            >
+                                Connexion
+                            </h1>
+
+                            <h1
+                                className="cursor-pointer rounded-lg px-4 py-1 text-lg transition hover:opacity-80"
+                                onClick={() => router.push("/signup")}
+                                style={{
+                                    color: systemTheme.text.secondary,
+                                    backgroundColor: systemTheme.background.button,
+                                }}
+                            >
+                                Inscription
+                            </h1>
+                        </>
+                    )}
+                </div>
             </div>
 
-            {/* Menu burger pour mobile */}
-            <BurgerMenu />
-
-            {/* Menu desktop (visible sur grand écran) */}
-            <div className="hidden items-center gap-4 lg:flex">
-
-                <ThemeDropdown />
-
-                {/* Boutons "Connexion" et "Inscription" */}
-                {showAuthButtons && (
-                    <>
-                        <h1
-                            className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
-                            onClick={() => router.push("/signin")}
-                            style={{
-                                color: systemTheme.text.primary,
-                                backgroundColor: systemTheme.background.secondary,
-                            }}
-                        >
-                            Connexion
-                        </h1>
-
-                        <h1
-                            className="cursor-pointer rounded-lg px-4 py-1 text-lg transition hover:opacity-80"
-                            onClick={() => router.push("/signup")}
-                            style={{
-                                color: systemTheme.text.secondary,
-                                backgroundColor: systemTheme.background.button,
-                            }}
-                        >
-                            Inscription
-                        </h1>
-                    </>
-                )}
-            </div>
+            <div
+                className="w-1/2 h-[1px] mt-4"
+                style={{
+                    backgroundColor: `${systemTheme.text.primary}AA`,
+                }}
+            />
         </header>
     );
 };

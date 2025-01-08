@@ -10,16 +10,20 @@ const Item: React.FC<ItemProps> = ({ name }) => {
     const [selected, setSelected] = useState<"yes" | "no" | "neutral">("neutral");
 
     return (
+
         <div
-            className="flex items-center justify-between p-2 rounded-md mb-2"
+            className={`flex items-center justify-between py-2 mx-2 border-b last:border-b-0`}
             style={{
                 background: systemTheme.background.secondary,
-                border: `1px solid ${systemTheme.background.primary}`,
+                borderColor: `${systemTheme.background.button}60`,
             }}
         >
+            <div className={`${systemTheme.background}`}>
+
+            </div>
             <span
                 className="flex-1 text-sm"
-                style={{ color: systemTheme.text.primary }}
+                style={{color: systemTheme.text.primary}}
             >
                 {name}
             </span>
@@ -29,13 +33,9 @@ const Item: React.FC<ItemProps> = ({ name }) => {
                     style={{
                         backgroundColor:
                             selected === "no"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
-                        color:
-                            selected === "no"
-                                ? systemTheme.text.secondary
-                                : systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.secondary}`,
+                                ? systemTheme.background.primary
+                                : systemTheme.background.secondary,
+                        color: systemTheme.text.primary,
                     }}
                     onClick={() => setSelected("no")}
                 >
@@ -46,10 +46,9 @@ const Item: React.FC<ItemProps> = ({ name }) => {
                     style={{
                         backgroundColor:
                             selected === "neutral"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
+                                ? systemTheme.background.primary
+                                : systemTheme.background.secondary,
                         color: systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.button}`,
                     }}
                     onClick={() => setSelected("neutral")}
                 >
@@ -60,13 +59,9 @@ const Item: React.FC<ItemProps> = ({ name }) => {
                     style={{
                         backgroundColor:
                             selected === "yes"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
-                        color:
-                            selected === "yes"
-                                ? systemTheme.text.secondary
-                                : systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.button}`,
+                                ? systemTheme.background.primary
+                                : systemTheme.background.secondary,
+                        color: systemTheme.text.primary,
                     }}
                     onClick={() => setSelected("yes")}
                 >

@@ -15,22 +15,25 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
 
     return (
         <div
-            className="mb-4 rounded-lg overflow-hidden"
+            className="mb-4 rounded-lg overflow-hidden max-w-2xl mx-auto"
             style={{
-                border: `1px solid ${systemTheme.background.secondary}`,
-                background: systemTheme.background.primary,
+                background: systemTheme.background.secondary,
+                border: `1px solid ${systemTheme.background.button}60`,
             }}
         >
             {/* Titre cliquable */}
             <div
-                className="flex justify-between items-center px-4 py-3 cursor-pointer transition"
+                className="flex justify-between items-center px-4 py-3 cursor-pointer transition text-center border-b border-0"
                 style={{
                     backgroundColor: isOpen
-                        ? systemTheme.background.button
+                        ? systemTheme.background.secondary
                         : systemTheme.background.secondary,
                     color: isOpen
-                        ? systemTheme.text.secondary
+                        ? systemTheme.text.primary
                         : systemTheme.text.primary,
+                    borderColor: isOpen
+                        ? `${systemTheme.background.button}60`
+                        : systemTheme.background.secondary,
                 }}
                 onClick={toggleOpen}
             >
@@ -49,7 +52,7 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
                 }}
             >
                 <div
-                    className="px-4 py-3"
+                    className="px-4"
                     style={{
                         color: systemTheme.text.secondary,
                     }}
