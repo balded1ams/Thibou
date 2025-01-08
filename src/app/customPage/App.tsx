@@ -1,6 +1,6 @@
-import Header from "@/components/ui/header";
+import Header from "@/components/header";
 import CustomPage from "@/components/customPage";
-import Footer from "@/components/ui/footer";
+import Footer from "@/components/footer";
 import { useThemeContext } from "@/hooks/useTheme";
 
 

@@ -19,7 +19,7 @@ const Signin: React.FC = () => {
 
     return (
         <div
-            className="flex min-h-screen items-center justify-center"
+            className="flex items-center justify-center my-32"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
             <div

@@ -26,7 +26,7 @@ const Signup: React.FC = () => {
 
     return (
         <div
-            className="flex min-h-screen items-center justify-center"
+            className="flex items-center justify-center my-32"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
             <div
@@ -152,7 +152,7 @@ const Signup: React.FC = () => {
                 >
                     Vous avez déjà un compte ?{" "}
                     <span
-                        onClick={() => router.push("/signup")}
+                        onClick={() => router.push("/signin")}
                         className="font-bold transition-all cursor-pointer hover:underline"
                         style={{
                             color: systemTheme.text.title,
