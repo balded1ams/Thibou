@@ -21,8 +21,6 @@ function App() {
                 <Header/>
                 <Plan imageUrl={"/logo.jpg"}/>
 
-                <Plan/>
-                <Footer/>
             </main>
             <Footer/>
         </div>
