@@ -5,17 +5,17 @@ export const theme = {
     light: {
         name: "Thibou",
         background: {
-            primary: "#FAF1E4",
-            secondary: "#FDE6CE",
-            button: "#AB8F79",
-            hover: "#CBAA96",
-            border: "#DCC8B4",
+            primary: "#FFF8F1",      /* Couleur douce et lumineuse pour le fond principal */
+            secondary: "#FDE8D2",   /* Complémentaire légèrement plus foncée pour différencier */
+            button: "#B78C6C",      /* Couleur chaude et distincte pour les boutons */
+            hover: "#D1A88B",       /* Variante plus claire du bouton pour l'effet hover */
+            border: "#E6D4C3",      /* Couleur neutre et discrète pour les bordures */
         },
         text: {
-            primary: "#453222",
-            secondary: "#FAF1E4",
-            title: "#453222",
-            placeholder: "#907567",
+            primary: "#4A2E1A",     /* Texte principal, couleur foncée pour un bon contraste */
+            secondary: "#FFF8F1",   /* Texte secondaire, adapté au fond des boutons */
+            title: "#4A2E1A",       /* Titres, même couleur que le texte principal */
+            placeholder: "#A57F6A", /* Texte des placeholders, ton plus doux que le primaire */
         },
     },
     aurora: {
