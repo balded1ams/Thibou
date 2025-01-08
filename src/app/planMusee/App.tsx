@@ -5,8 +5,6 @@ import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
-    const roomNumber = 5; //exemple de numéro de salle
-    const directions = ["Tournez à gauche", "Continuez tout droit", "Tournez à droite"]; //exemple de liste d'indications, a remplacer à terme par un appel a la BD ?
 
     return (
         <div
