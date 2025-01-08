@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
                 <ul className="mb-4 flex flex-wrap items-center justify-center gap-6 text-sm md:mb-0">
                     <li>
                         <a
-                            href="/"
+                            href="/public"
                             className="hover:underline"
                             style={{ color: systemTheme.text.primary }}
                         >

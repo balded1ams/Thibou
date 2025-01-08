@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import {useRouter} from "next/navigation";
 
 const Signup: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -9,6 +10,7 @@ const Signup: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const router = useRouter();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -149,15 +151,15 @@ const Signup: React.FC = () => {
                     style={{ color: systemTheme.text.primary }}
                 >
                     Vous avez déjà un compte ?{" "}
-                    <a
-                        href="/login"
-                        className="font-bold transition-all hover:underline"
+                    <span
+                        onClick={() => router.push("/signup")}
+                        className="font-bold transition-all cursor-pointer hover:underline"
                         style={{
                             color: systemTheme.text.title,
                         }}
                     >
                         Connectez-vous
-                    </a>
+                    </span>
                 </p>
             </div>
         </div>

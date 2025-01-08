@@ -1,6 +1,6 @@
 import Signup from "@/components/signup";
-import Footer from "@/components/ui/footer";
-import Header from "@/components/ui/header";
+import Footer from "@/components/footer";
+import Header from "@/components/header";
 import { useThemeContext } from "@/hooks/useTheme";
 
 
