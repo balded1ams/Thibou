@@ -1,10 +1,16 @@
 import Header from "@/components/header";
 import Plan from "@/components/plan"
 import Footer from "@/components/footer";
+import Checkbox from "@/components/customCheckBox";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
+
+    const handleCheckboxChange = (state) => {
+        const stateLabel = ["Non coché", "Indéterminé", "Coché"];
+        console.log("Checkbox state:", stateLabel[state]);
+    };
 
     return (
         <div
@@ -20,7 +26,7 @@ function App() {
             >
                 <Header/>
                 <Plan imageUrl={"/logo.jpg"}/>
-
+                <Checkbox onChange={handleCheckboxChange} />
                 <Plan/>
                 <Footer/>
             </main>
