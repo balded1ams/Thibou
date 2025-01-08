@@ -117,8 +117,9 @@ export const theme = {
 };
 
 export const StaticColors = {
-    green: "#00FF00",
-    red: "#FF0000",
+    green: "rgb(124, 225, 124)",
+    red: "rgb(232, 122, 122)",
+    gray: "rgb(128,128,128)",
 }
 
 export const musee: Musee = {
