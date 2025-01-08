@@ -116,6 +116,12 @@ export const theme = {
     },
 };
 
+export const StaticColors = {
+    green: "rgb(124, 225, 124)",
+    red: "rgb(232, 122, 122)",
+    gray: "rgb(128,128,128)",
+}
+
 export const musee: Musee = {
     name: "Grand Musée Imaginaire",
     map: [
