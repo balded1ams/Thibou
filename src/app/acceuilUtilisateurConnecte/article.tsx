@@ -1,6 +1,7 @@
 import { useThemeContext } from "@/hooks/useTheme";
+import Image from "next/image";
 
-export default function Article() {
+const Article = () => {
     const { systemTheme } = useThemeContext();
 
     return (
@@ -47,5 +48,7 @@ export default function Article() {
                 </span>
             </section>
         </article>
-    )
-} 
+    );
+};
+
+export default Article;

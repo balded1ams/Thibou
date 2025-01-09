@@ -1,5 +1,10 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import Salutation from "./salutations";
+import BtnVisite from "./btnNouvVisite";
+import ReprendreTitle from "./reprendreTitle";
+import ReprendreTable from "./reprendreTable";
+import Article from "./article";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
@@ -18,7 +23,10 @@ function App() {
                 style={{}}
             >
                 <Header/>
-
+                <Salutation />
+                <BtnVisite />
+                <ReprendreTitle />
+                <ReprendreTable />
             </main>
             <Footer/>
         </div>
