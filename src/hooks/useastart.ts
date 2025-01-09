@@ -1,7 +1,15 @@
 import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
+import { findSalleForCoordonnee } from './useSalle';
 
+
+// Fonction principale
+export const useSimplePathfinding = (): number[][] => {
+    const start: [number, number] = [0, 0];
+    const end: [number, number] = [0, 0];
+    calculerCheminComplet(oeuvres, start, end, musee.map);
+};
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
 function calculerCheminComplet(
@@ -101,12 +109,41 @@ function reconstructPath(
     return path;
 }
 
-export function pathing() {
-    return calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
+
+function convertCoordinatesToVectors(coordinates: [number, number][]): [number, number][] {
+    const vectors: [number, number][] = [];
+
+    for (let i = 1; i < coordinates.length; i++) {
+        const [x1, y1] = coordinates[i - 1];
+        const [x2, y2] = coordinates[i];
+        vectors.push([x2 - x1, y2 - y1]);
+    }
+
+    return vectors;
 }
-export function pathing2() {
-    return bfs([0, 0], oeuvres[0].coordinate, musee.map)
+
+function convertPartialCoordinatesToVectors(coordinates: [number, number][]): [number, number][] {
+    let startIndex = 0;
+    const endIndex = coordinates.length - 1;
+    const endSalle = findSalleForCoordonnee(coordinates[endIndex]);
+
+    if (!endSalle) {
+        throw new Error('La salle de destination n\'a pas été trouvée.');
+    }
+
+    for (let i = 0; i < coordinates.length; i++) {
+        const salle = findSalleForCoordonnee(coordinates[i]);
+        if (salle && salle.name === endSalle.name) {
+            startIndex = i;
+            break;
+        }
+    }
+
+    const partialCoordinates = coordinates.slice(startIndex);
+    return convertCoordinatesToVectors(partialCoordinates);
 }
+
+
 
 function testBfs() {
     const start: [number, number] = [0, 0];
@@ -117,7 +154,7 @@ function testBfs() {
     console.log("fin", result1, "\n\n\n");
 
     console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
+    const result2 = calculerCheminComplet(oeuvres, start, start, musee.map)
     console.log("fin", result2);
 }
 

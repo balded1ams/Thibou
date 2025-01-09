@@ -153,11 +153,11 @@ export const musee: Musee = {
 };
 
 export const oeuvres: Oeuvre[] = [
-    { name: "Statue 1", description: "Une belle statue", coordinates: [0, 3] },
-    { name: "Peinture 1", description: "Un chef-d'œuvre", coordinates: [10, 13] },
+    { name: "Statue 1", description: "Une belle statue", coordinate: [0, 3] },
+    { name: "Peinture 1", description: "Un chef-d'œuvre", coordinate: [10, 13] },
     {
         name: "Sculpture",
         description: "Une sculpture imposante",
-        coordinates: [3, 10],
+        coordinate: [3, 10],
     },
 ];
