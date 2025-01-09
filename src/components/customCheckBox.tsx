@@ -4,41 +4,48 @@ import { X, Check, Ban } from "lucide-react";
 import { useThemeContext } from "@/hooks/useTheme";
 
 
-
-const Checkbox = ({ state }: { state: number }) => {
+const Checkbox = ({
+                    state,
+                    onChange,
+                  }: {
+  state: number;
+  onChange?: (newState: number) => void;
+}) => {
   const [internalState, setInternalState] = useState<number>(state);
   const { systemTheme } = useThemeContext();
 
 
-  // Synchronise l'état interne avec l'état reçu via les props
   useEffect(() => {
     setInternalState(state);
   }, [state]);
 
   const handleClickLeft = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setInternalState(1); // Refusé
+    setInternalState(1);
+    onChange?.(1); // Notifie le parent
   };
 
   const handleClickRight = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setInternalState(2); // Accepté
+    setInternalState(2);
+    onChange?.(2); // Notifie le parent
   };
 
   const handleReset = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setInternalState(0); // Neutre
+    setInternalState(0);
+    onChange?.(0); // Notifie le parent
   };
 
   return (
     <div
-      className="w-1/2 h-10 items-center rounded-xl flex overflow-hidden justify-between"
+      className="h-10 items-center rounded-xl flex overflow-hidden justify-between w-full lg:w-1/2"
       onClick={handleReset}
       style={{
-        backgroundColor: colors.gray,
+        backgroundColor: systemTheme.background.primary,
+        color: systemTheme.text.primary,
       }}
     >
-      {/* Bouton "Refusé" */}
       <div
         onClick={handleClickLeft}
         className={`flex items-center h-full justify-center transition-all duration-300 ${
@@ -50,21 +57,13 @@ const Checkbox = ({ state }: { state: number }) => {
       >
         <X />
       </div>
-
-      {/* Bouton "Neutre" */}
       <div
         className={`flex items-center h-full justify-center transition-all duration-300 ${
           internalState === 0 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
-        style={{
-          backgroundColor: systemTheme.background.primary,
-          color: systemTheme.text.primary,
-        }}
       >
         <Ban />
       </div>
-
-      {/* Bouton "Accepté" */}
       <div
         onClick={handleClickRight}
         className={`flex items-center h-full justify-center transition-all duration-300 ${
