@@ -26,9 +26,6 @@ function App() {
             >
                 <Header/>
                 <Plan imageUrl={"/logo.jpg"}/>
-                <Checkbox onChange={handleCheckboxChange} />
-                <Plan/>
-                <Footer/>
             </main>
             <Footer/>
         </div>
