@@ -4,9 +4,10 @@ import CustomCheckBox from "@/components/customCheckBox";
 
 interface ItemProps {
     name: string;
+    globalState: number;
 }
 
-const Item: React.FC<ItemProps> = ({ name }) => {
+const Item: React.FC<ItemProps> = ({ name, globalState }) => {
     const { systemTheme } = useThemeContext();
 
     return (
@@ -27,7 +28,7 @@ const Item: React.FC<ItemProps> = ({ name }) => {
             >
                 {name}
             </span>
-            <CustomCheckBox/>
+            <CustomCheckBox state={globalState}/>
         </div>
     );
 };
