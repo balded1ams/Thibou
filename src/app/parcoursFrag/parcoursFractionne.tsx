@@ -33,4 +33,6 @@ const PFractionne = () => {
             </div>
         </div>
     );
-}
+};
+
+export default PFractionne;

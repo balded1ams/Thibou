@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useThemeContext } from "@/hooks/useTheme";
 import parcoursCplt from '/public/plan-w-parcours-complet.jpg'
 
-const PFractionne = () => {
+const PComplet = () => {
     const { systemTheme } = useThemeContext();
 
     return (
@@ -24,4 +24,4 @@ const PFractionne = () => {
     );
 }
 
-export default PFractionne;
+export default PComplet;
