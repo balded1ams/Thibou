@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { StaticColors as colors } from "@/utils/index";
 import { X, Check, Ban } from "lucide-react";
+import { useThemeContext } from "@/hooks/useTheme";
+
+
 
 const Checkbox = ({ state }: { state: number }) => {
   const [internalState, setInternalState] = useState<number>(state);
+  const { systemTheme } = useThemeContext();
+
 
   // Synchronise l'état interne avec l'état reçu via les props
   useEffect(() => {
@@ -27,16 +32,17 @@ const Checkbox = ({ state }: { state: number }) => {
 
   return (
     <div
-      className="w-1/2 h-10 items-center border rounded-xl flex overflow-hidden justify-between bg-amber-50"
+      className="w-1/2 h-10 items-center rounded-xl flex overflow-hidden justify-between"
       onClick={handleReset}
       style={{
         backgroundColor: colors.gray,
       }}
     >
+      {/* Bouton "Refusé" */}
       <div
         onClick={handleClickLeft}
-        className={`flex items-center h-full justify-center border-r transition-all duration-300 ${
-          internalState === 1 ? "w-1/2" : "w-1/4"
+        className={`flex items-center h-full justify-center transition-all duration-300 ${
+          internalState === 1 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
         style={{
           backgroundColor: colors.red,
@@ -45,18 +51,24 @@ const Checkbox = ({ state }: { state: number }) => {
         <X />
       </div>
 
+      {/* Bouton "Neutre" */}
       <div
         className={`flex items-center h-full justify-center transition-all duration-300 ${
-          internalState === 0 ? "w-1/2" : "w-1/4"
+          internalState === 0 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
+        style={{
+          backgroundColor: systemTheme.background.primary,
+          color: systemTheme.text.primary,
+        }}
       >
         <Ban />
       </div>
 
+      {/* Bouton "Accepté" */}
       <div
         onClick={handleClickRight}
-        className={`flex items-center h-full justify-center border-l transition-all duration-300 ${
-          internalState === 2 ? "w-1/2" : "w-1/4"
+        className={`flex items-center h-full justify-center transition-all duration-300 ${
+          internalState === 2 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
         style={{
           backgroundColor: colors.green,
