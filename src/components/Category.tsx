@@ -38,7 +38,7 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
                 onClick={toggleOpen}
             >
                 <h3 className="text-lg font-medium">{title}</h3>
-                <span>{isOpen ? "▲" : "▼"}</span>
+                <span><i className="text-sm mr-1 font-serif">Dérouler </i>{isOpen ? "▲" : "▼"}</span>
             </div>
 
             {/* Contenu avec transition */}
