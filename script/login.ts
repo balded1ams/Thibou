@@ -4,21 +4,22 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 import { validatedAction } from "./middleware";
-import { db } from "@/db";
-import { NewUser, users } from "@/db/schema";
+import { db } from "@/db/db";
+import { utilisateur } from "@/db/schema";
 import { comparePasswords, hashPassword, setSession } from "./session";
+import signin from "@/components/signin";
 
 const authSchema = z.object({
-  username: z.string().min(1),
+  email: z.string().min(1),
   password: z.string().min(1),
 });
-
+/*
 export const signUp = validatedAction(authSchema, async (data) => {
-  const { username, password } = data;
+  const { nomutilisateur, password } = data;
   const existingUser = await db
     .select()
-    .from(users)
-    .where(eq(users.username, username))
+    .from(signin)
+    .where(eq(signin.nomutilisateur, nomutilisateur))
     .limit(1);
 
   if (existingUser.length > 0) {
@@ -28,45 +29,48 @@ export const signUp = validatedAction(authSchema, async (data) => {
   const passwordHash = await hashPassword(password);
 
   const newUser: NewUser = {
-    username,
+      nomutilisateur,
     passwordHash,
   };
 
-  const [createdUser] = await db.insert(users).values(newUser).returning();
+  const [createdUser] = await db.insert(signin).values(newUser).returning();
 
   if (!createdUser) {
-    return { error: "Failed to create user. Please try again." };
+    return { error: "Failed to create signin. Please try again." };
   }
   await setSession(createdUser);
-});
+});*/
 
 export const signIn = validatedAction(authSchema, async (data) => {
-  const { username, password } = data;
-  const ip = (await headers()).get("x-real-ip") ?? "local";
+  const { email, password } = data;
+  //const ip = (await headers()).get("x-real-ip") ?? "local";
 
   const user = await db
     .select({
-      user: users,
+        adressemail: utilisateur,
     })
-    .from(users)
-    .where(eq(users.username, username))
+    .from(utilisateur)
+    .where(eq(utilisateur.adressemail, email))
     .limit(1);
 
+  console.log(user);
   if (user.length === 0) {
     return { error: "Invalid username or password. Please try again." };
   }
 
-  const { user: foundUser } = user[0];
+  const { adressemail: foundUser } = user[0];
 
   const isPasswordValid = await comparePasswords(
     password,
-    foundUser.passwordHash,
+    foundUser.password,
   );
 
   if (!isPasswordValid) {
+    console.log("faux");
     return { error: "Invalid username or password. Please try again." };
   }
-  await setSession(foundUser);
+  console.log("Juste");
+  //await setSession(foundUser);
 });
 
 export async function signOut() {
