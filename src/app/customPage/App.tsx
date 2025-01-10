@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
+import { X, Check, Ban } from "lucide-react";
+import { StaticColors as colors } from "@/utils/index";
 
 function App() {
   const { systemTheme } = useThemeContext();
@@ -32,30 +34,25 @@ function App() {
         <Title>Choisissez vos préférences</Title>
 
         {/* Boutons pour tout accepter ou tout refuser */}
-        <div className="mx-auto flex w-full max-w-2xl justify-between gap-4">
-          <button
+        <div className="mx-auto flex w-full max-w-2xl justify-end gap-8 pr-16">
+          <div
             onClick={handleRejectAll}
-            className="bg-red-500 text-white rounded-lg p-2 border"
+            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
             style={{
-              backgroundColor: systemTheme.background.secondary,
-              border: `1px solid ${systemTheme.background.button}60`,
-              color: systemTheme.text.primary,
+              backgroundColor: colors.red,
             }}
-
           >
-            Tout Refuser
-          </button>
-          <button
+            <X />
+          </div>
+          <div
             onClick={handleAcceptAll}
-            className="bg-red-500 text-white rounded-lg p-2 border"
+            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
             style={{
-              backgroundColor: systemTheme.background.secondary,
-              border: `1px solid ${systemTheme.background.button}60`,
-              color: systemTheme.text.primary,
+              backgroundColor: colors.green,
             }}
           >
-            Tout Accepter
-          </button>
+            <Check />
+          </div>
         </div>
 
         <div>
@@ -103,7 +100,7 @@ function App() {
         </div>
 
         <button
-          className={`w-full py-2 rounded-lg text-white bg-red-500 max-w-2xl mx-auto text-xl`}
+          className={`w-full py-2 rounded-lg text-white bg-red-500 max-w-2xl mx-auto text-xl transition hover:opacity-80`}
           style={{
             backgroundColor: systemTheme.background.button,
             color: systemTheme.text.secondary,
