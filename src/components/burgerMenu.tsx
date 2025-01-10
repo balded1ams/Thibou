@@ -47,9 +47,8 @@ const BurgerMenu = () => {
                             className="block w-full cursor-pointer rounded-lg border px-4 py-2 text-center text-lg
                                         transition-all hover:opacity-90"
                             style={{
-                                color: systemTheme.text.primary,
-                                backgroundColor: systemTheme.background.primary,
-                                borderColor: systemTheme.background.button,
+                                color: systemTheme.text.secondary,
+                                backgroundColor: systemTheme.background.button,
                             }}
                             onClick={() => router.push("/signin")}
                         >
