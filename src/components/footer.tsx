@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import { Unlink2 } from "lucide-react";
 
 const Footer: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -16,7 +17,7 @@ const Footer: React.FC = () => {
         >
             <div className="container mx-auto flex flex-col items-center justify-between px-6 md:flex-row">
                 {/* Section gauche : Logo et texte */}
-                <div className="mb-4 flex items-center gap-3 md:mb-0">
+                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0">
                     <img
                         src="/thibou.png"
                         alt="Logo Thibou"
@@ -28,10 +29,10 @@ const Footer: React.FC = () => {
                     >
                         Thibou.
                     </h1>
-                </div>
+                </ul>
 
                 {/* Section centrale : Liens rapides */}
-                <ul className="mb-4 flex flex-wrap items-center justify-center gap-6 text-sm md:mb-0">
+                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0">
                     <li>
                         <a
                             href="/public"
@@ -71,34 +72,8 @@ const Footer: React.FC = () => {
                 </ul>
 
                 {/* Section droite : Réseaux sociaux */}
-                <div className="flex items-center gap-4">
-                    <a
-                        href="https://twitter.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-twitter">Twitter</i> {/* Icône Twitter */}
-                    </a>
-                    <a
-                        href="https://facebook.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-facebook">Facebook</i> {/* Icône Facebook */}
-                    </a>
-                    <a
-                        href="https://instagram.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-instagram">Instagram</i> {/* Icône Instagram */}
-                    </a>
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                    
                 </div>
             </div>
 
