@@ -53,8 +53,8 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                                 className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
                                 onClick={() => router.push("/signin")}
                                 style={{
-                                    color: systemTheme.text.primary,
-                                    backgroundColor: systemTheme.background.secondary,
+                                    color: systemTheme.text.secondary,
+                                    backgroundColor: systemTheme.background.button,
                                 }}
                             >
                                 Connexion
