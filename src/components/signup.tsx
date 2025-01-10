@@ -53,7 +53,7 @@ const Signup: React.FC = () => {
 
     return (
         <div
-            className="flex items-center justify-center my-32"
+            className="flex items-center justify-center my-16"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
             <div

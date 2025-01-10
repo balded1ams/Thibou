@@ -11,16 +11,12 @@ const Intro = () => {
                     color: systemTheme.text.primary,
                 }}
             >
-                Commençons par rappeler le concept de notre application,
-                celle-ci offre une génération de parcours à l’intérieur d’un
-                musée. Le parcours généré est adapté aux choix de l’utilisateur
-                selon différent critère que on lui aura préalablement proposé.
-                Les utilisateurs aurons en plus du parcours proposé, un outil de
-                guidage présent directement depuis l’application et une carte
-                téléchargeable du parcours pour les personne ni disposant pas de
-                connexion d’internet. En plus de cela les utilisateurs auront
-                accès a des préférences associé a leurs compte comme le montre
-                ce diagramme UML
+                L'application Thibou génère des parcours à l’intérieur de musée.
+                Le parcours généré selon vos choix. Vous indiquez vos préférences
+                et, en plus du parcours proposé, vous aurez un outil de guidage 
+                fait par l’application ainsi qu'une carte téléchargeable du 
+                parcours pour le cas où vous n'aurez pas d'accès internet. Vos
+                préférences seront aussi sauvegardées sur votre compte.
             </p>
         </div>
     );

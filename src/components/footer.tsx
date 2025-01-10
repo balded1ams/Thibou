@@ -2,9 +2,11 @@
 
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import { useRouter } from "next/navigation";
 
 const Footer: React.FC = () => {
     const { systemTheme } = useThemeContext();
+    const router = useRouter();
 
     return (
         <footer
@@ -16,22 +18,25 @@ const Footer: React.FC = () => {
         >
             <div className="container mx-auto flex flex-col items-center justify-between px-6 md:flex-row">
                 {/* Section gauche : Logo et texte */}
-                <div className="mb-4 flex items-center gap-3 md:mb-0">
+                <div
+                    className="flex cursor-pointer items-center gap-3 hover:underline"
+                    style={{
+                        color: systemTheme.text.title,
+                    }}
+                    onClick={() => router.push("/")}
+                >
                     <img
-                        src="/thibou.png"
-                        alt="Logo Thibou"
-                        className="h-10 w-10"
+                        className={"h-10 w-10"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
                     />
-                    <h1
-                        className="text-lg font-bold"
-                        style={{ color: systemTheme.text.title }}
-                    >
+                    <h1 className={`text-lg font-bold hover:underline`}>
                         Thibou.
                     </h1>
                 </div>
 
                 {/* Section centrale : Liens rapides */}
-                <ul className="mb-4 flex flex-wrap items-center justify-center gap-6 text-sm md:mb-0">
+                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0 mr-20 pr-10">
                     <li>
                         <a
                             href="/public"
@@ -52,7 +57,7 @@ const Footer: React.FC = () => {
                     </li>
                     <li>
                         <a
-                            href="/login"
+                            href="/signin"
                             className="hover:underline"
                             style={{ color: systemTheme.text.primary }}
                         >
@@ -71,44 +76,18 @@ const Footer: React.FC = () => {
                 </ul>
 
                 {/* Section droite : Réseaux sociaux */}
-                <div className="flex items-center gap-4">
-                    <a
-                        href="https://twitter.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-twitter">Twitter</i> {/* Icône Twitter */}
-                    </a>
-                    <a
-                        href="https://facebook.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-facebook">Facebook</i> {/* Icône Facebook */}
-                    </a>
-                    <a
-                        href="https://instagram.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-transform hover:scale-110"
-                        style={{ color: systemTheme.text.primary }}
-                    >
-                        <i className="fab fa-instagram">Instagram</i> {/* Icône Instagram */}
-                    </a>
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                    
                 </div>
             </div>
 
             {/* Section bas de page */}
-            <div
-                className="mt-6 text-center text-xs"
+            <legend
+                className="mt-6 text-center text-xs italic"
                 style={{ color: systemTheme.text.primary }}
             >
                 © {new Date().getFullYear()} Thibou. Tous droits réservés.
-            </div>
+            </legend>
         </footer>
     );
 };
