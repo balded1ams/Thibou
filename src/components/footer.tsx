@@ -2,10 +2,11 @@
 
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
-import { Unlink2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Footer: React.FC = () => {
     const { systemTheme } = useThemeContext();
+    const router = useRouter();
 
     return (
         <footer
@@ -17,22 +18,25 @@ const Footer: React.FC = () => {
         >
             <div className="container mx-auto flex flex-col items-center justify-between px-6 md:flex-row">
                 {/* Section gauche : Logo et texte */}
-                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0">
+                <div
+                    className="flex cursor-pointer items-center gap-3 hover:underline"
+                    style={{
+                        color: systemTheme.text.title,
+                    }}
+                    onClick={() => router.push("/")}
+                >
                     <img
-                        src="/thibou.png"
-                        alt="Logo Thibou"
-                        className="h-10 w-10"
+                        className={"h-10 w-10"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
                     />
-                    <h1
-                        className="text-lg font-bold"
-                        style={{ color: systemTheme.text.title }}
-                    >
+                    <h1 className={`text-lg font-bold hover:underline`}>
                         Thibou.
                     </h1>
-                </ul>
+                </div>
 
                 {/* Section centrale : Liens rapides */}
-                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0">
+                <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0 mr-20 pr-10">
                     <li>
                         <a
                             href="/public"
@@ -53,7 +57,7 @@ const Footer: React.FC = () => {
                     </li>
                     <li>
                         <a
-                            href="/login"
+                            href="/signin"
                             className="hover:underline"
                             style={{ color: systemTheme.text.primary }}
                         >
@@ -78,12 +82,12 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Section bas de page */}
-            <div
-                className="mt-6 text-center text-xs"
+            <legend
+                className="mt-6 text-center text-xs italic"
                 style={{ color: systemTheme.text.primary }}
             >
                 © {new Date().getFullYear()} Thibou. Tous droits réservés.
-            </div>
+            </legend>
         </footer>
     );
 };
