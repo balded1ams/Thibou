@@ -1,20 +1,15 @@
 import Header from "@/components/header";
-import Plan from "@/components/plan"
 import Footer from "@/components/footer";
-import Guide from "@/components/guide";
+import Title from "./title";
+import PComplet from "./parcoursComplet";
+import PFractionne from "./parcoursFractionne";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
-    const roomNumber = 5; //exemple de numéro de salle
-
-    const handleCheckboxChange = (state) => {
-        const stateLabel = ["Non coché", "Indéterminé", "Coché"];
-        console.log("Checkbox state:", stateLabel[state]);
-    };
 
     return (
-        <div
+        <body
             className='h-screen w-full overflow-y-auto'
             style={{
                 backgroundColor: systemTheme.background.primary,
@@ -26,14 +21,16 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <div className="flex flex-row xl:flex-col ">
-                    <Plan imageUrl={"/logo.jpg"}/>
-                    <Guide />
-                </div>
+                <Title />
+                <section className="flex flex-wrap justify-evenly text-sm">
+                    <PComplet />
+                    <PFractionne />
+                </section>
+
             </main>
             <Footer/>
-        </div>
+        </body>
     );
-}
+};
 
 export default App;

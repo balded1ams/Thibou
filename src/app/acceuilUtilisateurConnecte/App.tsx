@@ -1,17 +1,14 @@
 import Header from "@/components/header";
-import Plan from "@/components/plan"
 import Footer from "@/components/footer";
-import Guide from "@/components/guide";
+import Salutation from "./salutations";
+import BtnVisite from "./btnNouvVisite";
+import ReprendreTitle from "./reprendreTitle";
+import ReprendreTable from "./reprendreTable";
+import Article from "./article";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
-    const roomNumber = 5; //exemple de numéro de salle
-
-    const handleCheckboxChange = (state) => {
-        const stateLabel = ["Non coché", "Indéterminé", "Coché"];
-        console.log("Checkbox state:", stateLabel[state]);
-    };
 
     return (
         <div
@@ -26,10 +23,10 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <div className="flex flex-row xl:flex-col ">
-                    <Plan imageUrl={"/logo.jpg"}/>
-                    <Guide />
-                </div>
+                <Salutation />
+                <BtnVisite />
+                <ReprendreTitle />
+                <ReprendreTable />
             </main>
             <Footer/>
         </div>

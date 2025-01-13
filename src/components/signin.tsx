@@ -2,24 +2,48 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
-import {useRouter} from "next/navigation";
 
-const Signin: React.FC = () => {
+const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter();
 
+    interface ResponseMessage {
+        message: string;
+    }
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+
+            const response = await fetch('/api/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+/*
+            if (!response.ok) {
+                throw new Error('Erreur lors de la soumission');
+            }*/
+
+            console.log("Test4");
+
+            const result: ResponseMessage = await response.json();
+            console.log(result.message); // Affiche le message du serveur
+
+        } catch (error: any) {
+            console.error(error.message || 'Erreur inattendue');
+        }
         console.log("Email:", email);
         console.log("Password:", password);
     };
 
     return (
         <div
-            className="flex items-center justify-center my-32"
+            className="flex items-center justify-center my-16"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
             <div
@@ -100,19 +124,19 @@ const Signin: React.FC = () => {
                     style={{ color: systemTheme.text.primary }}
                 >
                     Pas encore de compte ?{" "}
-                    <span
-                        onClick={() => router.push("/signup")}
-                        className="font-bold transition-all cursor-pointer hover:underline"
+                    <a
+                        href="/signup"
+                        className="font-bold transition-all hover:underline"
                         style={{
                             color: systemTheme.text.title,
                         }}
                     >
                         Inscrivez-vous
-                    </span>
+                    </a>
                 </p>
             </div>
         </div>
     );
 };
 
-export default Signin;
+export default Login;

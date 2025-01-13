@@ -11,7 +11,7 @@ function App() {
         <div style={{
             backgroundColor: systemTheme.background.primary,
         }}>
-            <main className={"max-w-5xl mx-auto flex h-full flex-col gap-4 px-4"}
+            <main className={"max-w-5xl mx-auto flex h-full flex-col gap-4 px-4 min-h-screen"}
                   style={{
                       backgroundColor: systemTheme.background.primary,
                   }}>

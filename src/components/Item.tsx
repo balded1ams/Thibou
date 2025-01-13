@@ -1,80 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import Checkbox from "@/components/customCheckBox";
 
 interface ItemProps {
-    name: string;
+  name: string;
+  state: number; // État actuel (0 = neutre, 1 = refusé, 2 = accepté)
+  onStateChange: (newState: number) => void; // Callback pour informer le parent du changement d'état
 }
 
-const Item: React.FC<ItemProps> = ({ name }) => {
-    const { systemTheme } = useThemeContext();
-    const [selected, setSelected] = useState<"yes" | "no" | "neutral">("neutral");
+const Item: React.FC<ItemProps> = ({ name, state, onStateChange }) => {
+  const { systemTheme } = useThemeContext();
 
-    return (
-        <div
-            className="flex items-center justify-between p-2 rounded-md mb-2"
-            style={{
-                background: systemTheme.background.secondary,
-                border: `1px solid ${systemTheme.background.primary}`,
-            }}
-        >
-            <span
-                className="flex-1 text-sm"
-                style={{ color: systemTheme.text.primary }}
-            >
-                {name}
-            </span>
-            <div className="flex gap-2">
-                <button
-                    className="px-2 py-1 rounded transition"
-                    style={{
-                        backgroundColor:
-                            selected === "no"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
-                        color:
-                            selected === "no"
-                                ? systemTheme.text.secondary
-                                : systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.secondary}`,
-                    }}
-                    onClick={() => setSelected("no")}
-                >
-                    ✗
-                </button>
-                <button
-                    className="px-2 py-1 rounded transition"
-                    style={{
-                        backgroundColor:
-                            selected === "neutral"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
-                        color: systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.button}`,
-                    }}
-                    onClick={() => setSelected("neutral")}
-                >
-                    –
-                </button>
-                <button
-                    className="px-2 py-1 rounded transition"
-                    style={{
-                        backgroundColor:
-                            selected === "yes"
-                                ? systemTheme.background.secondary
-                                : systemTheme.background.primary,
-                        color:
-                            selected === "yes"
-                                ? systemTheme.text.secondary
-                                : systemTheme.text.primary,
-                        border: `1px solid ${systemTheme.background.button}`,
-                    }}
-                    onClick={() => setSelected("yes")}
-                >
-                    ✓
-                </button>
-            </div>
-        </div>
-    );
+  return (
+    <div
+      className="flex items-center justify-between py-2 mx-2 border-b last:border-b-0 flex-col gap-2 lg:flex-row"
+      style={{
+        background: systemTheme.background.secondary,
+        borderColor: `${systemTheme.background.button}60`,
+      }}
+    >
+      <span
+        className="flex-1 text-sm"
+        style={{ color: systemTheme.text.primary }}
+      >
+          {name}
+      </span>
+      <Checkbox state={state} onChange={onStateChange} />
+    </div>
+  );
 };
 
 export default Item;

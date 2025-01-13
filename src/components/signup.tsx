@@ -12,13 +12,40 @@ const Signup: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const router = useRouter();
 
-    const handleSubmit = (event: React.FormEvent) => {
+    interface ResponseMessage {
+        message: string;
+    }
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (password !== confirmPassword) {
             alert("Les mots de passe ne correspondent pas !");
             return;
         }
         // Logique de soumission
+        try {
+
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username, email, password}),
+            });
+            /*
+                        if (!response.ok) {
+                            throw new Error('Erreur lors de la soumission');
+                        }*/
+
+            console.log("Test4");
+
+            const result: ResponseMessage = await response.json();
+            console.log(result.message); // Affiche le message du serveur
+
+        } catch (error: any) {
+            console.error(error.message || 'Erreur inattendue');
+        }
+
         console.log("Username:", username);
         console.log("Email:", email);
         console.log("Password:", password);
@@ -26,7 +53,7 @@ const Signup: React.FC = () => {
 
     return (
         <div
-            className="flex items-center justify-center my-32"
+            className="flex items-center justify-center my-16"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
             <div

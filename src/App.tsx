@@ -21,7 +21,7 @@ function App() {
                 style={{}}
             >
                 <Header showAuthButtons={true}/>
-                <Title />
+                <Title>Présentation de Thibou</Title>
                 <Start />
                 <Intro />
                 <Samples />
