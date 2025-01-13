@@ -25,6 +25,8 @@ function App() {
                 <Start />
                 <Intro />
                 <Samples />
+
+                
             </main>
             <Footer />
 
