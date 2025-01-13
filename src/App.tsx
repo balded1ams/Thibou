@@ -10,14 +10,14 @@ function App() {
     const { systemTheme } = useThemeContext();
     return (
         <div
-            className="h-screen w-full overflow-y-auto"
+            className="min-h-screen w-full overflow-y-auto"
             style={{
                 backgroundColor: systemTheme.background.primary,
                 color: systemTheme.text.primary,
             }}
         >
             <main
-                className=" mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
+                className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0"
                 style={{}}
             >
                 <Header showAuthButtons={true}/>

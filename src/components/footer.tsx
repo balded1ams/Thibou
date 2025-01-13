@@ -52,14 +52,14 @@ const Footer: React.FC = () => {
                         À propos
                     </li>
                     <li
-                        onClick={() => router.push("/signin")}
+                        onClick={() => router.push("/auth/signin")}
                         className="hover:underline cursor-pointer"
                         style={{ color: systemTheme.text.primary }}
                     >
                         Connexion
                     </li>
                     <li
-                        onClick={() => router.push("/signup")}
+                        onClick={() => router.push("/auth/signup")}
                         className="hover:underline cursor-pointer"
                         style={{ color: systemTheme.text.primary }}
                     >

@@ -1,7 +1,6 @@
 "use client";
 
 import { useThemeContext } from "@/hooks/useTheme";
-import { theme } from "@/utils";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
