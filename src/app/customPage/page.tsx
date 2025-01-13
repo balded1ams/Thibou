@@ -9,6 +9,7 @@ import Item from "@/components/Item";
 import Title from "@/components/title";
 import { X, Check } from "lucide-react";
 import { StaticColors as colors } from "@/utils/index";
+import {hover} from "motion-dom";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
@@ -63,25 +64,29 @@ export default function Preferences() {
         <Title>Choisissez vos préférences</Title>
 
         {/* Boutons pour tout accepter ou tout refuser */}
-        <div className="mx-auto flex w-full max-w-2xl justify-end gap-8 pr-16">
+        <div className="mx-auto flex w-full max-w-2xl gap-8 justify-between">
           <div
             onClick={handleRejectAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.red,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`
             }}
           >
             <X />
+            <p>Tout décocher</p>
           </div>
-          <div
+            <div
             onClick={handleAcceptAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.green,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`
             }}
-          >
+            >
+            <p>Tout cocher</p>
             <Check />
-          </div>
+            </div>
         </div>
 
         <div>
