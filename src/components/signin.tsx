@@ -126,7 +126,7 @@ const Login: React.FC = () => {
                 >
                     Pas encore de compte ?{" "}
                     <Link
-                        href="/signup"
+                        href="/auth/signup"
                         className="font-bold transition-all hover:underline"
                         style={{
                             color: systemTheme.text.title,

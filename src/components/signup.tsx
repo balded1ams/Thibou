@@ -180,7 +180,7 @@ const Signup: React.FC = () => {
                 >
                     Vous avez déjà un compte ?{" "}
                     <Link
-                      href="/signin"
+                      href="/auth/signin"
                       className="font-bold transition-all cursor-pointer hover:underline"
                         style={{
                             color: systemTheme.text.title,
