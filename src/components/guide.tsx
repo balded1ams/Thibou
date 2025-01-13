@@ -43,13 +43,20 @@
 
 // export default Guide;
 import React, { useEffect, useState } from 'react';
-import { setCurrentRoomFromCoordinates, setDirectionForPath, cooOeuvre } from '../hooks/useGuidage';
+import { setCurrentRoomFromCoordinates, setDirectionForPath, setDetailedDirectionInLastRoom } from '../hooks/useGuidage';
 import { useThemeContext } from "@/hooks/useTheme";
+import { calculerCheminComplet } from '@/hooks/useBFS';
+import { musee, oeuvres } from '@/utils';
+import { pathing2 } from '@/hooks/useBFS';
+
+const points = pathing2();
+const cooOeuvre = points[points.length - 1];
 
 const Guide = () => {
     const { systemTheme } = useThemeContext();
     const [currentRoomName, setCurrentRoomName] = useState('');
     const [directionPath, setDirectionPath] = useState('');
+    const [detailedDirection, setDetailedDirection] = useState('');
 
     useEffect(() => {
         // Appel de setCurrentRoomFromCoordinates avec cooOeuvre
@@ -57,8 +64,12 @@ const Guide = () => {
         setCurrentRoomName(roomName);
 
         // Appel de setDirectionForPath avec les points obtenus de pathing2
-        const directions = setDirectionForPath([cooOeuvre]);
+        const directions = setDirectionForPath(points);
         setDirectionPath(directions);
+
+        const a = setDetailedDirectionInLastRoom(points);
+        setDetailedDirection(a);
+
     }, []);
 
     return (
@@ -78,6 +89,10 @@ const Guide = () => {
             <div className="flex items-center gap-2">
                 <span>→</span>
                 <span>{directionPath}</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <span>→</span>
+                <span>{detailedDirection}</span>
             </div>
         </div>
     );

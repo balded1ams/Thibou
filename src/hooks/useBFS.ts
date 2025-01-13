@@ -4,7 +4,7 @@ import { oeuvres } from '@/utils';
 
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
-function calculerCheminComplet(
+export function calculerCheminComplet(
     oeuvres: Oeuvre[],
     start: [number, number],
     end: [number, number],
@@ -105,7 +105,15 @@ export function pathing() {
     return calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
 }
 export function pathing2() {
-    return bfs([0, 0], oeuvres[0].coordinate, musee.map)
+    let path = bfs([0, 0], oeuvres[0].coordinate, musee.map);
+    
+    // Vérifier si le chemin contient moins de deux coordonnées
+    if (path.length < 2) {
+        // Ajouter une coordonnée supplémentaire si nécessaire
+        path.push([oeuvres[1].coordinate[0] + 1, oeuvres[0].coordinate[1] + 1]); // Ajouter une coordonnée fictive
+    }
+
+    return path;
 }
 
 function toVector(point1, point2): number[] {
@@ -114,7 +122,8 @@ function toVector(point1, point2): number[] {
     }
     return [point2[0] - point1[0], point2[1] - point1[1]];
 }
-function generateVectors(path, divide) {
+
+export function generateVectors(path, divide) {
     if (!Array.isArray(path) || path.length < 2) {
         throw new Error("La liste des points doit contenir au moins deux points.");
     }
@@ -137,7 +146,7 @@ function generateVectors(path, divide) {
     return vectors;
 }
 
-function getVectorDirection(vector) {
+export function getVectorDirection(vector) {
     if (!Array.isArray(vector) || vector.length !== 2) {
         throw new Error("The input must be an array of two numbers.");
     }
