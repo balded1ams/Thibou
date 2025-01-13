@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 
 const Signup: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -178,15 +179,15 @@ const Signup: React.FC = () => {
                     style={{ color: systemTheme.text.primary }}
                 >
                     Vous avez déjà un compte ?{" "}
-                    <span
-                        onClick={() => router.push("/signin")}
-                        className="font-bold transition-all cursor-pointer hover:underline"
+                    <Link
+                      href="/signin"
+                      className="font-bold transition-all cursor-pointer hover:underline"
                         style={{
                             color: systemTheme.text.title,
                         }}
                     >
                         Connectez-vous
-                    </span>
+                    </Link>
                 </p>
             </div>
         </div>

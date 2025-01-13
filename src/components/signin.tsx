@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import Link from "next/link";
 
 const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
@@ -124,7 +125,7 @@ const Login: React.FC = () => {
                     style={{ color: systemTheme.text.primary }}
                 >
                     Pas encore de compte ?{" "}
-                    <a
+                    <Link
                         href="/signup"
                         className="font-bold transition-all hover:underline"
                         style={{
@@ -132,7 +133,7 @@ const Login: React.FC = () => {
                         }}
                     >
                         Inscrivez-vous
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

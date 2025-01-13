@@ -1,3 +1,4 @@
+"use client"
 import { useState, useCallback, useContext } from 'react';
 
 import { useLocalStorage } from './useLocalStorage';
