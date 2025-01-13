@@ -85,19 +85,18 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
   const { adressemail: foundUser } = user[0];
 
 
-  console.log('test');
   const isPasswordValid = await comparePasswords(
     password,
     foundUser.password,
   );
 
-  if (!isPasswordValid) {
-    console.log("faux");
-    return { error: "Invalid username or password. Please try again." };
+  if (isPasswordValid) {
+    //await setSession(foundUser);
+    return true;
   } else {
-    console.log("Juste")
+    return false;
   }
-  await setSession(foundUser);
+  //await setSession(foundUser);
 });
 
 export async function signOut() {
