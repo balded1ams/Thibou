@@ -21,7 +21,7 @@ export function findSalleForCoordonnee(coordinate: [number, number]): Salle | un
 }
 
 // Exemple d'utilisation
-const oeuvre: Oeuvre = { name: "Statue 1", description: "Une belle statue", coordinates: [0, 3] };
+const oeuvre: Oeuvre = { name: "Statue 1", description: "Une belle statue", coordinate: [0, 3] };
 const salle = findSalleForOeuvre(oeuvre);
 console.log(salle ? salle.name : "Oeuvre non trouvée dans une salle");
 

@@ -1,11 +1,12 @@
 import Header from "@/components/header";
 import Plan from "@/components/plan"
 import Footer from "@/components/footer";
-import Checkbox from "@/components/customCheckBox";
+import Guide from "@/components/guide";
 import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
+    const roomNumber = 5; //exemple de numéro de salle
 
     const handleCheckboxChange = (state) => {
         const stateLabel = ["Non coché", "Indéterminé", "Coché"];
@@ -25,7 +26,10 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <Plan imageUrl={"/logo.jpg"}/>
+                <div className="flex flex-row xl:flex-col ">
+                    <Plan imageUrl={"/logo.jpg"}/>
+                    <Guide />
+                </div>
             </main>
             <Footer/>
         </div>
