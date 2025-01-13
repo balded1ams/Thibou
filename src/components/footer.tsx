@@ -37,41 +37,33 @@ const Footer: React.FC = () => {
 
                 {/* Section centrale : Liens rapides */}
                 <ul className="mb-4 flex flex-wrap items-center gap-3 md:mb-0 mr-20 pr-10">
-                    <li>
-                        <a
-                            href="/public"
-                            className="hover:underline"
-                            style={{ color: systemTheme.text.primary }}
-                        >
-                            Accueil
-                        </a>
+                    <li
+                        onClick={() => router.push("/")}
+                        className="hover:underline cursor-pointer"
+                        style={{ color: systemTheme.text.primary }}
+                    >
+                        Accueil
                     </li>
-                    <li>
-                        <a
-                            href="/about"
-                            className="hover:underline"
-                            style={{ color: systemTheme.text.primary }}
-                        >
-                            À propos
-                        </a>
+                    <li 
+                        onClick={() => router.push("/about")}
+                        className="hover:underline cursor-pointer"
+                        style={{ color: systemTheme.text.primary }}
+                    >                            
+                        À propos
                     </li>
-                    <li>
-                        <a
-                            href="/signin"
-                            className="hover:underline"
-                            style={{ color: systemTheme.text.primary }}
-                        >
-                            Connexion
-                        </a>
+                    <li
+                        onClick={() => router.push("/signin")}
+                        className="hover:underline cursor-pointer"
+                        style={{ color: systemTheme.text.primary }}
+                    >
+                        Connexion
                     </li>
-                    <li>
-                        <a
-                            href="/signup"
-                            className="hover:underline"
-                            style={{ color: systemTheme.text.primary }}
-                        >
-                            Inscription
-                        </a>
+                    <li
+                        onClick={() => router.push("/signup")}
+                        className="hover:underline cursor-pointer"
+                        style={{ color: systemTheme.text.primary }}
+                    >
+                        Inscription
                     </li>
                 </ul>
 
