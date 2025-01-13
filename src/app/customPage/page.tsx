@@ -70,7 +70,8 @@ export default function Preferences() {
             className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
               backgroundColor: systemTheme.background.secondary,
-              border: `1px solid ${systemTheme.background.button}60`
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
           >
             <X />
@@ -81,7 +82,8 @@ export default function Preferences() {
             className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
               backgroundColor: systemTheme.background.secondary,
-              border: `1px solid ${systemTheme.background.button}60`
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
             >
             <p>Tout cocher</p>
