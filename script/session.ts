@@ -1,7 +1,8 @@
 import { utilisateur } from "@/db/schema";
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
+//import { cookies } from "next/headers";
+import {NextApiRequest} from "next";
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -37,11 +38,27 @@ export async function verifyToken(input: string) {
   return payload as SessionData;
 }
 
+/*
+export async function getSession(req: NextApiRequest) {
+  const sessionCookie = req.cookies["session"];
+  if (!sessionCookie) return null;
+
+  try {
+    const { payload } = await jwtVerify(sessionCookie, key, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (error) {
+    return null; // Invalid session
+  }
+}*/
+
+/*
 export async function getSession() {
   const session = (await cookies()).get("session")?.value;
   if (!session) return null;
   return await verifyToken(session);
-}
+}*/
 
 export async function setSession(user: utilisateur) {
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);

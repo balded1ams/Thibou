@@ -23,12 +23,11 @@ export async function POST(request: Request) {
 
         // Call the signIn function with the form data
         const result = await signIn(actionState, formData);
-/*
+        /*
         // Handle the result (e.g., success or error)
         if (result.error) {
-            return NextResponse.json({ error: result.error }, { status: 400 });
-        }*/
-        console.log('result : ', result);
+           return NextResponse.json({ error: result.error }, { status: 400 });
+         }*/
 
         if (result) {
             return NextResponse.json({ success: "Authentification confirmé" });
