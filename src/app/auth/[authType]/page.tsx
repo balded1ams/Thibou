@@ -27,9 +27,9 @@ export default function AuthPage({ params: paramsPromise }) {
 
   return (
     <div
+      className="h-screen"
       style={{
         backgroundColor: systemTheme.background.primary,
-        minHeight: "100vh", // Assure que la page occupe tout l'écran
       }}
     >
       <main className="max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
