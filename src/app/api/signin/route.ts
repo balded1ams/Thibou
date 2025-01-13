@@ -1,20 +1,9 @@
 "use server"
-import { db } from "@/db/db";
-import { utilisateur } from "@/db/schema"
+
 import {NextResponse} from 'next/server';
-import {eq} from "drizzle-orm";
 import { signIn } from "@/../script/login";
 
 
-
-
-import { z } from "zod";
-
-/*
-const authSchema = z.object({
-    email: z.string().min(1),
-    password: z.string().min(1),
-});*/
 
 export async function POST(request: Request) {
 
@@ -41,9 +30,14 @@ export async function POST(request: Request) {
         if (result.error) {
             return NextResponse.json({ error: result.error }, { status: 400 });
         }*/
+        console.log('result : ', result);
 
-        // Handle success (you can customize this as needed)
-        return NextResponse.json({ success: "Login checked, not sure if it is succesful!" });
+        if (result) {
+            return NextResponse.json({ success: "Authentification confirmé" });
+        } else  {
+            return NextResponse.json({ success: "Echec de l'authentification" });
+
+        }
     } catch (error) {
         // Handle unexpected errors
         console.error("Error during sign-in:", error);
