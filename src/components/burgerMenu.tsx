@@ -50,7 +50,7 @@ const BurgerMenu = () => {
                                 color: systemTheme.text.secondary,
                                 backgroundColor: systemTheme.background.button,
                             }}
-                            onClick={() => router.push("/signin")}
+                            onClick={() => router.push("/auth/signin")}
                         >
                             Connexion
                         </button>
@@ -61,7 +61,7 @@ const BurgerMenu = () => {
                                 color: systemTheme.text.secondary,
                                 backgroundColor: systemTheme.background.button,
                             }}
-                            onClick={() => router.push("/signup")}
+                            onClick={() => router.push("/auth/signup")}
                         >
                             Inscription
                         </button>

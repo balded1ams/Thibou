@@ -51,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                         <>
                             <h1
                                 className="cursor-pointer rounded-lg px-4 py-1 text-lg transition-all hover:opacity-80"
-                                onClick={() => router.push("/signin")}
+                                onClick={() => router.push("/auth/signin")}
                                 style={{
                                     color: systemTheme.text.secondary,
                                     backgroundColor: systemTheme.background.button,
@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
 
                             <h1
                                 className="cursor-pointer rounded-lg px-4 py-1 text-lg transition hover:opacity-80"
-                                onClick={() => router.push("/signup")}
+                                onClick={() => router.push("/auth/signup")}
                                 style={{
                                     color: systemTheme.text.secondary,
                                     backgroundColor: systemTheme.background.button,

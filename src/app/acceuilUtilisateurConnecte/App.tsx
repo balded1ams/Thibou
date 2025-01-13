@@ -1,11 +1,10 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import Salutation from "./salutations";
-import BtnVisite from "./btnNouvVisite";
-import ReprendreTitle from "./reprendreTitle";
+import BtnVisite from "../../components/btnNouvVisite";
 import ReprendreTable from "./reprendreTable";
 import Article from "./article";
 import {useThemeContext} from "@/hooks/useTheme";
+import Title from "@/components/title";
 
 function App() {
     const { systemTheme } = useThemeContext();
@@ -23,9 +22,9 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <Salutation />
+                <Title>Bonjour "Jean Bon" !</Title>
                 <BtnVisite />
-                <ReprendreTitle />
+                <Title>Ou reprendre une visite :</Title>
                 <ReprendreTable />
             </main>
             <Footer/>
