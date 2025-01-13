@@ -18,14 +18,18 @@ function App() {
             }}
         >
             <main
-                className=' mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0'
+                className=' mx-auto flex h-full max-w-5xl flex-col gap-8 px-4 xl:px-0'
                 style={{}}
             >
                 <Header/>
-                <Title>Bonjour "Jean Bon" !</Title>
-                <BtnVisite />
-                <Title>Ou reprendre une visite :</Title>
-                <ReprendreTable />
+                <section className="flex flex-col items-center mb-14">
+                    <Title>Bonjour "Jean Bon" !</Title>
+                    <BtnVisite />
+                </section>
+                <section>
+                    <Title>Ou reprendre une visite :</Title>
+                    <ReprendreTable />
+                </section>
             </main>
             <Footer/>
         </div>
