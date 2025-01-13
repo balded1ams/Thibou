@@ -6,14 +6,24 @@ import Signup from "@/components/signup";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { useThemeContext } from "@/hooks/useTheme";
+import { notFound } from "next/navigation"; // Import de notFound()
 
 export default function AuthPage({ params: paramsPromise }) {
   const params = use(paramsPromise);
 
   const { systemTheme } = useThemeContext();
 
-  // Détermine le composant à rendre (Signin ou Signup)
-  const Component = params === "signup" ? Signup : Signin;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const authType = params?.authType;
+
+  const validAuthTypes = ["signup", "signin"];
+
+  if (!authType || !validAuthTypes.includes(authType)) {
+    notFound();
+  }
+
+  const Component = authType === "signup" ? Signup : Signin;
 
   return (
     <div

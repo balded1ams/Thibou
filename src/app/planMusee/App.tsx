@@ -26,15 +26,10 @@ function App() {
                 style={{}}
             >
                 <Header/>
-<<<<<<< Updated upstream
                 <div className="flex flex-row xl:flex-col ">
                     <Plan imageUrl={"/logo.jpg"}/>
                     <Guide />
                 </div>
-=======
-                <Plan imageUrl={"/logo.jpg"}/>
-                <Footer/>
->>>>>>> Stashed changes
             </main>
             <Footer/>
         </div>
