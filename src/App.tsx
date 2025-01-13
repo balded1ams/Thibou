@@ -5,8 +5,6 @@ import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
-import Arrow from "./components/arrow";
-
 
 function App() {
     const { systemTheme } = useThemeContext();
