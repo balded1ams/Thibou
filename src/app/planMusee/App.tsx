@@ -27,7 +27,7 @@ function App() {
             >
                 <Header/>
                 <div className="flex flex-row xl:flex-col ">
-                    <Plan imageUrl={"/logo.jpg"}/>
+                    <Plan imageUrl={"/map.jpg"}/>
                     <Guide />
                 </div>
             </main>

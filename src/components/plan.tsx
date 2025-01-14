@@ -1,5 +1,5 @@
 import React from "react";
-import { musee } from "@/utils";
+import { musee, oeuvres } from "@/utils";
 import { pathing } from "@/hooks/useBFS";
 import Arrow from "./arrow";
 
@@ -71,7 +71,7 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                         position: "absolute",
                         left: `${(y / cols) * 100}%`,
                         top: `${(x / rows) * 100}%`,
-                        transform: "translate(100%, 100%)",
+                        transform: "translate(50%, 50%)",
                         width: "5px",
                         height: "5px",
                     }}
@@ -93,6 +93,23 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                     />
                 );
             })}
+
+            {/* Superposition des œuvres */}
+            {oeuvres.map(({ coordinate: [x, y] }, index) => (
+                <svg
+                    key={`oeuvre-${x}-${y}-${index}`}
+                    style={{
+                        position: "absolute",
+                        left: `${(y / cols) * 100}%`,
+                        top: `${(x / rows) * 100}%`,
+                        transform: "translate(-50%, -50%)",
+                        width: "10px",
+                        height: "10px",
+                    }}
+                >
+                    <circle cx="5" cy="5" r="5" fill="black" />
+                </svg>
+            ))}
         </div>
     );
 };
