@@ -1,7 +1,7 @@
 import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
-
+import { fetchAllOeuvres } from '@/../script/slugify'
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
 function calculerCheminComplet(
@@ -101,10 +101,9 @@ function reconstructPath(
     return path;
 }
 
-export function pathing() {
+export async function pathing() {
     const oeuvresSort: Oeuvre[] = [];
-    const oeuvresTemp = [...oeuvres];
-
+    const oeuvresTemp = await fetchAllOeuvres();
     let currentPosition: [number, number] = [10, 10]; // Position de départ
 
     while (oeuvresTemp.length > 0) {
@@ -127,7 +126,7 @@ export function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [10, 10], [10, 10], musee.map);
+    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {
@@ -136,7 +135,7 @@ function dist(pos1: [number, number], pos2: [number, number]): number {
     );
 }
 export function pathing2() {
-    return bfs([0, 0], oeuvres[0].coordinate, musee.map)
+    return bfs([10, 10], oeuvres[0].coordinate, musee.map)
 }
 
 function toVector(point1, point2): number[] {
@@ -192,7 +191,7 @@ function getVectorDirection(vector) {
 
 
 function testBfs() {
-    const start: [number, number] = [0, 0];
+    const start: [number, number] = [10, 10];
     const end: [number, number] = oeuvres[0].coordinate;
 
     console.log("Test BFS 1 : Chemin simple");
@@ -200,7 +199,7 @@ function testBfs() {
     console.log("fin", result1, "\n\n\n");
 
     console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [0, 0], [0, 0], musee.map)
+    const result2 = calculerCheminComplet(oeuvres, [10, 10], [10, 10], musee.map)
     console.log("fin", result2);
     const vectors:number[][] = generateVectors(result2,3);
 
