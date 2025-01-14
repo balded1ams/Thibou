@@ -102,12 +102,12 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                         position: "absolute",
                         left: `${(y / cols) * 100}%`,
                         top: `${(x / rows) * 100}%`,
-                        transform: "translate(-50%, -50%)",
                         width: "10px",
                         height: "10px",
+                        zIndex: 1,
                     }}
                 >
-                    <circle cx="5" cy="5" r="5" fill="black" />
+                    <circle cx="5" cy="5" r="5" fill="blue" />
                 </svg>
             ))}
         </div>
