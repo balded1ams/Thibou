@@ -1,9 +1,7 @@
 "use client";
 
 import { useThemeContext } from "@/hooks/useTheme";
-import { theme } from "@/utils";
 import { useState } from "react";
-import {opacity} from "html2canvas/dist/types/css/property-descriptors/opacity";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +18,9 @@ const BurgerMenu = () => {
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="text-4xl pb-2"
+                    style={{
+                        color: systemTheme.text.primary,
+                    }}
                 >
                     &#9776; {/* Icône burger */}
                 </button>
@@ -44,8 +45,7 @@ const BurgerMenu = () => {
                         <ThemeDropdown isMobile={true}/>
 
                         <button
-                            className="block w-full cursor-pointer rounded-lg border px-4 py-2 text-center text-lg
-                                        transition-all hover:opacity-90"
+                            className="block w-full cursor-pointer rounded-lg px-4 py-2 text-center text-lg transition-all hover:opacity-90"
                             style={{
                                 color: systemTheme.text.secondary,
                                 backgroundColor: systemTheme.background.button,

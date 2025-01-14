@@ -45,7 +45,7 @@ const Checkbox = ({
 
   return (
     <div
-      className="h-10 items-center rounded-xl flex overflow-hidden justify-between w-full lg:w-1/2"
+      className="h-10 items-center rounded-xl flex overflow-hidden justify-between w-full lg:w-1/2 cursor-pointer"
       onClick={handleReset}
       style={{
         backgroundColor: systemTheme.background.primary,

@@ -30,13 +30,11 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
       }
     };
 
-    updateLineCoords();
-
     // Met à jour les coordonnées lors du redimensionnement de la fenêtre
     window.addEventListener("resize", updateLineCoords);
 
-    const intervalId = setInterval(updateLineCoords, 1000);
-
+    const intervalId = setInterval(updateLineCoords, 1);
+    
     return () => {
       clearInterval(intervalId);
       window.removeEventListener("resize", updateLineCoords);

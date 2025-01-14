@@ -13,12 +13,6 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
 
     const points = pathing(); // Points du chemin
 
-    // Calcul des positions absolues des points dans la grille
-    const getGridPosition = (x: number, y: number) => ({
-        left: `${(y / cols) * 100}%`,
-        top: `${(x / rows) * 100}%`,
-    });
-
     // Déterminer la direction entre deux points
     const getDirection = (from: [number, number], to: [number, number]) => {
         const [x1, y1] = from;

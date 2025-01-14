@@ -8,7 +8,6 @@ import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
 import { X, Check } from "lucide-react";
-import { StaticColors as colors } from "@/utils/index";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
