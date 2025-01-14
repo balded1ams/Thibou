@@ -114,7 +114,9 @@ function toVector(point1, point2): number[] {
     }
     return [point2[0] - point1[0], point2[1] - point1[1]];
 }
-function generateVectors(path, divide) {
+
+
+function generateVectors(path, divide:number) {
     if (!Array.isArray(path) || path.length < 2) {
         throw new Error("La liste des points doit contenir au moins deux points.");
     }
