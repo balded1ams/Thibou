@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -13,6 +13,7 @@ import { StaticColors as colors } from "@/utils/index";
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
 
+  // État pour stocker l'état individuel de chaque item
   const [itemStates, setItemStates] = useState<number[]>([0, 0, 0, 0, 0, 0, 0]); // 7 items initialisés à neutre
 
   const handleAcceptAll = () => setItemStates(itemStates.map(() => 2)); // Tout accepté
@@ -24,43 +25,31 @@ export default function Preferences() {
     );
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-    const data = {
-      "Type d'œuvre": {
-        Peinture: itemStates[0],
-        Sculpture: itemStates[1],
-      },
-      Auteur: {
-        "Michel-Ange": itemStates[2],
-        "Léonard de Vinci": itemStates[3],
-      },
-      Mouvement: {
-        "Le maniérisme": itemStates[4],
-        "Le baroque": itemStates[5],
-        "Le romantisme": itemStates[6],
-      },
-    };
-
-    try {
-      const response = await fetch('/api/preferences', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la soumission');
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await fetch('/api/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  /*
+        if (!response.ok) {
+            throw new Error('Erreur lors de la soumission');
+        }*/
+        console.log("Test4");
+        const result: ResponseMessage = await response.json();
+        console.log(result.message); // Affiche le message du serveur
+      } catch (error: any) {
+          console.error(error.message || 'Erreur inattendue');
       }
-
-      const result = await response.json();
-      console.log("Réponse du serveur :", result);
-    } catch (error: any) {
-      console.error(error.message || 'Erreur inattendue');
-    }
+      console.log("Email:", email);
+      console.log("Password:", password);
   };
 
   return (
@@ -73,25 +62,32 @@ export default function Preferences() {
 
         <Title>Choisissez vos préférences</Title>
 
-        <div className="mx-auto flex w-full max-w-2xl justify-end gap-8 pr-16">
+        {/* Boutons pour tout accepter ou tout refuser */}
+        <div className="mx-auto flex w-full max-w-2xl gap-8 justify-between">
           <div
             onClick={handleRejectAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.red,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
           >
             <X />
+            <p>Tout décocher</p>
           </div>
-          <div
+            <div
             onClick={handleAcceptAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.green,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
-          >
+            >
+            <p>Tout cocher</p>
             <Check />
-          </div>
+            </div>
         </div>
 
         <div>
@@ -149,6 +145,8 @@ export default function Preferences() {
         >
           Suivant
         </button>
+
+
       </main>
       <Footer />
     </div>

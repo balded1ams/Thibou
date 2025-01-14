@@ -27,12 +27,11 @@ export default function AuthPage({ params: paramsPromise }) {
 
   return (
     <div
-      className="h-screen"
       style={{
         backgroundColor: systemTheme.background.primary,
       }}
     >
-      <main className="max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
+      <main className="min-h-screen max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
         <Header />
         <Component />
       </main>

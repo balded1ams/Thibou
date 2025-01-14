@@ -20,21 +20,27 @@ const Checkbox = ({
   }, [state]);
 
   const handleClickLeft = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setInternalState(1);
-    onChange?.(1); // Notifie le parent
+    if (internalState != 1) {
+      e.stopPropagation();
+      setInternalState(1);
+      onChange?.(1); // Notifie le parent
+    }
   };
 
   const handleClickRight = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setInternalState(2);
-    onChange?.(2); // Notifie le parent
+    if (internalState != 2) {
+      e.stopPropagation();
+      setInternalState(2);
+      onChange?.(2); // Notifie le parent
+    }
   };
 
   const handleReset = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setInternalState(0);
-    onChange?.(0); // Notifie le parent
+    if (internalState != 0) {
+      e.stopPropagation();
+      setInternalState(0);
+      onChange?.(0); // Notifie le parent
+    }
   };
 
   return (

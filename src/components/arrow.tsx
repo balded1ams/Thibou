@@ -35,10 +35,14 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
     // Met à jour les coordonnées lors du redimensionnement de la fenêtre
     window.addEventListener("resize", updateLineCoords);
 
+    const intervalId = setInterval(updateLineCoords, 1000);
+
     return () => {
+      clearInterval(intervalId);
       window.removeEventListener("resize", updateLineCoords);
-    };
+    }
   }, [from, to]);
+
 
   return (
     <svg
@@ -57,23 +61,12 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
         y1={lineCoords.y1}
         x2={lineCoords.x2}
         y2={lineCoords.y2}
-        stroke="black"
+        stroke="red"
         strokeWidth={2}
         markerEnd="url(#arrowhead)"
       />
-      <defs>
-        <marker
-          id="arrowhead"
-          markerWidth="10"
-          markerHeight="7"
-          refX="10"
-          refY="3.5"
-          orient="auto"
-        >
-          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-        </marker>
-      </defs>
     </svg>
+    
   );
 };
 
