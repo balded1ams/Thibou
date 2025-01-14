@@ -26,7 +26,7 @@ function App() {
                 style={{}}
             >
                 <Header/>
-                <div className="flex flex-row xl:flex-col ">
+                <div className="flex flex-col xl:flex-row gap-4">
                     <Plan imageUrl={"/map.jpg"}/>
                     <Guide />
                 </div>
