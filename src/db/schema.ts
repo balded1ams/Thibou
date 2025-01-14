@@ -60,6 +60,8 @@ export const oeuvre = pgTable("oeuvre", {
 	description: text(),
 	nomauteur: varchar({ length: 255 }),
 	image: varchar({ length: 255 }),
+	x: integer(),
+	y: integer(),
 }, (table) => [
 	foreignKey({
 			columns: [table.nomauteur],
