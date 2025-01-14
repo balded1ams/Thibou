@@ -66,30 +66,36 @@ export default function Preferences() {
   return (
     <div style={{ backgroundColor: systemTheme.background.primary }}>
       <main
-        className="max-w-5xl mx-auto flex h-full flex-col gap-4 px-4 min-h-screen mb-10"
+        className="mx-auto mb-10 flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4"
         style={{ backgroundColor: systemTheme.background.primary }}
       >
         <Header />
 
         <Title>Choisissez vos préférences</Title>
 
-        <div className="mx-auto flex w-full max-w-2xl justify-end gap-8 pr-16">
+        <div className="mx-auto flex w-full max-w-2xl justify-between gap-8">
           <div
             onClick={handleRejectAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg p-2 px-4 transition hover:opacity-80`}
             style={{
-              backgroundColor: colors.red,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
           >
             <X />
+            <p>Tout décocher</p>
           </div>
           <div
             onClick={handleAcceptAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg p-2 px-4 transition hover:opacity-80`}
             style={{
-              backgroundColor: colors.green,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
           >
+            <p>Tout cocher</p>
             <Check />
           </div>
         </div>
@@ -139,7 +145,7 @@ export default function Preferences() {
         </div>
 
         <button
-          className={`w-full py-2 rounded-lg text-white bg-red-500 max-w-2xl mx-auto text-xl transition hover:opacity-80`}
+          className={`text-white bg-red-500 mx-auto w-full max-w-2xl rounded-lg py-2 text-xl transition hover:opacity-80`}
           style={{
             backgroundColor: systemTheme.background.button,
             color: systemTheme.text.secondary,
