@@ -1,7 +1,7 @@
 import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
-import { fetchAllOeuvres } from '@/../script/slugify'
+
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
 function calculerCheminComplet(
@@ -101,9 +101,10 @@ function reconstructPath(
     return path;
 }
 
-export async function pathing() {
+export function pathing() {
     const oeuvresSort: Oeuvre[] = [];
-    const oeuvresTemp = await fetchAllOeuvres();
+    const oeuvresTemp = [...oeuvres];
+
     let currentPosition: [number, number] = [10, 10]; // Position de départ
 
     while (oeuvresTemp.length > 0) {
@@ -126,7 +127,7 @@ export async function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
+    return calculerCheminComplet(oeuvresSort, [0, 14], [0, 87], musee.map);
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {
@@ -199,7 +200,7 @@ function testBfs() {
     console.log("fin", result1, "\n\n\n");
 
     console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [10, 10], [10, 10], musee.map)
+    const result2 = calculerCheminComplet(oeuvres, [0, 14], [0, 87], musee.map)
     console.log("fin", result2);
     const vectors:number[][] = generateVectors(result2,3);
 
