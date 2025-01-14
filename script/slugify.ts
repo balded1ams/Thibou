@@ -8,9 +8,21 @@ import {and, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
 type oeuvreType   = InferModel<typeof oeuvre>;
 
+
+export async function fetchAllOeuvres(): Promise<oeuvreType[]> {
+    try {
+        // Use Drizzle's select method to fetch all rows
+        const listOeuvres = await db.select().from(oeuvre);
+        return listOeuvres;
+    } catch (error) {
+        console.error('Error fetching rows:', error);
+        throw new Error('Failed to fetch rows from the database');
+    }
+}
+
 export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[],  typeOeuvreRefusee : string[],
                                    artisteAcceptee : string[], artisteRefusee : string[],
-                                   mouvementAcceptee : string[], mouvementRefusee : string[],): Promise<oeuvreType[]> {
+                                   mouvementAcceptee : string[], mouvementRefusee : string[]): Promise<oeuvreType[]> {
 
     try {
 
