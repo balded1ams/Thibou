@@ -21,15 +21,11 @@ const ThemeDropdown = ({ isMobile = false }: ThemeDropdownProps) => {
                 : "text-center hover:opacity-80"
             }`}
             style={{
-              color: isMobile
-                ? systemTheme.text.primary
-                : systemTheme.text.primary,
+              color: systemTheme.text.primary,
               backgroundColor: isMobile
                 ? systemTheme.background.primary
                 : systemTheme.background.secondary,
-              border: isMobile
-                  ? `1px solid ${systemTheme.background.button}`
-                  : 'none'
+              border: `1px solid ${systemTheme.background.button}`
             }}
             onClick={() => toggleDropdown()}
           >
