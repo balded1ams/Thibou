@@ -238,12 +238,52 @@ export const musee: Musee = {
     ],
 };
 
+const getRandomCoordinates = (rows: number, cols: number, occupied: Set<string>): [number, number] => {
+    let x, y;
+    do {
+        x = Math.floor(Math.random() * rows);
+        y = Math.floor(Math.random() * cols);
+    } while (occupied.has(`${x},${y}`));
+    occupied.add(`${x},${y}`);
+    return [x, y];
+};
+
+// Initialiser les coordonnées occupées
+const occupiedCoordinates = new Set<string>();
+
+// Ajouter les coordonnées des obstacles à la liste des coordonnées occupées
+musee.map.forEach((row, rowIndex) => {
+    row.forEach((cell, colIndex) => {
+        if (cell === 1) {
+            occupiedCoordinates.add(`${rowIndex},${colIndex}`);
+        }
+    });
+});
+
+// Ajouter les coordonnées des salles à la liste des coordonnées occupées
+musee.rooms.forEach(room => {
+    for (let i = room.cooUpLeft[0]; i <= room.cooDownRight[0]; i++) {
+        for (let j = room.cooUpLeft[1]; j <= room.cooDownRight[1]; j++) {
+            occupiedCoordinates.add(`${i},${j}`);
+        }
+    }
+});
+
+const additionalOeuvres: Oeuvre[] = [
+    { name: "Sculpture 1", description: "Une sculpture imposante", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
+    { name: "Peinture 4", description: "Une peinture classique", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
+    { name: "Statue 4", description: "Une statue en marbre", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
+    { name: "Peinture 5", description: "Une peinture moderne", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
+    { name: "Sculpture 2", description: "Une sculpture en bois", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
+];
+
 export const oeuvres: Oeuvre[] = [
     { name: "Statue 1", description: "Une belle statue", coordinate: [0, 3] },
     { name: "Peinture 1", description: "Un chef-d'œuvre", coordinate: [10, 13] },
-    {
-        name: "Sculpture",
-        description: "Une sculpture imposante",
-        coordinate: [3, 10],
-    },
+    { name: "Peinture 2", description: "Une peinture abstraite", coordinate: [5, 15] },
+    { name: "Statue 2", description: "Une statue antique", coordinate: [8, 8] },
+    { name: "Peinture 3", description: "Un paysage magnifique", coordinate: [12, 5] },
+    { name: "Statue 3", description: "Une statue moderne", coordinate: [18, 18] },
+    { name: "Sculpture", description: "Une sculpture imposante", coordinate: [3, 10] },
+    ...additionalOeuvres,
 ];
