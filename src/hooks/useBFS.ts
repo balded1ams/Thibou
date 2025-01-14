@@ -127,7 +127,7 @@ export function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [0, 14], [0, 87], musee.map);
+    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {
