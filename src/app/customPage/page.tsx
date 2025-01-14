@@ -1,3 +1,5 @@
+"use client"
+
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { useThemeContext } from "@/hooks/useTheme";
@@ -5,10 +7,11 @@ import React, { useState } from "react";
 import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
-import { X, Check, Ban } from "lucide-react";
+import { X, Check } from "lucide-react";
 import { StaticColors as colors } from "@/utils/index";
+import {hover} from "motion-dom";
 
-function App() {
+export default function Preferences() {
   const { systemTheme } = useThemeContext();
 
   // État pour stocker l'état individuel de chaque item
@@ -23,6 +26,33 @@ function App() {
     );
   };
 
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await fetch('/api/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  /*
+        if (!response.ok) {
+            throw new Error('Erreur lors de la soumission');
+        }*/
+        console.log("Test4");
+        const result: ResponseMessage = await response.json();
+        console.log(result.message); // Affiche le message du serveur
+      } catch (error: any) {
+          console.error(error.message || 'Erreur inattendue');
+      }
+      console.log("Email:", email);
+      console.log("Password:", password);
+  };
+
   return (
     <div style={{ backgroundColor: systemTheme.background.primary }}>
       <main
@@ -34,25 +64,31 @@ function App() {
         <Title>Choisissez vos préférences</Title>
 
         {/* Boutons pour tout accepter ou tout refuser */}
-        <div className="mx-auto flex w-full max-w-2xl justify-end gap-8 pr-16">
+        <div className="mx-auto flex w-full max-w-2xl gap-8 justify-between">
           <div
             onClick={handleRejectAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.red,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
           >
             <X />
+            <p>Tout décocher</p>
           </div>
-          <div
+            <div
             onClick={handleAcceptAll}
-            className={`rounded-lg flex items-center justify-center p-2 w-1/6 transition hover:opacity-80`}
+            className={`rounded-lg flex items-center justify-center p-2 px-4 transition hover:opacity-80 gap-3 cursor-pointer`}
             style={{
-              backgroundColor: colors.green,
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
             }}
-          >
+            >
+            <p>Tout cocher</p>
             <Check />
-          </div>
+            </div>
         </div>
 
         <div>
@@ -105,7 +141,12 @@ function App() {
             backgroundColor: systemTheme.background.button,
             color: systemTheme.text.secondary,
             border: `1px solid ${systemTheme.background.button}60`,
-          }}>
+          }}
+            onClick={() => {
+              console.log(itemStates)
+              handleSubmit
+            }}
+          >
           Suivant
         </button>
 
@@ -115,5 +156,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
