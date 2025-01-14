@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/db/db";
 import {oeuvre} from "@/db/schema";
-import {and, InferModel, like, not, or, sql} from "drizzle-orm";
+import {and, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
 
 
@@ -31,7 +31,7 @@ export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[]
 
 
         const mustNotContainArtisteConditions = artisteRefusee ?
-            and(...artisteRefusee.map(str => not(like(oeuvre.nomauteur, `%${str}%`)))) :sql`true`;
+            and(...artisteRefusee.map(str => not(like(oeuvre.nomauteur, `%${str}%`)))) : sql`true`;
 
         //Condition Mouvement
 
@@ -43,12 +43,43 @@ export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[]
             and(...mouvementRefusee.map(str => not(like(oeuvre.nommouvement, `%${str}%`)))) : sql`true`;
 
 
+        //Conditions combinées
         const combinedConditions = and(mustContainTypeOeuvreConditions, mustNotContainTypeOeuvreConditions,
             mustContainArtisteConditions, mustNotContainArtisteConditions,
             mustContainMouvementConditions, mustNotContainMouvementConditions);
 
-        // Use Drizzle's select method to fetch all rows
-        return   await db.select().from(oeuvre).where(combinedConditions).limit(nbmax);
+        // Recuperer les oeuvres initales
+        const initialOeuvres  =  await db.select().from(oeuvre).where(combinedConditions).limit(nbmax);
+
+
+        const currentCount = initialOeuvres.length;
+
+        if (currentCount < nbmax) {
+
+            const idsAlreadySelected = initialOeuvres.map(o => o.idoeuvre);
+
+            // Conditions pour exclure les œuvres déjà sélectionnées et celles refusées
+            const completionConditions = and(
+                not(inArray(oeuvre.idoeuvre, idsAlreadySelected)), // Exclure les œuvres déjà sélectionnées
+                mustNotContainTypeOeuvreConditions,
+                mustNotContainArtisteConditions,
+                mustNotContainMouvementConditions
+            );
+
+            const additionalOeuvres = await db.select()
+                .from(oeuvre)
+                .where(completionConditions)
+                .limit(nbmax - currentCount);
+
+
+            const finalOeuvres = [...initialOeuvres, ...additionalOeuvres];
+
+            return finalOeuvres;
+
+        } else {
+            return initialOeuvres;
+        }
+
     } catch (error) {
         console.error('Error fetching rows:', error);
         throw new Error('Failed to fetch rows from the database');
