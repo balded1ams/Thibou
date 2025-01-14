@@ -1,52 +1,50 @@
+"use client"
+
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { fetchOeuvre } from "@/../script/slugify";
+import { eq } from "drizzle-orm";
+import { db } from "@/db/db";
+import { oeuvre } from "@/db/schema";
 
-const DescriptionOeuvre = () => {
+function DescriptionOeuvre() {
   const searchParams = useSearchParams();
-  const id = searchParams.get("id"); // Récupère l'ID depuis le querystring
-
-  const [oeuvre, setOeuvre] = useState<{
-    idoeuvre: number;
-    titreOeuvre: string | null;
-    typeOeuvre: string;
-    nommouvement: string | null;
-    periodeCreation: string | null;
-    materiauxTechniques: string | null;
-    description: string | null;
-    nomauteur: string | null;
-    image: string | null;
-  } | null>(null);
+  const id: number = Number(searchParams.get("id")); // Récupère l'ID depuis le querystring
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [oeuvreData, setOeuvreData] = useState<any | null>(null);
 
   useEffect(() => {
-    if (!id) return; // Si aucun ID, ne fait rien
+    if (!isNaN(id)) {
+      async function loadOeuvre() {
+        try {
+          setLoading(true);
+          const oeuvreTmp = await db
+            .select()
+            .from(oeuvre)
+            .where(eq(oeuvre.idoeuvre, id));
 
-    async function loadOeuvre() {
-      try {
-        setLoading(true);
-        const data = await fetchOeuvre(parseInt(id));
-        setOeuvre(data || null);
-      } catch (err) {
-        console.error("Error fetching oeuvre:", err);
-        setError("Failed to fetch oeuvre.");
-      } finally {
-        setLoading(false);
+            if (oeuvreTmp.length === 0) {
+              setOeuvreData(oeuvreTmp[0]); 
+            } else {
+              setError("Il y a " + oeuvreTmp.length + " Oeuvres trouvées");
+            }
+
+        } catch (err) {
+          console.error("Error fetching oeuvre: ", err);
+          setError("Failed to fetch oeuvre.");
+        } finally {
+          setLoading(false);
+        }
       }
-    }
 
-    loadOeuvre();
+      loadOeuvre();
+    }
   }, [id]);
 
   // Si aucun query string `id`, n'affiche rien
   if (!id) {
     return null;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
   }
 
   if (error) {
@@ -61,24 +59,24 @@ const DescriptionOeuvre = () => {
     <div className="p-4">
       {oeuvre.image && (
         <img
-          src={oeuvre.image}
-          alt={oeuvre.titreOeuvre || "Oeuvre"}
+          src={oeuvreData.image}
+          alt={oeuvreData.titreOeuvre || "Oeuvre"}
           className="max-w-full h-auto object-contain rounded-lg mx-auto mb-4"
           style={{ maxHeight: "400px" }} // Limite la hauteur maximale de l'image
         />
       )}
       <h1 >
-        <strong> {oeuvre.titreOeuvre} - {oeuvre.periodeCreation} </strong>
+        <strong> {oeuvreData.titreOeuvre} - {oeuvreData.periodeCreation} </strong>
       </h1>
-      <p >{oeuvre.nomauteur}</p>
+      <p >{oeuvreData.nomauteur}</p>
       <p >
-        <strong>Mouvement :</strong> {oeuvre.nommouvement}
+        <strong>Mouvement :</strong> {oeuvreData.nommouvement}
       </p>
       <p >
-        <strong>Matériaux et techniques :</strong> {oeuvre.materiauxTechniques}
+        <strong>Matériaux et techniques :</strong> {oeuvreData.materiauxTechniques}
       </p>
       <p >
-        <strong>Description :</strong> {oeuvre.description}
+        <strong>Description :</strong> {oeuvreData.description}
       </p>
     </div>
   );
