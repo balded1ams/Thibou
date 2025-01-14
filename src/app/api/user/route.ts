@@ -1,17 +1,8 @@
-export async function POST(req: { json: () => any }) {
-  try {
-    const data = await req.json();
+import {fetchOeuvres} from "../../../../script/slugify";
+import {NextResponse} from "next/server";
 
-    console.log("Données reçues :", data);
-    return new Response(
-      JSON.stringify({ message: "Données traitées avec succès", data }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
-  } catch (error) {
-    console.error("Erreur lors du traitement des données :", error);
-    return new Response(
-      JSON.stringify({ message: "Erreur serveur", error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
-  }
+export async function POST(req: { json: () => any }) {
+  const oeuvre = await fetchOeuvres(50, ["sculpture" ,"dessin"], ["peinture" ,"beaux-arts"], ["VASARI GIORGIO","COROT CAMILLE"], ["BANDINELLI BACCIO", "ZIEM FÉLIX"], ["Renaissance"], ["Baroque"]);
+  console.log("number oeuvre : ", oeuvre.length);
+  return NextResponse.json(oeuvre);
 }
