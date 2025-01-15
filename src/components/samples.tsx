@@ -7,12 +7,12 @@ const Samples = () => {
 
     return (
         <div
-            className="flex flex-col items-center py-8 "
+            className="flex flex-col items-center gap-8 py-8 text-xl font-semibold"
             style={{
                 color: systemTheme.text.primary,
             }}
         >
-            <p>Some samples: </p>
+            <p>Quelques exemples : </p>
             <section className="flex flex-wrap gap-4">
                 <Image
                     src={map}   // A remplacer par l'image voulue

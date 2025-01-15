@@ -65,7 +65,7 @@ export default function Preferences() {
   return (
     <div style={{ backgroundColor: systemTheme.background.primary }}>
       <main
-        className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 mb-8"
+        className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 pb-8"
         style={{ backgroundColor: systemTheme.background.primary }}
       >
         <Header />
