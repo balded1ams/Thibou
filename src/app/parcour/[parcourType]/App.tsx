@@ -5,6 +5,7 @@ import Guide from "@/components/guide";
 import {useThemeContext} from "@/hooks/useTheme";
 import { use } from "react";
 import { notFound } from "next/navigation";
+import ArtworkCard from "@/components/ArtworkDesc";
 
 function App({ params: paramsPromise }) {
     const params = use(paramsPromise);
@@ -21,7 +22,7 @@ function App({ params: paramsPromise }) {
 
     return (
         <div
-            className='h-screen w-full overflow-y-auto'
+            className='min-h-screen w-full overflow-y-auto'
             style={{
                 backgroundColor: systemTheme.background.primary,
                 color: systemTheme.text.primary,
@@ -36,6 +37,16 @@ function App({ params: paramsPromise }) {
                     <ImageDesc/>
                     <Guide />
                 </div>
+
+                <ArtworkCard
+                    title="La Nuit étoilée"
+                    year="1889"
+                    author="Van Gogh"
+                    movement="Postimpressionnisme"
+                    technique="Huile sur toile"
+                    description="La Nuit étoilée est une peinture de l'artiste peintre postimpressionniste néerlandais Vincent van Gogh. Le tableau représente ce que Van Gogh pouvait voir et extrapoler de la chambre qu'il occupait dans l'asile du monastère Saint-Paul-de-Mausole à Saint-Rémy-de-Provence en mai 1889. Souvent présenté comme son grand œuvre, le tableau a été reproduit à de très nombreuses reprises."
+                />
+
             </main>
             <Footer/>
         </div>

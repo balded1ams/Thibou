@@ -61,7 +61,6 @@ function bfs(
 
     while (queue.length > 0) {
         const current = queue.shift()!;
-        console.log(`Visite du nœud : ${current}`);
 
         if (current[0] === end[0] && current[1] === end[1]) {
             console.log("Chemin trouvé !");
@@ -80,7 +79,6 @@ function bfs(
                 queue.push(neighbor);
                 visited.add(neighbor.join(','));
                 cameFrom.set(neighbor.join(','), current);
-                console.log(`Ajout de ${neighbor} à la file`);
             }
         }
     }
@@ -201,25 +199,3 @@ function getVectorDirection(vector) {
     }
     return horizontal || vertical;
 }
-
-
-function testBfs() {
-    const start: [number, number] = [10, 10];
-    const end: [number, number] = oeuvres[0].coordinate;
-
-    console.log("Test BFS 1 : Chemin simple");
-    const result1 = bfs(start, end, musee.map);
-    console.log("fin", result1, "\n\n\n");
-
-    console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [0, 14], [0, 87], musee.map)
-    console.log("fin", result2);
-    const vectors:number[][] = generateVectors(result2,3);
-
-    for(const [dx, dy] of vectors){
-        console.log("vectors, ", dx, ",",dy,",", getVectorDirection([dx,dy]));
-    }
-}
-
-// Appeler les tests
-testBfs();
