@@ -9,12 +9,14 @@ import ArtworkCard from "@/components/ArtworkDesc";
 
 function App({ params: paramsPromise }) {
     const params = use(paramsPromise);
-    const authType = params?.parcourType;
-    const validAuthTypes = ["fraction", "description"];
-    const imageDesc = authType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
-    const textDesc = authType === "fraction" ? Guide : ArtworkDesc;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const parcourType = params?.parcourType;
+    const validparcourType = ["fraction", "description"];
+    const imageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
+    const textDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
 
-    if (!authType || !validAuthTypes.includes(authType)) {
+    if (!authType || !validparcourType.includes(authType)) {
         notFound();
     }
 
@@ -35,7 +37,7 @@ function App({ params: paramsPromise }) {
                 <Header/>
                 <div className="flex flex-col xl:flex-row gap-4">
                     <ImageDesc/>
-                    <Guide />
+                    <textDesc/>
                 </div>
 
                 <ArtworkCard
