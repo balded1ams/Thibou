@@ -7,7 +7,7 @@ const Samples = () => {
 
     return (
         <div
-            className="flex flex-col items-center py-8 "
+            className="flex flex-col items-center gap-8 py-8 text-xl font-semibold"
             style={{
                 color: systemTheme.text.primary,
             }}
