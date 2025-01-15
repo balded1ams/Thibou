@@ -3,7 +3,7 @@ import { useThemeContext } from "@/hooks/useTheme";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface CategoryProps {
-    title: string;
+    title: React.ReactNode;
     children: React.ReactNode;
 }
 

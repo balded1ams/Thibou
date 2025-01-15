@@ -3,9 +3,23 @@ import Plan from "@/components/plan"
 import Footer from "@/components/footer";
 import Guide from "@/components/guide";
 import {useThemeContext} from "@/hooks/useTheme";
+import { use } from "react";
+import { notFound } from "next/navigation";
 import ArtworkCard from "@/components/ArtworkDesc";
 
-function App() {
+function App({ params: paramsPromise }) {
+    const params = use(paramsPromise);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const parcourType = params?.parcourType;
+    const validparcourType = ["fraction", "description"];
+    const imageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
+    const textDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
+
+    if (!authType || !validparcourType.includes(authType)) {
+        notFound();
+    }
+
     const { systemTheme } = useThemeContext();
 
     return (
@@ -22,8 +36,8 @@ function App() {
             >
                 <Header/>
                 <div className="flex flex-col xl:flex-row gap-4">
-                    <Plan />
-                    <Guide />
+                    <ImageDesc/>
+                    <textDesc/>
                 </div>
 
                 <ArtworkCard
