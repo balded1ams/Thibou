@@ -4,7 +4,7 @@ import { Oeuvre } from "@/types"; // Assuming the type is defined in "@/types"
 import { pathing } from "@/hooks/useBFS";
 import Arrow from "@/components/arrow";
 import Image from "next/image";
-import { useThemeContext } from '../hooks/useTheme';
+import { useThemeContext } from '@/hooks/useTheme';
 
 
 interface PlanProps {
