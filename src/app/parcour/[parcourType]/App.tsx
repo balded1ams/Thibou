@@ -9,6 +9,8 @@ import ArtworkCard from "@/components/ArtworkDesc";
 
 function App({ params: paramsPromise }) {
     const params = use(paramsPromise);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const authType = params?.parcourType;
     const validAuthTypes = ["fraction", "description"];
     const imageDesc = authType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
@@ -35,7 +37,7 @@ function App({ params: paramsPromise }) {
                 <Header/>
                 <div className="flex flex-col xl:flex-row gap-4">
                     <ImageDesc/>
-                    <Guide />
+                    <textDesc/>
                 </div>
 
                 <ArtworkCard
