@@ -11,12 +11,12 @@ function App({ params: paramsPromise }) {
     const params = use(paramsPromise);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const authType = params?.parcourType;
-    const validAuthTypes = ["fraction", "description"];
-    const imageDesc = authType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
-    const textDesc = authType === "fraction" ? Guide : ArtworkDesc;
+    const parcourType = params?.parcourType;
+    const validparcourType = ["fraction", "description"];
+    const imageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
+    const textDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
 
-    if (!authType || !validAuthTypes.includes(authType)) {
+    if (!authType || !validparcourType.includes(authType)) {
         notFound();
     }
 
