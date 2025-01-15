@@ -2,6 +2,7 @@ import React from "react";
 import { musee, oeuvres } from "@/utils";
 import { pathing } from "@/hooks/useBFS";
 import Arrow from "./arrow";
+import Image from "next/image";
 
 interface PlanProps {
     imageUrl: string; // URL de l'image en paramètre
@@ -51,15 +52,13 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                 overflow: "hidden",
             }}
         >
+
             {/* Image de fond */}
-            <img
+            <Image
                 src={imageUrl}
                 alt="Plan de musée"
-                style={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                }}
+                width={625}
+                height={558}
             />
 
             {/* Superposition des points */}

@@ -6,12 +6,6 @@ import {useThemeContext} from "@/hooks/useTheme";
 
 function App() {
     const { systemTheme } = useThemeContext();
-    const roomNumber = 5; //exemple de numéro de salle
-
-    const handleCheckboxChange = (state) => {
-        const stateLabel = ["Non coché", "Indéterminé", "Coché"];
-        console.log("Checkbox state:", stateLabel[state]);
-    };
 
     return (
         <div
