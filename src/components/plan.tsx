@@ -7,22 +7,38 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 
 
-const Plan: React.FC = ({ }) => {
+const Plan: React.FC = () => {
     const { systemTheme } = useThemeContext();
 
     const rows = musee.map.length;
     const cols = musee.map[0].length;
 
     const [points, setPoints] = useState<[number, number][]>([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+
+
+    const advancePoint = () => {
+        setCurrentIndex((prevIndex) => {
+            const newIndex = prevIndex + 1;
+            if (newIndex < points.length) {
+                return newIndex;
+            } else {
+                console.warn('No more points to advance.');
+                return prevIndex;
+            }
+        });
+    };
 
     useEffect(() => {
         const fetchPoints = async () => {
             const result = await pathing();
-            setPoints(result);
+            setPoints(result[currentIndex]);
         };
 
         fetchPoints();
     }, []);
+
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
 
     // Déterminer la direction entre deux points
