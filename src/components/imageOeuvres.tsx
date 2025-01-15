@@ -5,7 +5,7 @@ const ImageOeuvre = () => {
   return (
     <>
       <Image
-        src={"/map.jpg"}
+        src={"/oeuvre.jpg"}
         alt="Plan de musée"
         width={625}
         height={558}

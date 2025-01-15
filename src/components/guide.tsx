@@ -45,6 +45,7 @@
 import React, { useEffect, useState } from 'react';
 import { setCurrentRoomFromCoordinates, setDirectionForPath, cooOeuvre } from '../hooks/useGuidage';
 import { useThemeContext } from "@/hooks/useTheme";
+import Button from '@/components/button';
 
 const Guide = () => {
     const { systemTheme } = useThemeContext();
@@ -80,6 +81,7 @@ const Guide = () => {
                 <span>{directionPath}</span>
             </div>
 
+            <Button text="Suivant" onClick={() => {}} />
             
         </div>
     );

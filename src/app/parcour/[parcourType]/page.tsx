@@ -37,19 +37,19 @@ export default function ParcourPage({ params: paramsPromise }) {
         }}
       >
           <main
-            className=" mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
+            className="min-h-screen mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
             style={{}}
           >
               <Header />
               <div className="flex flex-col gap-4 xl:flex-row">
                   <ImageDesc />
                   <TextDesc
-                    title={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"}
-                    year={"Lorem ipsum dolor"}
-                    author={"Lorem ipsum dolor"}
-                    movement={"Lorem ipsum dolor"}
-                    technique={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"}
-                    description={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"}
+                    title={"La Nuit étoilée"}
+                    year={"1889"}
+                    author={"Van Gogh"}
+                    movement={"Postimpressionnisme"}
+                    technique={"Huile sur toile"}
+                    description={"La Nuit étoilée est une peinture de l'artiste peintre postimpressionniste néerlandais Vincent van Gogh. Le tableau représente ce que Van Gogh pouvait voir et extrapoler de la chambre qu'il occupait dans l'asile du monastère Saint-Paul-de-Mausole à Saint-Rémy-de-Provence en mai 1889. Souvent présenté comme son grand œuvre, le tableau a été reproduit à de très nombreuses reprises. "}
                   />
               </div>
           </main>
