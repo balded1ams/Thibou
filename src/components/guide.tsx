@@ -79,6 +79,8 @@ const Guide = () => {
                 <span>→</span>
                 <span>{directionPath}</span>
             </div>
+
+            
         </div>
     );
 };
