@@ -12,7 +12,7 @@ const Samples = () => {
                 color: systemTheme.text.primary,
             }}
         >
-            <p>Some samples: </p>
+            <p>Quelques exemples : </p>
             <section className="flex flex-wrap gap-4">
                 <Image
                     src={map}   // A remplacer par l'image voulue
