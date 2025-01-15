@@ -100,19 +100,19 @@ export default function Preferences() {
         </div>
 
         <div>
-          <Category title="Type d'œuvre">
+          <Category title="Type d'œuvres">
             <Item
-              name="Peinture"
+              name="Peintures"
               state={itemStates[0]}
               onStateChange={(newState) => updateItemState(0, newState)}
             />
             <Item
-              name="Sculpture"
+              name="Sculptures"
               state={itemStates[1]}
               onStateChange={(newState) => updateItemState(1, newState)}
             />
           </Category>
-          <Category title="Auteur">
+          <Category title="Auteurs">
             <Item
               name="Michel-Ange"
               state={itemStates[2]}
@@ -124,7 +124,7 @@ export default function Preferences() {
               onStateChange={(newState) => updateItemState(3, newState)}
             />
           </Category>
-          <Category title="Mouvement">
+          <Category title="Mouvements">
             <Item
               name="Le maniérisme"
               state={itemStates[4]}
