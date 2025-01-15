@@ -7,12 +7,8 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 
 
-interface PlanProps {
-    imageUrl: string; // URL de l'image en paramètre
-}
-
-const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
-    const { systemTheme, setTheme } = useThemeContext();
+const Plan: React.FC = ({ }) => {
+    const { systemTheme } = useThemeContext();
 
     const rows = musee.map.length;
     const cols = musee.map[0].length;
@@ -69,10 +65,11 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
 
             {/* Image de fond */}
             <Image
-                src={imageUrl}
+                src={"/map.jpg"}
                 alt="Plan de musée"
                 width={625}
                 height={558}
+                priority={true}
             />
 
             {/* Superposition des points */}
