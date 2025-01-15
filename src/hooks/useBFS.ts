@@ -1,6 +1,7 @@
 import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
+import { fetchAllOeuvres } from "../../script/slugify";
 
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
@@ -101,7 +102,17 @@ function reconstructPath(
     return path;
 }
 
-export function pathing() {
+export async function transformOeuvres(): Promise<Oeuvre[]> {
+    const rawOeuvres = await fetchAllOeuvres();
+
+    return rawOeuvres.map((oeuvre) => ({
+        name: oeuvre.titreOeuvre || "Titre inconnu",
+        description: oeuvre.description || "Aucune description disponible",
+        coordinate: [oeuvre.x ?? 0, oeuvre.y ?? 0],
+    }));
+}
+
+export async function pathing() {
     const oeuvresSort: Oeuvre[] = [];
     const oeuvresTemp = [...oeuvres];
 
@@ -110,6 +121,7 @@ export function pathing() {
     while (oeuvresTemp.length > 0) {
         // Trouver l'œuvre la plus proche de la position actuelle
         let closestIndex = 0;
+
         let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
 
         for (let i = 0; i < oeuvresTemp.length; i++) {

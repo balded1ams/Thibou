@@ -12,7 +12,7 @@ type oeuvreType   = InferModel<typeof oeuvre>;
 export async function fetchAllOeuvres(): Promise<oeuvreType[]> {
     try {
         // Use Drizzle's select method to fetch all rows
-        const listOeuvres = await db.select().from(oeuvre);
+        const listOeuvres = await db.select().from(oeuvre).limit(10);
         return listOeuvres;
     } catch (error) {
         console.error('Error fetching rows:', error);
