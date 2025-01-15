@@ -1,7 +1,7 @@
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 
-interface ArtworkCardProps {
+interface ArtworkDescProps {
   title: string;
   year: string;
   author: string;
@@ -10,7 +10,7 @@ interface ArtworkCardProps {
   description: string;
 }
 
-const ArtworkCard: React.FC<ArtworkCardProps> = ({
+const ArtworkDesc: React.FC<ArtworkDescProps> = ({
   title,
   year,
   author,
@@ -48,4 +48,4 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
   );
 };
 
-export default ArtworkCard;
+export default ArtworkDesc;

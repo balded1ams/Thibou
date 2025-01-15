@@ -5,7 +5,8 @@ import Guide from "@/components/guide";
 import {useThemeContext} from "@/hooks/useTheme";
 import { use } from "react";
 import { notFound } from "next/navigation";
-import ArtworkCard from "@/components/ArtworkDesc";
+import ArtworkDesc from "@/components/ArtworkDesc";
+import ImageOeuvre from "@/components/imageOeuvres";
 
 function App({ params: paramsPromise }) {
     const params = use(paramsPromise);
@@ -13,45 +14,42 @@ function App({ params: paramsPromise }) {
     // @ts-ignore
     const parcourType = params?.parcourType;
     const validparcourType = ["fraction", "description"];
-    const imageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
-    const textDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
+    const ImageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
+    const TextDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
 
-    if (!authType || !validparcourType.includes(authType)) {
+    if (!parcourType || !validparcourType.includes(parcourType)) {
         notFound();
     }
 
     const { systemTheme } = useThemeContext();
 
     return (
-        <div
-            className='min-h-screen w-full overflow-y-auto'
-            style={{
-                backgroundColor: systemTheme.background.primary,
-                color: systemTheme.text.primary,
-            }}
+      <div
+        className="min-h-screen w-full overflow-y-auto"
+        style={{
+          backgroundColor: systemTheme.background.primary,
+          color: systemTheme.text.primary,
+        }}
+      >
+        <main
+          className=" mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0"
+          style={{}}
         >
-            <main
-                className=' mx-auto flex h-full max-w-5xl flex-col gap-4 px-4 xl:px-0'
-                style={{}}
-            >
-                <Header/>
-                <div className="flex flex-col xl:flex-row gap-4">
-                    <ImageDesc/>
-                    <textDesc/>
-                </div>
-
-                <ArtworkCard
-                    title="La Nuit étoilée"
-                    year="1889"
-                    author="Van Gogh"
-                    movement="Postimpressionnisme"
-                    technique="Huile sur toile"
-                    description="La Nuit étoilée est une peinture de l'artiste peintre postimpressionniste néerlandais Vincent van Gogh. Le tableau représente ce que Van Gogh pouvait voir et extrapoler de la chambre qu'il occupait dans l'asile du monastère Saint-Paul-de-Mausole à Saint-Rémy-de-Provence en mai 1889. Souvent présenté comme son grand œuvre, le tableau a été reproduit à de très nombreuses reprises."
-                />
-
-            </main>
-            <Footer/>
-        </div>
+          <Header />
+          <div className="flex flex-col gap-4 xl:flex-row">
+            <ImageDesc />
+            <TextDesc
+              title={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"}
+              year={"Lorem ipsum dolor"}
+              author={"Lorem ipsum dolor"}
+              movement={"Lorem ipsum dolor"}
+              technique={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"}
+              description={"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"}
+            />
+          </div>
+        </main>
+        <Footer />
+      </div>
     );
 }
 
