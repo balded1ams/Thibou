@@ -1,60 +1,60 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { musee, oeuvres } from "@/utils";
+import { Oeuvre } from "@/types"; // Assuming the type is defined in "@/types"
 import { pathing } from "@/hooks/useBFS";
-import Arrow from "./arrow";
+import Arrow from "@/components/arrow";
 import Image from "next/image";
+import { useThemeContext } from '../hooks/useTheme';
+
 
 interface PlanProps {
     imageUrl: string; // URL de l'image en paramètre
 }
 
 const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
-  const rows = musee.map.length;
-  const cols = musee.map[0].length;
+    const { systemTheme, setTheme } = useThemeContext();
 
-  const [points, setPoints] = useState([]);
+    const rows = musee.map.length;
+    const cols = musee.map[0].length;
 
-  useEffect(() => {
-    const fetchPathing = async () => {
-      try {
-        const result = await pathing(); // Appel de la fonction asynchrone
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        setPoints(result); // Stocke les points dans l'état
-      } catch (error) {
-        console.error('Erreur lors de l’exécution de pathing:', error);
-      }
+    const [points, setPoints] = useState<[number, number][]>([]);
+
+    useEffect(() => {
+        const fetchPoints = async () => {
+            const result = await pathing();
+            setPoints(result);
+        };
+
+        fetchPoints();
+    }, []);
+    const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
+
+    // Déterminer la direction entre deux points
+    const getDirection = (from: [number, number], to: [number, number]) => {
+        const [x1, y1] = from;
+        const [x2, y2] = to;
+
+        if (x1 === x2) return y2 > y1 ? "right" : "left"; // Mouvement horizontal
+        if (y1 === y2) return x2 > x1 ? "down" : "up";   // Mouvement vertical
+        return "diagonal"; // Autre mouvement (normalement inutile ici)
     };
 
-    fetchPathing();
-  }, []);
+    // Regrouper les segments ayant la même direction
+    const mergedSegments: [number, number][][] = [];
+    let currentSegment: [number, number][] = [points[0]];
 
-  // Déterminer la direction entre deux points
-  const getDirection = (from: [number, number], to: [number, number]) => {
-    const [x1, y1] = from;
-    const [x2, y2] = to;
+    for (let i = 1; i < points.length; i++) {
+        const prevDirection = getDirection(points[i - 1], points[i]);
+        const nextDirection = i < points.length - 1 ? getDirection(points[i], points[i + 1]) : null;
 
-    if (x1 === x2) return y2 > y1 ? "right" : "left"; // Mouvement horizontal
-    if (y1 === y2) return x2 > x1 ? "down" : "up";   // Mouvement vertical
-    return "diagonal"; // Autre mouvement (normalement inutile ici)
-  };
+        currentSegment.push(points[i]);
 
-  // Regrouper les segments ayant la même direction
-  const mergedSegments: [number, number][][] = [];
-  let currentSegment: [number, number][] = [points[0]];
-
-  for (let i = 1; i < points.length; i++) {
-    const prevDirection = getDirection(points[i - 1], points[i]);
-    const nextDirection = i < points.length - 1 ? getDirection(points[i], points[i + 1]) : null;
-
-    currentSegment.push(points[i]);
-
-    // Si la direction change ou si c'est le dernier point, terminer le segment actuel
-    if (prevDirection !== nextDirection || i === points.length - 1) {
-      mergedSegments.push(currentSegment);
-      currentSegment = [points[i]];
+        // Si la direction change ou si c'est le dernier point, terminer le segment actuel
+        if (prevDirection !== nextDirection || i === points.length - 1) {
+            mergedSegments.push(currentSegment);
+            currentSegment = [points[i]];
+        }
     }
-  }
 
     return (
         <div
@@ -64,7 +64,6 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                 maxWidth: "600px",
                 margin: "auto",
                 borderRadius: "8px",
-                overflow: "hidden",
             }}
         >
 
@@ -77,7 +76,7 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
             />
 
             {/* Superposition des points */}
-            {points.map(([x, y]:[number, number], index) => (
+            {points.map(([x, y], index) => (
                 <div
                     key={`point-${x}-${y}-${index}`}
                     id={`point-${x}-${y}`}
@@ -92,40 +91,72 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                 />
             ))}
 
-      {/* Superposition des flèches */}
-      {mergedSegments.map((segment, index) => {
-        if (segment.length < 2) return null; // Pas besoin de dessiner une flèche
+            {/* Superposition des flèches */}
+            {mergedSegments.map((segment, index) => {
+                if (segment.length < 2) return null; // Pas besoin de dessiner une flèche
 
-        const start = segment[0];
-        const end = segment[segment.length - 1];
+                const start = segment[0];
+                const end = segment[segment.length - 1];
 
-        return (
-          <Arrow
-            key={`arrow-${index}`}
-            from={`point-${start[0]}-${start[1]}`}
-            to={`point-${end[0]}-${end[1]}`}
-          />
-        );
-      })}
+                return (
+                    <Arrow
+                        key={`arrow-${index}`}
+                        from={`point-${start[0]}-${start[1]}`}
+                        to={`point-${end[0]}-${end[1]}`}
+                    />
+                );
+            })}
 
-      {/* Superposition des œuvres */}
-      {oeuvres.map(({ coordinate: [x, y] }, index) => (
-        <svg
-          key={`oeuvre-${x}-${y}-${index}`}
-          style={{
-            position: "absolute",
-            left: `${(y / cols) * 100}%`,
-            top: `${(x / rows) * 100}%`,
-            width: "10px",
-            height: "10px",
-            zIndex: 1,
-          }}
-        >
-          <circle cx="5" cy="5" r="5" fill="blue" />
-        </svg>
-      ))}
-    </div>
-  );
+            {/* Superposition des œuvres */}
+            {oeuvres.map((oeuvre, index) => {
+                const isSelected = selectedOeuvre === oeuvre;
+                const radius = isSelected ? 10 : 5;
+                return (
+                    <svg
+                        key={`oeuvre-${oeuvre.coordinate[0]}-${oeuvre.coordinate[1]}-${index}`}
+                        style={{
+                            position: "absolute",
+                            left: `${(oeuvre.coordinate[1] / cols) * 100}%`,
+                            top: `${(oeuvre.coordinate[0] / rows) * 100}%`,
+                            transform: "translate(-50%, -50%)",
+                            width: `${radius * 2}px`,
+                            height: `${radius * 2}px`,
+                            zIndex: 1,
+                        }}
+                        onClick={() => setSelectedOeuvre(oeuvre)}
+                    >
+                        <circle
+                            cx={radius}
+                            cy={radius}
+                            r={radius}
+                            fill="blue"
+                            className="cursor-pointer"
+                        />
+                    </svg>
+                );
+            })}
+
+            {/* Affichage des informations de l'œuvre sélectionnée */}
+            {selectedOeuvre && (
+                <div
+                    className="flex flex-col rounded-lg shadow-lg p-4"
+                    style={{
+                        position: "absolute",
+                        top: "105%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        backgroundColor: systemTheme.background.secondary,
+                        color: systemTheme.text.primary,
+                        zIndex: 2,
+                    }}
+                >
+                    <h3>{selectedOeuvre.name}</h3>
+                    <p>{selectedOeuvre.description}</p>
+                    <button className="" onClick={() => setSelectedOeuvre(null)}>Fermer</button>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default Plan;
