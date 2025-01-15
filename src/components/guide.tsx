@@ -47,7 +47,7 @@ import { setCurrentRoomFromCoordinates, setDirectionForPath, cooOeuvre } from '.
 import { useThemeContext } from "@/hooks/useTheme";
 import Button from '@/components/button';
 
-const Guide = () => {
+const Guide = ({onClick}) => {
     const { systemTheme } = useThemeContext();
     const [currentRoomName, setCurrentRoomName] = useState('');
     const [directionPath, setDirectionPath] = useState('');
@@ -81,7 +81,7 @@ const Guide = () => {
                 <span>{directionPath}</span>
             </div>
 
-            <Button text="Suivant" onClick={() => {}} />
+            <Button text="Suivant" onClick={() => {onClick}} />
             
         </div>
     );
