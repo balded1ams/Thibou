@@ -3,8 +3,20 @@ import Plan from "@/components/plan"
 import Footer from "@/components/footer";
 import Guide from "@/components/guide";
 import {useThemeContext} from "@/hooks/useTheme";
+import { use } from "react";
+import { notFound } from "next/navigation";
 
-function App() {
+function App({ params: paramsPromise }) {
+    const params = use(paramsPromise);
+    const authType = params?.parcourType;
+    const validAuthTypes = ["fraction", "description"];
+    const imageDesc = authType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
+    const textDesc = authType === "fraction" ? Guide : ArtworkDesc;
+
+    if (!authType || !validAuthTypes.includes(authType)) {
+        notFound();
+    }
+
     const { systemTheme } = useThemeContext();
 
     return (
@@ -21,7 +33,7 @@ function App() {
             >
                 <Header/>
                 <div className="flex flex-col xl:flex-row gap-4">
-                    <Plan imageUrl={"/map.jpg"}/>
+                    <ImageDesc/>
                     <Guide />
                 </div>
             </main>
