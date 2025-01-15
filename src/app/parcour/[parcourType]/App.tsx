@@ -1,3 +1,5 @@
+"use client"
+
 import Header from "@/components/header";
 import Plan from "@/components/plan"
 import Footer from "@/components/footer";
@@ -13,7 +15,10 @@ function App({ params: paramsPromise }) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const parcourType = params?.parcourType;
+
     const validparcourType = ["fraction", "description"];
+
+
     const ImageDesc = parcourType === "fraction" ? Plan : ImageOeuvre; //plan priority TRUE
     const TextDesc = parcourType === "fraction" ? Guide : ArtworkDesc;
 
