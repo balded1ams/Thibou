@@ -83,12 +83,9 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
     return (
         <div
             style={{
-                position: "relative",
-                width: "100%",
                 maxWidth: "600px",
-                margin: "auto",
-                borderRadius: "8px",
             }}
+            className="relative w-full m-auto rounded-md overflow-hidden"
         >
 
             {/* Image de fond */}

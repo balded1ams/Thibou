@@ -64,21 +64,22 @@ const Guide = ({onClick}) => {
 
     return (
         <div
-            className="flex flex-col items-center gap-4"
+            className="flex flex-col gap-4 rounded-2xl p-3 justify-between border"
             style={{
                 backgroundColor: systemTheme.background.secondary,
                 color: systemTheme.text.primary,
-                padding: "1rem",
-                borderRadius: "8px",
+                borderColor: `${systemTheme.background.button}60`
             }}
         >
-            <div className="flex items-center gap-2">
-                <span>→</span>
-                <span>{currentRoomName}</span>
-            </div>
-            <div className="flex items-center gap-2">
-                <span>→</span>
-                <span>{directionPath}</span>
+            <div>
+                <div className="flex items-center gap-2">
+                    <span>→</span>
+                    <span>{currentRoomName}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span>→</span>
+                    <span>{directionPath}</span>
+                </div>
             </div>
 
             <Button text="Suivant" onClick={onClick} />

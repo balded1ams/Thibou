@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({ text, onClick }) => {
 
     return (
         <button 
-            className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+            className="w-full rounded-lg py-2 text-lg font-bold transition-all hover:opacity-80"
             style={{
                 backgroundColor: systemTheme.background.button,
                 color: systemTheme.text.secondary,

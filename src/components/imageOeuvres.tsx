@@ -5,6 +5,7 @@ const ImageOeuvre = () => {
   return (
     <>
       <Image
+        className="rounded-lg"
         src={"/oeuvre.jpg"}
         alt="Plan de musée"
         width={625}

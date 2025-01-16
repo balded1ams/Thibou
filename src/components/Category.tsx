@@ -26,12 +26,8 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
             <div
                 className="flex justify-between items-center px-4 py-3 cursor-pointer transition text-center border-b border-0"
                 style={{
-                    backgroundColor: isOpen
-                        ? systemTheme.background.secondary
-                        : systemTheme.background.secondary,
-                    color: isOpen
-                        ? systemTheme.text.primary
-                        : systemTheme.text.primary,
+                    backgroundColor: systemTheme.background.secondary,
+                    color: systemTheme.text.primary,
                     borderColor: isOpen
                         ? `${systemTheme.background.button}60`
                         : systemTheme.background.secondary,

@@ -3,6 +3,7 @@
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -25,11 +26,14 @@ const Footer: React.FC = () => {
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img
-                        className={"h-10 w-10"}
-                        src={"/thibou.png"}
-                        alt={"Thibou logo"}
+                    <Image 
+                        src="/logo.svg" 
+                        alt="Thibou Logo" 
+                        className="h-8 w-8"
+                        width={1}
+                        height={1}
                     />
+
                     <h1 className={`text-lg font-bold hover:underline`}>
                         Thibou.
                     </h1>
