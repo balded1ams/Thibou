@@ -1,8 +1,7 @@
-import { utilisateur } from "@/db/schema";
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
-//import { cookies } from "next/headers";
-import {NextApiRequest} from "next";
+import { cookies } from "next/headers";
+
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -38,6 +37,81 @@ export async function verifyToken(input: string) {
   return payload as SessionData;
 }
 
+
+export async function setSession(user: utilisateur) {
+  const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const session: SessionData = {
+    user: { id: user.idutilisateur! },
+    expires: expiresInOneDay.toISOString(),
+  };
+  const encryptedSession = await signToken(session);
+  (await cookies()).set("session", encryptedSession, {
+    expires: expiresInOneDay,
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+}
+/*
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+
+  // Parse cookies from the request headers
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  const sessionToken = cookies.session;
+
+  if (!sessionToken) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  try {
+    // Verify the session token
+    const session = await verifyToken(sessionToken);
+
+    return {
+      props: {
+        user: session.user, // Pass user data to the page
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+};
+*/
+
+/*
+type UserProfileProps = {
+  user: {
+    id: number;
+  };
+};*/
+
+/*
+const UserProfile: FC<UserProfileProps> = ({ user }) => {
+  if (!user) {
+    return  <p></p>;
+  }
+
+  return (
+      <div>
+          <h1>Welcome, User {user.id}!</h1>
+  </div>
+);
+};
+
+export default UserProfile;*/
+
 /*
 export async function getSession(req: NextApiRequest) {
   const sessionCookie = req.cookies["session"];
@@ -60,17 +134,3 @@ export async function getSession() {
   return await verifyToken(session);
 }*/
 
-export async function setSession(user: utilisateur) {
-  const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  const session: SessionData = {
-    user: { id: user.id! },
-    expires: expiresInOneDay.toISOString(),
-  };
-  const encryptedSession = await signToken(session);
-  (await cookies()).set("session", encryptedSession, {
-    expires: expiresInOneDay,
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-  });
-}
