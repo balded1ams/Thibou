@@ -87,12 +87,11 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
   );
 
   if (isPasswordValid) {
-    //await setSession(foundUser);
+    await setSession(foundUser);
     return true;
   } else {
     return false;
   }
-  //await setSession(foundUser);
 });
 
 export async function signOut() {

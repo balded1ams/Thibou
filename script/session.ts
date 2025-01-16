@@ -1,5 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
+import {cookies} from "next/headers";
 
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
@@ -36,32 +37,12 @@ export async function verifyToken(input: string) {
   return payload as SessionData;
 }
 
-/*
-export async function getSession(req: NextApiRequest) {
-  const sessionCookie = req.cookies["session"];
-  if (!sessionCookie) return null;
 
-  try {
-    const { payload } = await jwtVerify(sessionCookie, key, {
-      algorithms: ["HS256"],
-    });
-    return payload;
-  } catch (error) {
-    return null; // Invalid session
-  }
-}*/
 
-/*
-export async function getSession() {
-  const session = (await cookies()).get("session")?.value;
-  if (!session) return null;
-  return await verifyToken(session);
-}*/
-
-export async function setSession(user: utilisateur) {
+export async function setSession(user) {
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const session: SessionData = {
-    user: { id: user.id! },
+    user: { id: user.idutilisateur! },
     expires: expiresInOneDay.toISOString(),
   };
   const encryptedSession = await signToken(session);
@@ -73,24 +54,29 @@ export async function setSession(user: utilisateur) {
   });
 }
 
-export async function getIdUserFromSession(headersList : Record<string, string>): Promise<number | null> {
-  const cookieHeader = headersList.get('cookie');
+export async function getIdUserFromSession(
+  headersList: Headers & {
+    append(...args: any[]): void;
+    set(...args: any[]): void;
+    delete(...args: any[]): void;
+  }
+): Promise<number | null> {
+  const cookieHeader = headersList.get("cookie");
 
   // Parse cookies from the header
   const cookies = cookieHeader
-      ? Object.fromEntries(cookieHeader.split('; ').map(cookie => cookie.split('=')))
-      : {};
+    ? Object.fromEntries(
+        cookieHeader.split("; ").map((cookie) => cookie.split("="))
+      )
+    : {};
 
-  const sessionToken = cookies['session'];
-
-
+  const sessionToken = cookies["session"];
 
   // Ensure the token is a string
-  if (typeof sessionToken !== 'string') {
-    console.warn('Session token is not found or is not a valid string.');
+  if (typeof sessionToken !== "string") {
+    console.warn("Session token is not found or is not a valid string.");
     return null;
   }
-
 
   if (!sessionToken) {
     return null; // No session token, user is not authenticated
