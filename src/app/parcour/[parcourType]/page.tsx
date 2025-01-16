@@ -17,6 +17,7 @@ export default function ParcourPage({ params: paramsPromise }) {
   const advancePoint = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex + 1;
+      console.log(newIndex);
       return newIndex;
     });
   };

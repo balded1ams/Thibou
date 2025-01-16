@@ -81,7 +81,7 @@ const Guide = ({onClick}) => {
                 <span>{directionPath}</span>
             </div>
 
-            <Button text="Suivant" onClick={() => {onClick}} />
+            <Button text="Suivant" onClick={onClick} />
             
         </div>
     );

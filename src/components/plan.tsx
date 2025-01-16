@@ -18,15 +18,18 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
 
     const [points, setPoints] = useState<[number, number][]>([]);
 
-
     useEffect(() => {
         const fetchPoints = async () => {
             const result = await pathing();
-            setPoints(result[currentIndex]);
+            if (result[currentIndex]) {
+                setPoints(result[currentIndex]);
+            } else {
+                setPoints([]);
+            }
         };
 
         fetchPoints();
-    }, []);
+    }, [currentIndex]);
 
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
 
