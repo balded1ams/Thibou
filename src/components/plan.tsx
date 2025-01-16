@@ -10,26 +10,46 @@ interface PlanProps {
     currentIndex: number;
 }
 
-
-const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme } = useThemeContext();
+const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
+    const { systemTheme } = useThemeContext();
 
     const rows = musee.map.length;
     const cols = musee.map[0].length;
 
     const [points, setPoints] = useState<[number, number][]>([]);
+    const [result, setResult] = useState<[number, number][][]>([]);
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
 
+    // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
     useEffect(() => {
         const fetchPoints = async () => {
             const result = await pathing();
-            if (result[currentIndex]) {
-                setPoints(result[currentIndex]);
-            } else {
-                setPoints([]);
-            }
+            setResult(result);
+            setDataLoaded(true);
+            console.log(result);
         };
 
-        fetchPoints();
-    }, [currentIndex]);
+        if (!dataLoaded) {
+            fetchPoints();
+        }
+    }, [dataLoaded]);
+
+    // Récupérer le chemin actuel en fonction de l'index actuel
+    useEffect(() => {
+        if (result[currentIndex]) {
+            setPoints(result[currentIndex]);
+        } else {
+            setPoints([]);
+        }
+    }, [currentIndex, result]);
+
+    // Mettre à jour les positions des œuvres lorsque les données sont chargées
+    useEffect(() => {
+        if (dataLoaded) {
+            setOeuvrePositions(oeuvres);
+        }
+    }, [dataLoaded]);
 
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
 
@@ -89,9 +109,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
                         position: "absolute",
                         left: `${(y / cols) * 100}%`,
                         top: `${(x / rows) * 100}%`,
-                        transform: "translate(50%, 50%)",
-                        width: "5px",
-                        height: "5px",
+                        transform: "translate(-50%, -50%)",
                     }}
                 />
             ))}
@@ -113,7 +131,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
             })}
 
             {/* Superposition des œuvres */}
-            {oeuvres.map((oeuvre, index) => {
+            {oeuvrePositions.map((oeuvre, index) => {
                 const isSelected = selectedOeuvre === oeuvre;
                 const radius = isSelected ? 10 : 5;
                 return (

@@ -62,7 +62,7 @@ export default function ParcourPage({ params: paramsPromise }) {
             description={
               "La Nuit étoilée est une peinture de l'artiste peintre postimpressionniste néerlandais Vincent van Gogh. Le tableau représente ce que Van Gogh pouvait voir et extrapoler de la chambre qu'il occupait dans l'asile du monastère Saint-Paul-de-Mausole à Saint-Rémy-de-Provence en mai 1889. Souvent présenté comme son grand œuvre, le tableau a été reproduit à de très nombreuses reprises. "
             }
-            onClick={() => advancePoint()}
+            onClick={advancePoint}
           />
         </div>
       </main>
