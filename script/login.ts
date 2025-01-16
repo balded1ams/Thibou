@@ -45,11 +45,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   }
 
   const passwordHash = await hashPassword(password);
-/*
-  const newUser: nom = {
-      username,
-    passwordHash,
-  };*/
+
 
   const [createdUser] = await db.insert(utilisateur).values({
     nomutilisateur: username,
