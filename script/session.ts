@@ -1,8 +1,6 @@
-import { utilisateur } from "@/db/schema";
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
-//import { cookies } from "next/headers";
-import {NextApiRequest} from "next";
+
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -73,4 +71,36 @@ export async function setSession(user: utilisateur) {
     secure: true,
     sameSite: "lax",
   });
+}
+
+export async function getIdUserFromSession(headersList : Record<string, string>): Promise<number | null> {
+  const cookieHeader = headersList.get('cookie');
+
+  // Parse cookies from the header
+  const cookies = cookieHeader
+      ? Object.fromEntries(cookieHeader.split('; ').map(cookie => cookie.split('=')))
+      : {};
+
+  const sessionToken = cookies['session'];
+
+
+
+  // Ensure the token is a string
+  if (typeof sessionToken !== 'string') {
+    console.warn('Session token is not found or is not a valid string.');
+    return null;
+  }
+
+
+  if (!sessionToken) {
+    return null; // No session token, user is not authenticated
+  }
+
+  try {
+    const session = await verifyToken(sessionToken);
+    console.log(session);
+    return session.user.id; // Return the user data
+  } catch {
+    return null; // Invalid or expired token
+  }
 }

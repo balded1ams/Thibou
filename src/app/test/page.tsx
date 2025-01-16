@@ -1,57 +1,19 @@
-import { verifyToken } from "@/../script/session"; // Update with your actual path
 import { headers} from "next/headers";
 import {fetchUtilisateur} from "../../../script/slugify";
-
-
-type User = {
-    id: number;
-};
-
-
-async function getUserFromSession(): Promise<User | null> {
-    const headersList = await headers();
-    const cookieHeader = headersList.get('cookie');
-
-    // Parse cookies from the header
-    const cookies = cookieHeader
-        ? Object.fromEntries(cookieHeader.split('; ').map(cookie => cookie.split('=')))
-        : {};
-
-    const sessionToken = cookies['session'];
-
-
-
-    // Ensure the token is a string
-    if (typeof sessionToken !== 'string') {
-        console.warn('Session token is not found or is not a valid string.');
-        return null;
-    }
-
-
-    if (!sessionToken) {
-        return null; // No session token, user is not authenticated
-    }
-
-    try {
-        const session = await verifyToken(sessionToken);
-        console.log(session);
-        return session.user; // Return the user data
-    } catch {
-        return null; // Invalid or expired token
-    }
-}
-
+import {getIdUserFromSession} from "../../../script/session";
 
 
 
 export default async function ProfilePage() {
 
-
-    const user = await getUserFromSession();
-
+    const headersList = await headers();
 
 
-    if (!user) {
+    const idUser = await getIdUserFromSession(headersList);
+
+
+
+    if (idUser == null) {
         //redirect("/login"); // Redirect if the user is not authenticated
         return (
             <div>
@@ -59,7 +21,7 @@ export default async function ProfilePage() {
             </div>
         );
     }
-    const utilisateur = await fetchUtilisateur(user.id);
+    const utilisateur = await fetchUtilisateur(idUser);
 
 
 
