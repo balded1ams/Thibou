@@ -73,11 +73,17 @@ export const oeuvre = pgTable("oeuvre", {
 export const parcours = pgTable("parcours", {
 	datecreation: date().notNull(),
 	idutilisateur: integer().notNull(),
+	idoeuvre: integer(),
 }, (table) => [
 	foreignKey({
 			columns: [table.idutilisateur],
 			foreignColumns: [utilisateur.idutilisateur],
 			name: "parcours_idutilisateur_fkey"
+		}),
+	foreignKey({
+			columns: [table.idoeuvre],
+			foreignColumns: [oeuvre.idoeuvre],
+			name: "parcours_idoeuvre_fkey"
 		}),
 	primaryKey({ columns: [table.datecreation, table.idutilisateur], name: "parcours_pkey"}),
 	check("parcours_datecreation_check", sql`datecreation <= CURRENT_DATE`),
