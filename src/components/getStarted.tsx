@@ -19,10 +19,7 @@ const Start = () => {
         >
           Commencer en tant qu’invité
         </button>
-        <Link className="bg-dark-button p-2 rounded-xl"
-          href="/oeuvre/Sculpture3">
-          Aller via Link
-        </Link>
+
       </div>
     );
 };

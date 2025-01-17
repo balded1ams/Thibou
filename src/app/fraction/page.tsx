@@ -1,10 +1,13 @@
 "use client";
 
 import Header from "@/components/header";
-import Plan from "@/components/plan";
 import Footer from "@/components/footer";
+
+import Plan from "@/components/plan";
 import Guide from "@/components/guide";
+
 import { useThemeContext } from "@/hooks/useTheme";
+
 import { useState } from "react";
 
 export default function fracPage() {
