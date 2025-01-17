@@ -1,14 +1,11 @@
 "use client";
 
-import { fetchUtilisateur } from "../../script/slugify";
-import { useEffect, useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
-import ThemeDropdown from "@/components/ThemeDropdown";
-import { user } from "@nextui-org/theme";
+import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
 import Image from "next/image";
-
+import logo from '/public/thibou.png';
 
 interface HeaderProps {
     showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
@@ -17,7 +14,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
     const { systemTheme, setTheme } = useThemeContext();
     const router = useRouter(); // Initialiser le hook de navigation
-
 
     return (
         <header

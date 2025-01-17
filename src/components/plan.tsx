@@ -5,9 +5,8 @@ import { pathing } from "@/hooks/useBFS";
 import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
-import { Expand } from 'lucide-react';
 import Link from "next/link";
-import { addOutput } from "@/hooks/useConsole";
+import { Expand } from 'lucide-react';
 
 interface PlanProps {
     currentIndex: number;
