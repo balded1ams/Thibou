@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
-import { X, Check } from "lucide-react";
+import { X, Check, Presentation, Palette, CalendarRange } from "lucide-react";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
@@ -100,7 +100,7 @@ export default function Preferences() {
         </div>
 
         <div>
-          <Category title="Type d'œuvres">
+          <Category title={<div className="flex items-center align-middle gap-2"> <Presentation/> <p>Type d'œuvres</p></div>}>
             <Item
               name="Peintures"
               state={itemStates[0]}
@@ -112,7 +112,7 @@ export default function Preferences() {
               onStateChange={(newState) => updateItemState(1, newState)}
             />
           </Category>
-          <Category title="Auteurs">
+          <Category title={<div className="flex items-center align-middle gap-2"> <Palette/> <p>Artistes</p></div>}>
             <Item
               name="Michel-Ange"
               state={itemStates[2]}
@@ -124,7 +124,7 @@ export default function Preferences() {
               onStateChange={(newState) => updateItemState(3, newState)}
             />
           </Category>
-          <Category title="Mouvements">
+          <Category title={<div className="flex items-center gap-2"> <CalendarRange/> <p>Mouvement</p></div>}>
             <Item
               name="Le maniérisme"
               state={itemStates[4]}

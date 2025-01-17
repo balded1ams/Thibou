@@ -1,7 +1,7 @@
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 
-interface ArtworkCardProps {
+interface ArtworkDescProps {
   title: string;
   year: string;
   author: string;
@@ -10,7 +10,7 @@ interface ArtworkCardProps {
   description: string;
 }
 
-const ArtworkCard: React.FC<ArtworkCardProps> = ({
+const ArtworkDesc: React.FC<ArtworkDescProps> = ({
   title,
   year,
   author,
@@ -21,13 +21,17 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
   const { systemTheme } = useThemeContext();
 
   return (
-    <div className="p-6 max-w-md bg-beige rounded-lg flex flex-col gap-4" style={{ backgroundColor: systemTheme.background.secondary }}>
+    <div 
+      className="max-w-md bg-beige rounded-lg flex flex-col gap-4"
+      style={{
+        color: systemTheme.text.primary,
+      }}  
+    >
 
       <div className="flex flex-col">
         {/* Titre de l'œuvre et l'année */}
         <h1 className="text-2xl font-bold pb-0 mb-0">
           {title} – {year}
-          
         </h1>
 
         {/* Auteur */}
@@ -48,4 +52,4 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
   );
 };
 
-export default ArtworkCard;
+export default ArtworkDesc;

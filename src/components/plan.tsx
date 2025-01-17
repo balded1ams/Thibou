@@ -6,27 +6,51 @@ import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 
-
 interface PlanProps {
-    imageUrl: string; // URL de l'image en paramètre
+    currentIndex: number;
 }
 
-const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
-    const { systemTheme, setTheme } = useThemeContext();
+const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
+    const { systemTheme } = useThemeContext();
 
     const rows = musee.map.length;
     const cols = musee.map[0].length;
 
     const [points, setPoints] = useState<[number, number][]>([]);
+    const [result, setResult] = useState<[number, number][][]>([]);
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
 
+    // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
     useEffect(() => {
         const fetchPoints = async () => {
             const result = await pathing();
-            setPoints(result);
+            setResult(result);
+            setDataLoaded(true);
+            console.log(result);
         };
 
-        fetchPoints();
-    }, []);
+        if (!dataLoaded) {
+            fetchPoints();
+        }
+    }, [dataLoaded]);
+
+    // Récupérer le chemin actuel en fonction de l'index actuel
+    useEffect(() => {
+        if (result[currentIndex]) {
+            setPoints(result[currentIndex]);
+        } else {
+            setPoints([]);
+        }
+    }, [currentIndex, result]);
+
+    // Mettre à jour les positions des œuvres lorsque les données sont chargées
+    useEffect(() => {
+        if (dataLoaded) {
+            setOeuvrePositions(oeuvres);
+        }
+    }, [dataLoaded]);
+
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
 
     // Déterminer la direction entre deux points
@@ -59,20 +83,18 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
     return (
         <div
             style={{
-                position: "relative",
-                width: "100%",
                 maxWidth: "600px",
-                margin: "auto",
-                borderRadius: "8px",
             }}
+            className="relative w-full m-auto rounded-md overflow-hidden"
         >
 
             {/* Image de fond */}
             <Image
-                src={imageUrl}
+                src={"/map.jpg"}
                 alt="Plan de musée"
                 width={625}
                 height={558}
+                priority={true}
             />
 
             {/* Superposition des points */}
@@ -84,9 +106,7 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
                         position: "absolute",
                         left: `${(y / cols) * 100}%`,
                         top: `${(x / rows) * 100}%`,
-                        transform: "translate(50%, 50%)",
-                        width: "5px",
-                        height: "5px",
+                        transform: "translate(-50%, -50%)",
                     }}
                 />
             ))}
@@ -108,7 +128,7 @@ const Plan: React.FC<PlanProps> = ({ imageUrl }) => {
             })}
 
             {/* Superposition des œuvres */}
-            {oeuvres.map((oeuvre, index) => {
+            {oeuvrePositions.map((oeuvre, index) => {
                 const isSelected = selectedOeuvre === oeuvre;
                 const radius = isSelected ? 10 : 5;
                 return (

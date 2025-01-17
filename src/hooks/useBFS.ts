@@ -34,6 +34,39 @@ function calculerCheminComplet(
     return chemin;
 }
 
+function calculerCheminFractionne(
+  oeuvres: Oeuvre[],
+  start: [number, number],
+  end: [number, number],
+  matrix: number[][]
+): [number, number][][] {
+    const parcoursFractionne: [number, number][][] = [];
+    let currentStart = start;
+
+    for (const oeuvre of oeuvres) {
+        const oeuvreChemin = bfs(currentStart, oeuvre.coordinate, matrix);
+        if (oeuvreChemin.length === 0) {
+            console.error(`Impossible d'atteindre l'œuvre : ${oeuvre.name}`);
+            return [];
+        }
+        // Ajouter ce sous-chemin aux parcours fractionnés
+        parcoursFractionne.push(oeuvreChemin);
+        currentStart = oeuvre.coordinate;
+    }
+
+    const cheminVersSortie = bfs(currentStart, end, matrix);
+    if (cheminVersSortie.length === 0) {
+        console.error("Impossible d'atteindre la sortie");
+        return [];
+    }
+
+    // Ajouter le dernier sous-chemin vers la sortie
+    parcoursFractionne.push(cheminVersSortie);
+
+    return parcoursFractionne;
+}
+
+
 // Algorithme BFS pour calculer un chemin entre deux points
 function bfs(
     start: [number, number],
@@ -137,7 +170,7 @@ export async function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
+    return calculerCheminFractionne(oeuvresSort, [0, 13], [0, 87], musee.map);
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {

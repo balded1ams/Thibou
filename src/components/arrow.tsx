@@ -50,7 +50,6 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
         left: 0,
         pointerEvents: "none",
         zIndex: 1,
-        transform: "translate(-1%, -1%)",
       }}
       width="100%"
       height="100%"

@@ -1,5 +1,6 @@
 "use server"
 import { db } from "@/db/db";
+import {oeuvre} from "@/db/schema";
 import {oeuvre, utilisateur, parcours} from "@/db/schema";
 import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
@@ -25,9 +26,26 @@ export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisa
     }
 }
 
+type utilisateurType   = InferModel<typeof utilisateur>;
+
+
+export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisateurType | null> {
+    try {
+        const utilisateurRow = await db.select().from(utilisateur).where(eq(utilisateur.idutilisateur, idUtilisateur)).limit(1);
+        if (utilisateurRow.length === 1) {
+            return utilisateurRow[0];
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching rows:', error);
+        throw new Error('Failed to fetch rows from the database');
+    }
+}
+
+
 export async function fetchAllOeuvres(): Promise<oeuvreType[]> {
     try {
-        // Use Drizzle's select method to fetch all rows
         const listOeuvres = await db.select().from(oeuvre).limit(10);
         return listOeuvres;
     } catch (error) {
@@ -42,7 +60,7 @@ export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[]
                                    mouvementAcceptee : string[], mouvementRefusee : string[]): Promise<oeuvreType[]> {
 
     try {
-        //Condition type oeuvres
+
         const mustContainTypeOeuvreConditions = typeOeuvreAcceptee ?
             or(...typeOeuvreAcceptee.map(str => like(oeuvre.typeOeuvre, `%${str}%`))) : sql`true`;
 
