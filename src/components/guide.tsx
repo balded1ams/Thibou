@@ -17,18 +17,19 @@ const Guide = ({onClick}) => {
 
     return (
         <div
-            className="flex flex-col items-start gap-4 w-full"
+            className="flex flex-col justify-between gap-4 w-full rounded-xl p-2 border"
             style={{
+                borderColor: `${systemTheme.background.button}60`,
                 backgroundColor: systemTheme.background.secondary,
                 color: systemTheme.text.primary,
-                padding: "1rem",
-                borderRadius: "8px",
             }}
         >
+          <div>
           {outputs.map((output, index) => (
             <p key={index}> {"->"} {output}</p>
           ))}
-            <Button text="Suivant" onClick={onClick} />
+          </div>
+          <Button text="Suivant" onClick={onClick} />
         </div>
     );
 };

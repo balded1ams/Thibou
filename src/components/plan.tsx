@@ -6,7 +6,7 @@ import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 import Link from "next/link";
-import { Expand } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 import { addOutput } from "@/hooks/useConsole";
 
 interface PlanProps {
@@ -26,6 +26,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
     const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+    const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
 
     // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
     useEffect(() => {
@@ -78,8 +79,6 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
         };
     }, [planRef]);
 
-    const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
-
     // Déterminer la direction entre deux points
     const getDirection = (from: [number, number], to: [number, number]) => {
         const [x1, y1] = from;
@@ -128,6 +127,26 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
         return 5; // Taille par défaut pour les points éloignés
     };
 
+    const getPopupPosition = () => {
+        if (!selectedOeuvre) return { left: '50%', top: '50%' };
+
+        const x = (selectedOeuvre.coordinate[1] / cols) * planRef.current!.clientWidth;
+        const y = (selectedOeuvre.coordinate[0] / rows) * planRef.current!.clientHeight;
+
+        const popupWidth = 300; // Largeur approximative de la popup
+        const popupHeight = 200; // Hauteur approximative de la popup
+
+        let left = x - popupWidth / 2;
+        let top = y + 40; // Décalage de 40px vers le bas
+
+        // Ajuster si la popup dépasse les bords de l'écran
+        if (left < 0) left = 10;
+        if (left + popupWidth > planRef.current!.clientWidth) left = planRef.current!.clientWidth - popupWidth - 10;
+        if (top + popupHeight > planRef.current!.clientHeight) top = y - popupHeight - 40;
+
+        return { left: `${left}px`, top: `${top}px` };
+    };
+
     return (
         <div
             ref={planRef}
@@ -139,6 +158,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
 
             {/* Image de fond */}
             <Image
+                className="overflow-hidden rounded-md"
                 src={"/map.jpg"}
                 alt="Plan de musée"
                 width={625}
@@ -180,23 +200,24 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
             {oeuvrePositions.map((oeuvre, index) => {
                 const isSelected = selectedOeuvre === oeuvre;
                 const radius = getRadius(oeuvre);
+                const selectedRadius = isSelected ? radius * 1.5 : radius; // Augmenter la taille si sélectionné
                 return (
                     <svg
                         key={`oeuvre-${oeuvre.coordinate[0]}-${oeuvre.coordinate[1]}-${index}`}
-                        className={`absolute cursor-pointer transition-transform z-10 ${isSelected ? 'animate-pulse' : ''}`}
+                        className={`absolute cursor-pointer z-10 ${isSelected ? 'animate-pulse' : ''}`}
                         style={{
                             left: `${(oeuvre.coordinate[1] / cols) * 100}%`,
                             top: `${(oeuvre.coordinate[0] / rows) * 100}%`,
                             transform: "translate(-50%, -50%)",
-                            width: `${radius * 2}px`,
-                            height: `${radius * 2}px`,
+                            width: `${selectedRadius * 2}px`,
+                            height: `${selectedRadius * 2}px`,
                         }}
                         onClick={() => setSelectedOeuvre(oeuvre)}
                     >
                         <circle
-                            cx={radius}
-                            cy={radius}
-                            r={radius}
+                            cx={selectedRadius}
+                            cy={selectedRadius}
+                            r={selectedRadius}
                             fill="blue"
                             className="cursor-pointer"
                         />
@@ -209,24 +230,23 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
                 <div
                     className="absolute rounded-xl w-1/2 shadow-lg p-2 z-20 backdrop-blur-md border"
                     style={{
+                        ...getPopupPosition(),
                         backgroundColor: `${systemTheme.background.secondary}AA`,
                         borderColor: `${systemTheme.text.primary}60`,
-                        left: `calc(${(selectedOeuvre.coordinate[1] / cols) * 100}%)`,
-                        top: `calc(${(selectedOeuvre.coordinate[0] / rows) * 100}% + 40px)`,
-                        transform: "translate(-50%, 0)",
+                        color: systemTheme.text.primary,
                     }}
                 >
                     {/* En-tête avec le nom et l'icône */}
                     <div className="flex items-center justify-between mb-2">
                     <h3 className="text-lg font-semibold">{selectedOeuvre.name}</h3>
-                    <Link href={`/oeuvre/${selectedOeuvre.name}`}>
-                        <button
-                            className="p-2 rounded-full transition"
-                            aria-label="Voir plus"
-                        >
-                            <Expand className="w-5 h-5" />
-                        </button>
-                    </Link>
+                    
+                    <button
+                        className="p-2 rounded-full"
+                        aria-label="Voir plus"
+                        onClick={() => setSelectedOeuvre(null)}
+                    >
+                        <CircleX className="w-5 h-5" />
+                    </button>
                     </div>
 
                     {/* Description */}
@@ -235,16 +255,17 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
                     </p>
 
                     {/* Bouton de fermeture */}
-                    <button
-                        className="w-full py-2 px-4 text-sm font-medium rounded-md shadow transition"
-                        style={{
+                    <Link href={`/oeuvre/${selectedOeuvre.name}`}>
+                        <button
+                            className="w-full py-2 px-4 text-sm font-medium rounded-md shadow"
+                            style={{
                             backgroundColor: systemTheme.background.button,
                             color: systemTheme.text.secondary,
-                        }}
-                        onClick={() => setSelectedOeuvre(null)}
-                    >
-                        Fermer
-                    </button>
+                            }}
+                        >
+                            Plus de détails
+                        </button>
+                    </Link>
                 </div>
             )}
         </div>
