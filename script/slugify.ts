@@ -10,26 +10,9 @@ type oeuvreType   = InferModel<typeof oeuvre>;
 type parcoursType = InferModel<typeof parcours>;
 
 
-type utilisateurType   = InferModel<typeof utilisateur>;
-
-
-export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisateurType | null> {
-    try {
-        const utilisateurRow = await db.select().from(utilisateur).where(eq(utilisateur.idutilisateur, idUtilisateur)).limit(1);
-        if (utilisateurRow.length === 1) {
-            return utilisateurRow[0];
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching rows:', error);
-        throw new Error('Failed to fetch rows from the database');
-    }
-}
-
-
 export async function fetchAllOeuvres(): Promise<oeuvreType[]> {
     try {
+        // Use Drizzle's select method to fetch all rows
         const listOeuvres = await db.select().from(oeuvre).limit(10);
         return listOeuvres;
     } catch (error) {
@@ -139,7 +122,7 @@ export async function fetchParcoursByUser(idutilisateur: number): Promise<parcou
             .from(parcours)
             .where(eq(parcours.idutilisateur, idutilisateur));
         return listParcours;
-            
+
     } catch (error) {
         console.error("Error fetching parcours:", error);
         throw new Error("Failed to fetch parcours from the database.");
