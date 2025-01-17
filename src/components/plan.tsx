@@ -89,7 +89,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
             style={{
                 maxWidth: "600px",
             }}
-            className="relative w-full m-auto rounded-md overflow-hidden"
+            className="relative w-full m-auto rounded-md"
         >
 
             {/* Image de fond */}
