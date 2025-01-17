@@ -1,3 +1,4 @@
+"use client"
 import Header from "./components/header";
 import Start from "./components/getStarted";
 import Title from "./components/title";
@@ -5,9 +6,17 @@ import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
+import {utilisateurType} from "@/types";
 
-function App() {
-    const { systemTheme } = useThemeContext();
+interface HeaderProps {
+    userConnected : utilisateurType;
+}
+
+async function App({userConnected}) {
+
+
+
+    const {systemTheme} = useThemeContext();
     return (
         <div
             className="min-h-screen w-full overflow-y-auto"
@@ -20,13 +29,13 @@ function App() {
                 className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0"
                 style={{}}
             >
-                <Header showAuthButtons={true}/>
+                <Header showAuthButtons={true} userConnected={userConnected}/>
                 <Title>Présentation de Thibou</Title>
-                <Start />
-                <Intro />
-                <Samples />
+                <Start/>
+                <Intro/>
+                <Samples/>
             </main>
-            <Footer />
+            <Footer/>
 
         </div>
     );

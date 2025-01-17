@@ -23,17 +23,22 @@ export const utilisateurRelations = relations(utilisateur, ({many}) => ({
 	emplacementParcours: many(emplacementParcours),
 }));
 
-export const oeuvreRelations = relations(oeuvre, ({one}) => ({
+export const oeuvreRelations = relations(oeuvre, ({one, many}) => ({
 	auteur: one(auteur, {
 		fields: [oeuvre.nomauteur],
 		references: [auteur.nomauteur]
 	}),
+	parcours: many(parcours),
 }));
 
 export const parcoursRelations = relations(parcours, ({one, many}) => ({
 	utilisateur: one(utilisateur, {
 		fields: [parcours.idutilisateur],
 		references: [utilisateur.idutilisateur]
+	}),
+	oeuvre: one(oeuvre, {
+		fields: [parcours.idoeuvre],
+		references: [oeuvre.idoeuvre]
 	}),
 	emplacementParcours: many(emplacementParcours),
 }));

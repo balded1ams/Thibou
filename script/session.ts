@@ -1,3 +1,4 @@
+"use server"
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import {cookies} from "next/headers";
@@ -84,7 +85,6 @@ export async function getIdUserFromSession(
 
   try {
     const session = await verifyToken(sessionToken);
-    console.log(session);
     return session.user.id; // Return the user data
   } catch {
     return null; // Invalid or expired token
