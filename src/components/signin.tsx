@@ -33,7 +33,7 @@ const Login: React.FC = () => {
             console.log("Test4");
 
             const result: ResponseMessage = await response.json();
-            console.log(result.message); // Affiche le message du serveur
+            console.log(result.message);
 
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');

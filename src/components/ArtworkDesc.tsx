@@ -20,6 +20,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
 }) => {
   const { systemTheme } = useThemeContext();
 
+
   return (
     <div className="p-6 max-w-md bg-beige rounded-lg flex flex-col gap-4" style={{ backgroundColor: systemTheme.background.secondary }}>
 

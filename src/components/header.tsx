@@ -16,15 +16,6 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
     const { systemTheme, setTheme } = useThemeContext();
     const router = useRouter(); // Initialiser le hook de navigation
 
-    const [usersProfile, user] = useState();
-
-
-    useEffect(() => {
-        const users = async () => {
-            const result = await fetchUtilisateur(15);
-        };
-        users();
-    }, []);
 
     return (
         <header
@@ -93,10 +84,6 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                     backgroundColor: `${systemTheme.text.primary}AA`,
                 }}
             />
-            <div>
-                {usersProfile}
-            </div>
-
         </header>
     );
 };
