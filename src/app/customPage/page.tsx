@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -7,26 +7,23 @@ import React, { useState } from "react";
 import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
-import { X, Check, Presentation, Palette, CalendarRange } from "lucide-react";
-import {router} from "next/client";
-import {useRouter} from "next/navigation";
+import { X, Check, MoveHorizontal } from "lucide-react";
+import { StaticColors as colors } from "@/utils/index";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
-  const router = useRouter();
 
   const [itemStates, setItemStates] = useState<number[]>([0, 0, 0, 0, 0, 0, 0]); // 7 items initialisés à neutre
 
-  const handleAcceptAll = () => setItemStates(itemStates.map(() => 2)); // Tout accepté
-  const handleRejectAll = () => setItemStates(itemStates.map(() => 1)); // Tout refusé
+  const handleAcceptAll = () => setItemStates(itemStates.map(() => 2)); // Tout accepter
+  const handleRejectAll = () => setItemStates(itemStates.map(() => 1)); // Tout refuser
+  const handleNullifyAll = () => setItemStates(itemStates.map(() => 0)); // Tout remettre à 0
 
   const updateItemState = (index: number, newState: number) => {
     setItemStates((prevStates) =>
       prevStates.map((state, i) => (i === index ? newState : state))
     );
   };
-
-
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -62,63 +59,101 @@ export default function Preferences() {
 
       const result = await response.json();
       console.log("Réponse du serveur :", result);
+      
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');
     }
-    await router.push("/fraction")
   };
 
   return (
     <div style={{ backgroundColor: systemTheme.background.primary }}>
       <main
-        className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 pb-8"
+        className="mx-auto flex h-full min-h-screen max-w-5xl flex-col text-sm gap-4 px-4 pb-8"
         style={{ backgroundColor: systemTheme.background.primary }}
       >
-        <Header />
+        <Header/>
 
         <Title>Choisissez vos préférences</Title>
 
-        <div className="mx-auto flex w-full max-w-2xl justify-between gap-8">
+        <p className="mx-auto w-full max-w-2xl text-center mb-4">
+          Indiquez si vous êtes intéressé, moyennement intéressé ou pas du tout intéressé. 
+        </p>
+
+        <div className="mx-auto flex w-full max-w-2xl text-xs justify-end gap-2">
+          <h2 className="h-min text-lg self-center w-full">Boutons à effet global :</h2>
           <div
             onClick={handleRejectAll}
-            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg p-2 px-4 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
             style={{
               backgroundColor: systemTheme.background.secondary,
               border: `1px solid ${systemTheme.background.button}60`,
               color: systemTheme.text.primary,
             }}
           >
-            <X />
-            <p>Tout décocher</p>
+            <p className="max-w-16">Tout refuser</p> 
+            <div 
+              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              style={{
+                backgroundColor: colors.red,
+              }}
+            >           
+              <X />
+            </div>
+          </div>
+          <div
+            onClick={handleNullifyAll}
+            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
+            style={{
+              backgroundColor: systemTheme.background.secondary,
+              border: `1px solid ${systemTheme.background.button}60`,
+              color: systemTheme.text.primary,
+            }}
+          >
+            <p className="max-w-20">Neutre partout</p>
+            <div 
+              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              style={{
+                backgroundColor: colors.gray,
+              }}
+            >    
+              <MoveHorizontal/>
+            </div>
           </div>
           <div
             onClick={handleAcceptAll}
-            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg p-2 px-4 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
             style={{
               backgroundColor: systemTheme.background.secondary,
               border: `1px solid ${systemTheme.background.button}60`,
               color: systemTheme.text.primary,
             }}
           >
-            <p>Tout cocher</p>
-            <Check />
+            <p className="max-w-16">Tout vouloir</p>
+            <div 
+              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              style={{
+                backgroundColor: colors.green,
+              }}
+            >    
+              <Check />
+            </div>
           </div>
         </div>
 
         <div>
-          <Category title={<div className="flex items-center align-middle gap-2"> <Presentation/> <p>Type d'œuvres</p></div>}>
+          <Category title="Type d'œuvre">
             <Item
-              name="Peintures"
+              name="Peinture"
               state={itemStates[0]}
               onStateChange={(newState) => updateItemState(0, newState)}
             />
             <Item
-              name="Sculptures"
+              name="Sculpture"
               state={itemStates[1]}
               onStateChange={(newState) => updateItemState(1, newState)}
             />
           </Category>
-          <Category title={<div className="flex items-center align-middle gap-2"> <Palette/> <p>Artistes</p></div>}>
+          <Category title="Auteur">
             <Item
               name="Michel-Ange"
               state={itemStates[2]}
@@ -130,7 +165,7 @@ export default function Preferences() {
               onStateChange={(newState) => updateItemState(3, newState)}
             />
           </Category>
-          <Category title={<div className="flex items-center gap-2"> <CalendarRange/> <p>Mouvement</p></div>}>
+          <Category title="Mouvement">
             <Item
               name="Le maniérisme"
               state={itemStates[4]}
