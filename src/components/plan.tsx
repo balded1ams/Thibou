@@ -158,7 +158,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
             <div className="flex justify-around">
               <h3>{selectedOeuvre.name}</h3>
                 <Link className="bg-dark-button p-2 rounded-xl"
-                      href="/oeuvre/Sculpture3">
+                      href={`/oeuvre/${selectedOeuvre.name}`}>
                     <Expand/>
                 </Link>
             </div>
