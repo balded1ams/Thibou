@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StaticColors as colors } from "@/utils/index";
-import { X, Check, Ban } from "lucide-react";
+import { X, Check, MoveHorizontal } from "lucide-react";
 import { useThemeContext } from "@/hooks/useTheme";
 
 
@@ -35,7 +35,7 @@ const Checkbox = ({
     }
   };
 
-  const handleReset = (e: React.MouseEvent) => {
+  const handleClickMiddle = (e: React.MouseEvent) => {
     if (internalState != 0) {
       e.stopPropagation();
       setInternalState(0);
@@ -46,7 +46,7 @@ const Checkbox = ({
   return (
     <div
       className="h-10 items-center rounded-xl flex overflow-hidden justify-between w-full lg:w-1/2 cursor-pointer"
-      onClick={handleReset}
+      onClick={handleClickMiddle}
       style={{
         backgroundColor: systemTheme.background.primary,
         color: systemTheme.text.primary,
@@ -67,8 +67,11 @@ const Checkbox = ({
         className={`flex items-center h-full justify-center transition-all duration-300 ${
           internalState === 0 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
+        style={{
+          backgroundColor: colors.gray,
+        }}
       >
-        <Ban />
+        <MoveHorizontal />
       </div>
       <div
         onClick={handleClickRight}

@@ -8,7 +8,7 @@ interface ItemProps {
   onStateChange: (newState: number) => void; // Callback pour informer le parent du changement d'état
 }
 
-  const Item: React.FC<ItemProps> = ({ name, state, onStateChange }) => {
+const Item: React.FC<ItemProps> = ({ name, state, onStateChange }) => {
   const { systemTheme } = useThemeContext();
 
   return (
