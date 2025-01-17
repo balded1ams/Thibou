@@ -21,6 +21,7 @@
     "@react-spring/web": "^9.7.5",
     "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.38.3",
+    "express": "^4.21.2",
     "html2canvas": "^1.4.1",
     "jose": "^5.9.6",
     "lucide-react": "^0.469.0",

@@ -5,6 +5,9 @@ import { pathing } from "@/hooks/useBFS";
 import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
+import { Expand } from 'lucide-react';
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface PlanProps {
     currentIndex: number;
@@ -156,26 +159,35 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
                 );
             })}
 
-            {/* Affichage des informations de l'œuvre sélectionnée */}
-            {selectedOeuvre && (
-                <div
-                    className="flex flex-col rounded-lg shadow-lg p-4"
-                    style={{
-                        position: "absolute",
-                        top: "105%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        backgroundColor: systemTheme.background.secondary,
-                        color: systemTheme.text.primary,
-                        zIndex: 2,
-                    }}
+        {/* Affichage des informations de l'œuvre sélectionnée */}
+        {selectedOeuvre && (
+          <div
+            className="flex flex-col rounded-lg p-4 shadow-lg"
+            style={{
+              position: "absolute",
+              top: "105%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              backgroundColor: systemTheme.background.secondary,
+              color: systemTheme.text.primary,
+              zIndex: 2,
+            }}
+          >
+            <div className="flex justify-around">
+              <h3>{selectedOeuvre.name}</h3>
+                <Link
+                  href={`/oeuvre/${selectedOeuvre.name}`}
                 >
-                    <h3>{selectedOeuvre.name}</h3>
-                    <p>{selectedOeuvre.description}</p>
-                    <button className="" onClick={() => setSelectedOeuvre(null)}>Fermer</button>
-                </div>
-            )}
-        </div>
+                    <Expand />
+                </Link>
+            </div>
+            <p>{selectedOeuvre.description}</p>
+            <button className="" onClick={() => setSelectedOeuvre(null)}>
+              Fermer
+            </button>
+          </div>
+        )}
+      </div>
     );
 };
 
