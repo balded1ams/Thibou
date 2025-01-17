@@ -3,6 +3,8 @@
 import React from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import logo from '/public/thibou.png';
 
 const Footer: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -31,7 +33,6 @@ const Footer: React.FC = () => {
                         <ellipse cx="38" cy="60" rx="6" ry="11" fill="currentColor"/>
                         <ellipse cx="117" cy="60" rx="6" ry="11" fill="currentColor"/>
                     </svg>
-
                     <h1 className={`text-lg font-bold hover:underline`}>
                         Thibou.
                     </h1>

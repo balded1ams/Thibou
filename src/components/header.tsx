@@ -6,8 +6,9 @@ import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
-import { user } from "@nextui-org/theme"; // Hook pour la navigation
+import { user } from "@nextui-org/theme";
 import Image from "next/image";
+
 
 interface HeaderProps {
     showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
@@ -49,6 +50,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                         alt={"Thibou logo"}
                         width={50}
                         height={50}
+
                     />
                     <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
                         Thibou.

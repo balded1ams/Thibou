@@ -5,6 +5,7 @@ import Intro from "./components/introduction";
 import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
+import SampleCarousel from "./components/sampleCarousel";
 
 function App() {
     const { systemTheme } = useThemeContext();
@@ -24,7 +25,7 @@ function App() {
                 <Title>Présentation de Thibou</Title>
                 <Start />
                 <Intro />
-                <Samples />
+                <SampleCarousel/>
             </main>
             <Footer />
 
