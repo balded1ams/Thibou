@@ -45,11 +45,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   }
 
   const passwordHash = await hashPassword(password);
-/*
-  const newUser: nom = {
-      username,
-    passwordHash,
-  };*/
+
 
   const [createdUser] = await db.insert(utilisateur).values({
     nomutilisateur: username,
@@ -91,12 +87,11 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
   );
 
   if (isPasswordValid) {
-    //await setSession(foundUser);
+    await setSession(foundUser);
     return true;
   } else {
     return false;
   }
-  //await setSession(foundUser);
 });
 
 export async function signOut() {

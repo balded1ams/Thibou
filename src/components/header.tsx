@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
-import ThemeDropdown from "@/components/ThemeDropdown";
-import { user } from "@nextui-org/theme"; // Hook pour la navigation
+import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
+import Image from "next/image";
+import logo from '/public/thibou.png';
 
 interface HeaderProps {
     showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
@@ -33,10 +34,12 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img
-                        className={"max-w-16"}
-                        src={"/thibou.png"}
-                        alt={"Thibou logo"}
+                    <Image
+                        src={logo}   // A remplacer par l'image voulue
+                        alt={`Logo`}
+                        width={64}
+                        height={64}
+                        className="image"
                     />
                     <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
                         Thibou.
