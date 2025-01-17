@@ -20,6 +20,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
 }) => {
   const { systemTheme } = useThemeContext();
 
+
   return (
     <div 
       className="max-w-md bg-beige rounded-lg flex flex-col gap-4"
