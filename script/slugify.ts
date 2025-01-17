@@ -1,6 +1,5 @@
 "use server"
 import { db } from "@/db/db";
-import {oeuvre} from "@/db/schema";
 import {oeuvre, utilisateur, parcours} from "@/db/schema";
 import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
@@ -8,23 +7,8 @@ import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
 
 type oeuvreType   = InferModel<typeof oeuvre>;
-type utilisateurType   = InferModel<typeof utilisateur>;
 type parcoursType = InferModel<typeof parcours>;
 
-export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisateurType | null> {
-    try {
-        // Use Drizzle's select method to fetch all rows
-        const utilisateurRow = await db.select().from(utilisateur).where(eq(utilisateur.idutilisateur, idUtilisateur)).limit(1);
-        if (utilisateurRow.length === 1) {
-            return utilisateurRow[0];
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching rows:', error);
-        throw new Error('Failed to fetch rows from the database');
-    }
-}
 
 type utilisateurType   = InferModel<typeof utilisateur>;
 
