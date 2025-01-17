@@ -173,13 +173,40 @@ export async function pathing() {
     return calculerCheminFractionne(oeuvresSort, [0, 13], [0, 87], musee.map);
 }
 
+export function pathing2() {
+    const oeuvresSort: Oeuvre[] = [];
+    const oeuvresTemp = [...oeuvres];
+
+    let currentPosition: [number, number] = [10, 10]; // Position de départ
+
+    while (oeuvresTemp.length > 0) {
+        // Trouver l'œuvre la plus proche de la position actuelle
+        let closestIndex = 0;
+
+        let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
+
+        for (let i = 0; i < oeuvresTemp.length; i++) {
+            const distance = dist(currentPosition, oeuvresTemp[i].coordinate);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        oeuvresSort.push(oeuvresTemp[closestIndex]);
+
+        currentPosition = oeuvresTemp[closestIndex].coordinate;
+
+        oeuvresTemp.splice(closestIndex, 1);
+    }
+
+    return [calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map)];
+}
+
 function dist(pos1: [number, number], pos2: [number, number]): number {
     return Math.sqrt(
       Math.pow(pos2[0] - pos1[0], 2) + Math.pow(pos2[1] - pos1[1], 2)
     );
-}
-export function pathing2() {
-    return bfs([10, 10], oeuvres[0].coordinate, musee.map)
 }
 
 function toVector(point1, point2): number[] {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { musee, oeuvres } from "@/utils";
 import { Oeuvre } from "@/types"; // Assuming the type is defined in "@/types"
-import { pathing } from "@/hooks/useBFS";
+import {pathing, pathing2} from "@/hooks/useBFS";
 import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
@@ -11,9 +11,10 @@ import { addOutput } from "@/hooks/useConsole";
 
 interface PlanProps {
     currentIndex: number;
+    allPathing?: boolean;
 }
 
-const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
+const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
     const { systemTheme } = useThemeContext();
     const planRef = useRef<HTMLDivElement>(null);
 
@@ -29,10 +30,9 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
     // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
     useEffect(() => {
         const fetchPoints = async () => {
-            const result = await pathing();
+            const result = await (allPathing ? pathing2() : pathing());
             setResult(result);
             setDataLoaded(true);
-            console.log(result);
         };
 
         if (!dataLoaded) {
