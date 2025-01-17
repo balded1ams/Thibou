@@ -26,7 +26,7 @@ const Guide = ({onClick}) => {
             }}
         >
           {outputs.map((output, index) => (
-            <p key={index}> -> {output}</p>
+            <p key={index}> {"->"} {output}</p>
           ))}
             <Button text="Suivant" onClick={onClick} />
         </div>
