@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 
 const Signup: React.FC = () => {
@@ -11,7 +10,6 @@ const Signup: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const router = useRouter();
 
     interface ResponseMessage {
         message: string;
