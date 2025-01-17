@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 import Link from "next/link";
 import { Expand } from 'lucide-react';
+import {addOutput} from "@/hooks/useConsole";
 
 interface PlanProps {
     currentIndex: number;
@@ -81,7 +82,6 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
             currentSegment = [points[i]];
         }
         addOutput(`oeuvre: ${currentIndex}, ${nextDirection}`)
-
     }
 
     return (
