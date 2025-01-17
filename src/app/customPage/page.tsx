@@ -8,9 +8,12 @@ import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
 import { X, Check, Presentation, Palette, CalendarRange } from "lucide-react";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
+  const router = useRouter();
 
   const [itemStates, setItemStates] = useState<number[]>([0, 0, 0, 0, 0, 0, 0]); // 7 items initialisés à neutre
 
@@ -22,6 +25,8 @@ export default function Preferences() {
       prevStates.map((state, i) => (i === index ? newState : state))
     );
   };
+
+
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,6 +65,7 @@ export default function Preferences() {
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');
     }
+    await router.push("/fraction")
   };
 
   return (
