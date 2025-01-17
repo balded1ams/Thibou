@@ -1,9 +1,14 @@
 "use client";
 
+import { fetchUtilisateur } from "../../script/slugify";
+import { useEffect, useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
-import ThemeDropdown from "@/components/ThemeDropdown"; // Hook pour la navigation
+import ThemeDropdown from "@/components/ThemeDropdown";
+import { user } from "@nextui-org/theme";
+import Image from "next/image";
+
 
 interface HeaderProps {
     showAuthButtons?: boolean; // Paramètre optionnel pour afficher les boutons
@@ -12,6 +17,16 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
     const { systemTheme, setTheme } = useThemeContext();
     const router = useRouter(); // Initialiser le hook de navigation
+
+    const [usersProfile, user] = useState();
+
+
+    useEffect(() => {
+        const users = async () => {
+            const result = await fetchUtilisateur(15);
+        };
+        users();
+    }, []);
 
     return (
         <header
@@ -29,10 +44,13 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img
+                    <Image
                         className={"max-w-16"}
                         src={"/thibou.png"}
                         alt={"Thibou logo"}
+                        width={50}
+                        height={50}
+
                     />
                     <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
                         Thibou.
@@ -80,6 +98,10 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false }) => {
                     backgroundColor: `${systemTheme.text.primary}AA`,
                 }}
             />
+            <div>
+                {usersProfile}
+            </div>
+
         </header>
     );
 };

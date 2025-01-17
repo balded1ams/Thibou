@@ -5,6 +5,7 @@ import ReprendreTable from "./reprendreTable";
 import Article from "./article";
 import {useThemeContext} from "@/hooks/useTheme";
 import Title from "@/components/title";
+import SaluerUser from "@/components/saluerUser";
 
 function App() {
     const { systemTheme } = useThemeContext();
@@ -23,7 +24,7 @@ function App() {
             >
                 <Header/>
                 <section className="flex flex-col items-center mb-14">
-                    <Title>Bonjour "Jean Bon" !</Title>
+                    <SaluerUser/>
                     <BtnVisite />
                 </section>
                 <section>

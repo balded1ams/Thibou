@@ -34,6 +34,39 @@ function calculerCheminComplet(
     return chemin;
 }
 
+function calculerCheminFractionne(
+  oeuvres: Oeuvre[],
+  start: [number, number],
+  end: [number, number],
+  matrix: number[][]
+): [number, number][][] {
+    const parcoursFractionne: [number, number][][] = [];
+    let currentStart = start;
+
+    for (const oeuvre of oeuvres) {
+        const oeuvreChemin = bfs(currentStart, oeuvre.coordinate, matrix);
+        if (oeuvreChemin.length === 0) {
+            console.error(`Impossible d'atteindre l'œuvre : ${oeuvre.name}`);
+            return [];
+        }
+        // Ajouter ce sous-chemin aux parcours fractionnés
+        parcoursFractionne.push(oeuvreChemin);
+        currentStart = oeuvre.coordinate;
+    }
+
+    const cheminVersSortie = bfs(currentStart, end, matrix);
+    if (cheminVersSortie.length === 0) {
+        console.error("Impossible d'atteindre la sortie");
+        return [];
+    }
+
+    // Ajouter le dernier sous-chemin vers la sortie
+    parcoursFractionne.push(cheminVersSortie);
+
+    return parcoursFractionne;
+}
+
+
 // Algorithme BFS pour calculer un chemin entre deux points
 function bfs(
     start: [number, number],
@@ -61,7 +94,6 @@ function bfs(
 
     while (queue.length > 0) {
         const current = queue.shift()!;
-        console.log(`Visite du nœud : ${current}`);
 
         if (current[0] === end[0] && current[1] === end[1]) {
             console.log("Chemin trouvé !");
@@ -80,7 +112,6 @@ function bfs(
                 queue.push(neighbor);
                 visited.add(neighbor.join(','));
                 cameFrom.set(neighbor.join(','), current);
-                console.log(`Ajout de ${neighbor} à la file`);
             }
         }
     }
@@ -139,7 +170,7 @@ export async function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
+    return calculerCheminFractionne(oeuvresSort, [0, 13], [0, 87], musee.map);
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {
@@ -201,25 +232,3 @@ function getVectorDirection(vector) {
     }
     return horizontal || vertical;
 }
-
-
-function testBfs() {
-    const start: [number, number] = [10, 10];
-    const end: [number, number] = oeuvres[0].coordinate;
-
-    console.log("Test BFS 1 : Chemin simple");
-    const result1 = bfs(start, end, musee.map);
-    console.log("fin", result1, "\n\n\n");
-
-    console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [0, 14], [0, 87], musee.map)
-    console.log("fin", result2);
-    const vectors:number[][] = generateVectors(result2,3);
-
-    for(const [dx, dy] of vectors){
-        console.log("vectors, ", dx, ",",dy,",", getVectorDirection([dx,dy]));
-    }
-}
-
-// Appeler les tests
-testBfs();
