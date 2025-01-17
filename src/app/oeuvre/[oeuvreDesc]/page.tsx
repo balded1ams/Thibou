@@ -1,33 +1,19 @@
 "use client";
-
 import { use, useEffect, useState } from "react";
-import { pathing } from "@/hooks/useBFS";
-
-async function getData(id) {
-  try {
-    const res = await fetch(`/api/oeuvres/${id}`);
-    const text = await res.text(); // Récupère la réponse brute
-    console.log("Réponse brute :", text); // Affiche la réponse brute
-    return JSON.parse(text); // Tente de convertir la réponse brute en JSON
-  } catch (error) {
-    console.error("Erreur lors de la récupération des données :", error);
-    throw error;
-  }
-}
-
-
+import { findOeuvres } from "@/hooks/useOeuvre";
 
 export default function Page({ params: paramsPromise }) {
   const params = use(paramsPromise);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const oeuvreDesc = params?.oeuvreDesc;
 
-  const [data, setData] = useState(null);
+  const [name, setName] = useState(null); //TODO: trouver un type un data, le pauvre
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedData = await getData(oeuvreDesc);
-        setData(fetchedData);
+        setName(oeuvreDesc);
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
       }
@@ -39,14 +25,17 @@ export default function Page({ params: paramsPromise }) {
   }, [oeuvreDesc]);
 
 
-  if (!data) {
+  if (!name) {
     return <p>Chargement...</p>;
+  } else {
+    const currentOeuvre = findOeuvres(name);
+    return (
+      <div>
+        <h1>{name}</h1>
+        <h1>oeuvre : {currentOeuvre.name}</h1>
+        <p>{currentOeuvre.description}</p>
+      </div>
+    );
   }
 
-  return (
-    <div>
-      <h1>Page de l'ID : {data.id}</h1>
-      <p>{data.name}</p>
-    </div>
-  );
 }
