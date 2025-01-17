@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 import { Expand } from 'lucide-react';
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface PlanProps {
     currentIndex: number;
@@ -15,15 +14,6 @@ interface PlanProps {
 
 
 const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme } = useThemeContext();
-    const router = useRouter();
-
-    const handleNavigation = () => {
-        router.push({
-            pathname: '/oeuvre/oui',
-            query: { id: 'someId', name: 'someName' }
-        });
-    };
-
     const rows = musee.map.length;
     const cols = musee.map[0].length;
 
@@ -167,10 +157,9 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
           >
             <div className="flex justify-around">
               <h3>{selectedOeuvre.name}</h3>
-                <Link
-                  href={`/oeuvre/${selectedOeuvre.name}`}
-                >
-                    <Expand />
+                <Link className="bg-dark-button p-2 rounded-xl"
+                      href="/oeuvre/Sculpture3">
+                    <Expand/>
                 </Link>
             </div>
             <p>{selectedOeuvre.description}</p>
