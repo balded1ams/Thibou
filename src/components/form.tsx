@@ -26,7 +26,7 @@ const Form: React.FC = () => {
                 body: JSON.stringify({ email, password }),
             });
             if (!response.ok) {
-                throw new Error('Erreur lors de la soumission');
+                throw new Error(`Erreur lors de la soumission`);
             }
 
             console.log("Test4");

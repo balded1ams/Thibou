@@ -160,7 +160,6 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
                 );
             })}
 
-        {/* Affichage des informations de l'œuvre sélectionnée */}
         {selectedOeuvre && (
           <div
             className="flex flex-col rounded-lg p-4 shadow-lg"
