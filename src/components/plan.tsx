@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 import { Expand } from 'lucide-react';
 import Link from "next/link";
+import { addOutput } from "@/hooks/useConsole";
 
 interface PlanProps {
     currentIndex: number;
@@ -59,6 +60,8 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {    const { systemTheme
             mergedSegments.push(currentSegment);
             currentSegment = [points[i]];
         }
+        addOutput(`oeuvre: ${currentIndex}, ${nextDirection}`)
+
     }
 
     return (

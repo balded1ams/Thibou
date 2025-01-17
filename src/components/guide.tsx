@@ -8,11 +8,6 @@ import { useThemeContext } from "@/hooks/useTheme";
 const Guide = ({onClick}) => {
   const [outputs, setOutputs] = useState<string[]>([]);
 
-  const handleAddOutput = (output: string) => {
-    const updatedOutputs = addOutput(output); // Mise à jour des sorties
-    setOutputs(updatedOutputs); // Mettre à jour l'état des sorties
-  };
-
   useEffect(() => {
     const updatedOutputs = addOutput('');
     setOutputs(updatedOutputs);
