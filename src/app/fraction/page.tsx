@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -7,17 +8,19 @@ import Plan from "@/components/plan";
 import Guide from "@/components/guide";
 
 import { useThemeContext } from "@/hooks/useTheme";
-
-import { useState } from "react";
+import { addOutput } from "@/hooks/useConsole"
 
 export default function fracPage() {
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const advancePoint = () => {
     setCurrentIndex(prevIndex => prevIndex + 1);
+    addOutput(`oeuvre: ${currentIndex}`)
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { systemTheme } = useThemeContext();
 
   return (
