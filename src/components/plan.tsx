@@ -162,33 +162,48 @@ const Plan: React.FC<PlanProps> = ({ currentIndex }) => {
 
         {/* Affichage des informations de l'œuvre sélectionnée */}
         {selectedOeuvre && (
-          <div
-            className="flex flex-col rounded-lg p-4 shadow-lg"
-            style={{
-              position: "absolute",
-              top: "105%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              backgroundColor: systemTheme.background.secondary,
-              color: systemTheme.text.primary,
-              zIndex: 2,
-            }}
-          >
-            <div className="flex justify-around">
-              <h3>{selectedOeuvre.name}</h3>
-                <Link
-                  href={`/oeuvre/${selectedOeuvre.name}`}
-                >
-                    <Expand />
+            <div
+                className="absolute rounded-xl w-1/2 shadow-lg p-2 z-20 backdrop-blur-md border"
+                style={{
+                    backgroundColor: `${systemTheme.background.secondary}AA`,
+                    borderColor: `${systemTheme.text.primary}60`,
+                    left: `calc(${(selectedOeuvre.coordinate[1] / cols) * 100}%)`,
+                    top: `calc(${(selectedOeuvre.coordinate[0] / rows) * 100}% + 40px)`,
+                    transform: "translate(-50%, 0)",
+                }}
+            >
+                {/* En-tête avec le nom et l'icône */}
+                <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold">{selectedOeuvre.name}</h3>
+                <Link href={`/oeuvre/${selectedOeuvre.name}`}>
+                    <button
+                        className="p-2 rounded-full transition"
+                        aria-label="Voir plus"
+                    >
+                        <Expand className="w-5 h-5" />
+                    </button>
                 </Link>
+                </div>
+
+                {/* Description */}
+                <p className="text-sm mb-4">
+                    {selectedOeuvre.description}
+                </p>
+
+                {/* Bouton de fermeture */}
+                <button
+                    className="w-full py-2 px-4 text-sm font-medium rounded-md shadow transition"
+                    style={{
+                        backgroundColor: systemTheme.background.button,
+                        color: systemTheme.text.secondary,
+                    }}
+                    onClick={() => setSelectedOeuvre(null)}
+                >
+                    Fermer
+                </button>
             </div>
-            <p>{selectedOeuvre.description}</p>
-            <button className="" onClick={() => setSelectedOeuvre(null)}>
-              Fermer
-            </button>
-          </div>
         )}
-      </div>
+        </div>
     );
 };
 
