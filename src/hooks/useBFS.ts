@@ -3,15 +3,6 @@ import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
 import { fetchAllOeuvres } from "../../script/slugify";
 
-export function findOeuvres(name: unknown): Oeuvre {
-  for (const oeuvre of oeuvres) {
-    if (oeuvre.name == name) {
-      return oeuvre;
-    }
-  }
-  console.error(`oeuvre ${name} pas trouvé, retourne la premiere oeuvres`);
-  return oeuvres[0];
-}
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
 function calculerCheminComplet(
