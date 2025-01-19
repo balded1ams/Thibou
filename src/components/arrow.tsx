@@ -61,7 +61,7 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
         y2={lineCoords.y2}
         stroke="red"
         strokeWidth={4}
-        markerEnd="url(#arrowhead)"
+        strokeLinecap="round"
       />
     </svg>
 
