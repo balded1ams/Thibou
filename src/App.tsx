@@ -14,8 +14,6 @@ interface HeaderProps {
 
 async function App({userConnected}) {
 
-
-
     const {systemTheme} = useThemeContext();
     return (
         <div

@@ -15,7 +15,14 @@ export async function comparePasswords(
   plainTextPassword: string,
   hashedPassword: string,
 ) {
-  return compare(plainTextPassword, hashedPassword);
+  try {
+    const result = await compare(plainTextPassword, hashedPassword);
+    console.log("Résultat de la comparaison:", result);
+    return result;
+  } catch (error) {
+    console.error("Erreur lors de la comparaison des mots de passe:", error);
+    return false;
+  }
 }
 
 type SessionData = {

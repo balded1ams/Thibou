@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router=useRouter();
 
     interface ResponseMessage {
         message: string;
@@ -17,7 +19,6 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         try {
-
             const response = await fetch('/api/signin', {
                 method: 'POST',
                 headers: {
@@ -29,15 +30,14 @@ const Login: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Erreur lors de la soumission');
             }*/
-
-
+            console.log(response);
             const result: ResponseMessage = await response.json();
             console.log(result.message); // Affiche le message du serveur
 
+            router.push("/");
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');
         }
-
     };
 
     return (
