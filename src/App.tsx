@@ -6,7 +6,7 @@ import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
 import SampleCarousel from "./components/sampleCarousel";
 
-async function App() {
+function App() {
 
     const {systemTheme} = useThemeContext();
     return (
