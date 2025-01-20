@@ -32,7 +32,7 @@ const Login: React.FC = () => {
             }*/
             console.log(response);
             const result: ResponseMessage = await response.json();
-            console.log(result.message); // Affiche le message du serveur
+            console.log(result.message);
 
             router.push("/");
         } catch (error: any) {

@@ -1,29 +1,14 @@
 "use server"
 import { db } from "@/db/db";
-import {oeuvre, utilisateur} from "@/db/schema";
+import {oeuvre, utilisateur, parcours} from "@/db/schema";
 import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 
 
 
 
 type oeuvreType   = InferModel<typeof oeuvre>;
-type utilisateurType   = InferModel<typeof utilisateur>;
+type parcoursType = InferModel<typeof parcours>;
 
-
-export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisateurType | null> {
-    try {
-        // Use Drizzle's select method to fetch all rows
-        const utilisateurRow = await db.select().from(utilisateur).where(eq(utilisateur.idutilisateur, idUtilisateur)).limit(1);
-        if (utilisateurRow.length === 1) {
-            return utilisateurRow[0];
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching rows:', error);
-        throw new Error('Failed to fetch rows from the database');
-    }
-}
 
 export async function fetchAllOeuvres(): Promise<oeuvreType[]> {
     try {
@@ -42,7 +27,7 @@ export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[]
                                    mouvementAcceptee : string[], mouvementRefusee : string[]): Promise<oeuvreType[]> {
 
     try {
-        //Condition type oeuvres
+
         const mustContainTypeOeuvreConditions = typeOeuvreAcceptee ?
             or(...typeOeuvreAcceptee.map(str => like(oeuvre.typeOeuvre, `%${str}%`))) : sql`true`;
 
@@ -123,4 +108,23 @@ export async function fetchOeuvre(idOeuvre: number): Promise<oeuvreType | null> 
     console.error("Error fetching oeuvre:", error);
     throw new Error("Failed to fetch oeuvre from the database.");
   }
+}
+
+/**
+ * Fonction utilisée pour obtenir les parcours associés à un utilisateur afin qu'il puisse reprendre o il en était.
+ * @param idutilisateur L'identifiant de l'utilisateur.
+ * @returns Tous les parcours associés à l'utilisateur.
+ */
+export async function fetchParcoursByUser(idutilisateur: number): Promise<parcoursType[]> {
+    try {
+        const listParcours = await db
+            .select()
+            .from(parcours)
+            .where(eq(parcours.idutilisateur, idutilisateur));
+        return listParcours;
+
+    } catch (error) {
+        console.error("Error fetching parcours:", error);
+        throw new Error("Failed to fetch parcours from the database.");
+    }
 }

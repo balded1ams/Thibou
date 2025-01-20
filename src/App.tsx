@@ -3,10 +3,10 @@ import Header from "./components/header";
 import Start from "./components/getStarted";
 import Title from "./components/title";
 import Intro from "./components/introduction";
-import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
 import {utilisateurType} from "@/types";
+import SampleCarousel from "./components/sampleCarousel";
 
 interface HeaderProps {
     userConnected : utilisateurType;
@@ -31,7 +31,7 @@ async function App({userConnected}) {
                 <Title>Présentation de Thibou</Title>
                 <Start/>
                 <Intro/>
-                <Samples/>
+                <SampleCarousel/>
             </main>
             <Footer/>
 

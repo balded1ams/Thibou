@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Salle, Oeuvre } from '../types';
 import { findSalleForOeuvre, findSalleForCoordonnee } from './useSalle';
-import { pathing2 } from './useBFS'; 
+import { generateVectors, getVectorDirection } from './useBFS';
 
-const points = pathing2();
-export const cooOeuvre = points[points.length - 1];
 
 export const setCurrentRoomFromCoordinates = (coordinates: [number, number]): string => {
     const salle = findSalleForCoordonnee(coordinates);
@@ -41,7 +39,42 @@ export const setDirectionForPath = (coordinates: [number, number][]): string => 
             path += 'Vous êtes à présent dans la bonne salle.';
         }
 
+        
+
         return path;
+    };
+
+    export const setDetailedDirectionInLastRoom = (coordinates: [number, number][]): string => {
+        if (coordinates.length < 2) {
+            return "La liste des coordonnées doit contenir au moins deux points.";
+        }
+    
+        const lastSalle = findSalleForCoordonnee(coordinates[coordinates.length - 1]);
+        if (!lastSalle) {
+            return "La salle de la dernière coordonnée n'a pas été trouvée.";
+        }
+    
+        let startIndex = coordinates.length - 1;
+        for (let i = coordinates.length - 2; i >= 0; i--) {
+            const salle = findSalleForCoordonnee(coordinates[i]);
+            if (!salle || salle.name !== lastSalle.name) {
+                startIndex = i + 1;
+                break;
+            }
+        }
+    
+        const lastRoomCoordinates = coordinates.slice(startIndex);
+        const vectors = generateVectors(lastRoomCoordinates, lastRoomCoordinates.length - 1);
+        let detailedDirections = '';
+    
+        vectors.forEach(vector => {
+            const direction = getVectorDirection(vector);
+            if (direction !== "no movement") {
+                detailedDirections += `Direction: ${direction}\n`;
+            }
+        });
+    
+        return detailedDirections.trim();
     };
     
 

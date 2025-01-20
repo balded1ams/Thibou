@@ -7,6 +7,7 @@ import ThemeDropdown from "@/components/ThemeDropdown";
 import { useState, useEffect } from "react";
 import { utilisateurType } from "@/types/index";
 import {LogOut, Pencil} from "lucide-react";
+import Image from "next/image";
 
 interface HeaderProps {
     showAuthButtons?: boolean;
@@ -73,8 +74,17 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img className={"max-w-16"} src={"/thibou.png"} alt={"Thibou logo"} />
-                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>Thibou.</h1>
+                    <Image
+                        className={"max-w-16"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
+                        width={50}
+                        height={50}
+
+                    />
+                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
+                        Thibou.
+                    </h1>
                 </div>
 
                 {/* Menu burger pour mobile */}
