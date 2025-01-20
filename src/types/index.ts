@@ -21,8 +21,15 @@ export interface Musee {
 }
 
 export interface Oeuvre {
+    id: number;
     name: string;
+    type_oeuvre: string;
+    mouvement: string;
+    periodeCreation: string;
+    materiauxTechniques: string;
     description: string;
+    artiste: string;
+    image: string;
     coordinate: [number, number];
 }
 

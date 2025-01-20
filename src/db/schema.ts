@@ -61,6 +61,8 @@ export const utilisateurPreferences = pgTable("utilisateur_preferences", {
 		}),
 ]);
 
+
+/*
 export const oeuvre = pgTable("oeuvre", {
 	idoeuvre: serial().primaryKey().notNull(),
 	titreOeuvre: text("titre_oeuvre"),
@@ -81,6 +83,28 @@ export const oeuvre = pgTable("oeuvre", {
 		}),
 ]);
 
+*/
+
+export const oeuvres_musee = pgTable("oeuvre", {
+	id: serial("idOeuvre").primaryKey(),
+	nom: text("titre_oeuvre").notNull(),
+	type_oeuvre: text("type_oeuvre").notNull(),
+	mouvement: text("nommouvement").notNull(),
+	periodeCreation: varchar("periode_creation", { length: 255 }),
+	materiauxTechniques: varchar("materiaux_techniques", { length: 255 }),
+	description: text("description").notNull(),
+	artiste: text("auteur").notNull(),
+	image: varchar({ length: 255 }),
+	x: integer(),
+	y: integer(),
+}, (table) => [
+	foreignKey({
+		columns: [table.artiste],
+		foreignColumns: [auteur.nomauteur],
+		name: "oeuvre_nomauteur_fkey"
+	}),
+]);
+
 export const parcours = pgTable("parcours", {
 	datecreation: date().notNull(),
 	idutilisateur: integer().notNull(),
@@ -93,12 +117,13 @@ export const parcours = pgTable("parcours", {
 		}),
 	foreignKey({
 			columns: [table.idoeuvre],
-			foreignColumns: [oeuvre.idoeuvre],
+			foreignColumns: [oeuvres_musee.id],
 			name: "parcours_idoeuvre_fkey"
 		}),
 	primaryKey({ columns: [table.datecreation, table.idutilisateur], name: "parcours_pkey"}),
 	check("parcours_datecreation_check", sql`datecreation <= CURRENT_DATE`),
 ]);
+
 
 export const emplacementParcours = pgTable("emplacement_parcours", {
 	idutilisateur: integer().notNull(),
@@ -124,14 +149,7 @@ export const emplacementParcours = pgTable("emplacement_parcours", {
 	check("emplacement_parcours_datecreationparcours_check", sql`datecreationparcours <= CURRENT_DATE`),
 ]);
 
-export const oeuvres_musee = pgTable('oeuvres_musee', {
-	id: serial('id').primaryKey(),
-	nom: text('nom').notNull(),
-	description: text('description').notNull(),
-	type_oeuvre: text('type_oeuvre').notNull(),
-	artiste: text('artiste').notNull(),
-	mouvement: text('mouvement').notNull()
-});
+
 
 export const sauvegarde = pgTable('save', {
 	id: serial('id').primaryKey(),
