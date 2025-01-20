@@ -23,16 +23,16 @@ export const utilisateur = pgTable("utilisateur", {
 	check("utilisateur_dateinscription_check", sql`dateinscription <= CURRENT_DATE`),
 ]);
 
-export const resetPasswordUuid = pgTable("resetPassword_UUID", {
+export const resetpasswordUuid = pgTable("resetpassword_uuid", {
 	idutilisateur: integer().notNull(),
 	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
 	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
 }, (table) => [
 	foreignKey({
-			columns: [table.idutilisateur],
-			foreignColumns: [utilisateur.idutilisateur],
-			name: "new_table_idutilisateur_fkey"
-		}),
+		columns: [table.idutilisateur],
+		foreignColumns: [utilisateur.idutilisateur],
+		name: "new_table_idutilisateur_fkey"
+	}),
 ]);
 
 export const emplacement = pgTable("emplacement", {

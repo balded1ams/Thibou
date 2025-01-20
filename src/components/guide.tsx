@@ -33,9 +33,9 @@ const Guide = ({onSuivant, onSave}) => {
             }}
         >
           <div>
-          {outputs.map((output, index) => (
-            <p key={index}> {"->"} {output}</p>
-          ))}
+            {outputs.map((output, index) => (
+              <p key={index}> {"->"} {output}</p>
+            ))}
           </div>
             <div className="align-bottom gap-2 flex flex-col">
                 <Button text="Suivant" onClick={onSuivant} />

@@ -1,21 +1,29 @@
 import Plan from "@/components/plan";
 import { useThemeContext } from "@/hooks/useTheme";
 import React from 'react';
+import Button from "@/components/button";
+import {useRouter} from "next/navigation";
 
 
 const ParcoursFractionne: React.FC = () => {
+    
     const { systemTheme } = useThemeContext();
+    const router = useRouter();
+
+    const handleButtonClick = () => {
+        router.push('/parcour');
+    };
+
     return(
         <div
-            className="flex flex-col items-center gap-8 p-8 text-xl font-semibold rounded-2xl"
+            className="flex flex-col items-center gap-8 p-4 text-xl font-semibold rounded-2xl mx-auto"
             style={{
                 color: systemTheme.text.primary,
                 backgroundColor: systemTheme.background.secondary,
             }}>
             <div
-                className="flex gap-4">
+                className="flex gap-4 max-w-md">
                 <Plan currentIndex={0} />
-                <Plan currentIndex={0} allPathing={true} />
             </div>
 
             <label htmlFor="timeInput">Choisissez une durée (en minutes) :</label>
@@ -33,6 +41,9 @@ const ParcoursFractionne: React.FC = () => {
                 name="nbParties" 
                 placeholder="1 à 10"
             />
+
+            <Button text="Commencer la visite" onClick={handleButtonClick} />
+
         </div>
     );
 };

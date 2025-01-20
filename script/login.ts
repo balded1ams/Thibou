@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
-import {resetPasswordUuid, utilisateur} from "@/db/schema";
+import {resetpasswordUuid, utilisateur} from "@/db/schema";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
 import nodemailer from "nodemailer";
@@ -127,7 +127,7 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
   console.log(foundUser.idutilisateur);
 
-  const [createdResetPasswordUUID] = await db.insert(resetPasswordUuid).values({
+  const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
     uuidValue : myuuid
 
@@ -175,8 +175,8 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
   const user = await db
       .select()
-      .from(resetPasswordUuid)
-      .where(eq(resetPasswordUuid.uuidValue, uuid))
+      .from(resetpasswordUuid)
+      .where(eq(resetpasswordUuid.uuidValue, uuid))
       .limit(1);
 
 
@@ -205,8 +205,8 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
       .where(eq(utilisateur.idutilisateur, idUser));
 
   await db
-      .delete(resetPasswordUuid)
-      .where(eq(resetPasswordUuid.uuidValue, uuid));
+      .delete(resetpasswordUuid)
+      .where(eq(resetpasswordUuid.uuidValue, uuid));
 
   return true;
 });

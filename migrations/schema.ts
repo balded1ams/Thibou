@@ -1,4 +1,4 @@
-import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, text, primaryKey, json } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -25,14 +25,7 @@ export const utilisateur = pgTable("utilisateur", {
 	check("utilisateur_dateinscription_check", sql`dateinscription <= CURRENT_DATE`),
 ]);
 
-export const emplacement = pgTable("emplacement", {
-	idemplacement: varchar({ length: 255 }).primaryKey().notNull(),
-	abscisse: integer(),
-	ordonnee: integer(),
-	etage: integer(),
-});
-
-export const resetPasswordUuid = pgTable("resetPassword_UUID", {
+export const resetpasswordUuid = pgTable("resetpassword_uuid", {
 	idutilisateur: integer().notNull(),
 	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
 	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
