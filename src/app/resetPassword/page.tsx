@@ -16,7 +16,6 @@ const Page = () => {
 
     const uuidValue = searchParams.get('t') ?? null;
 
-    console.log('test1');
 
 
     //Si la requete est mauvaise
