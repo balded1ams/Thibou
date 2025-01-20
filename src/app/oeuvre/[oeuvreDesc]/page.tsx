@@ -72,6 +72,6 @@ export default function Page({ params: paramsPromise }) {
           </div>
         </main>
       </div>
-  );
+    );
   }
-  }
+}

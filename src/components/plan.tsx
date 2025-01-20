@@ -254,7 +254,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
                         {selectedOeuvre.description}
                     </p>
 
-                    {/* Bouton de fermeture */}
+                    {/* Bouton de détails */}
                     <Link href={`/oeuvre/${selectedOeuvre.name}`}>
                         <button
                             className="w-full py-2 px-4 text-sm font-medium rounded-md shadow"
