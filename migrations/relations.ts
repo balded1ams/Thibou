@@ -1,5 +1,19 @@
 import { relations } from "drizzle-orm/relations";
-import { auteur, utilisateurPreferences, utilisateur, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
+import { utilisateur, resetPasswordUuid, auteur, utilisateurPreferences, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
+
+export const resetPasswordUuidRelations = relations(resetPasswordUuid, ({one}) => ({
+	utilisateur: one(utilisateur, {
+		fields: [resetPasswordUuid.idutilisateur],
+		references: [utilisateur.idutilisateur]
+	}),
+}));
+
+export const utilisateurRelations = relations(utilisateur, ({many}) => ({
+	resetPasswordUuids: many(resetPasswordUuid),
+	utilisateurPreferences: many(utilisateurPreferences),
+	parcours: many(parcours),
+	emplacementParcours: many(emplacementParcours),
+}));
 
 export const utilisateurPreferencesRelations = relations(utilisateurPreferences, ({one}) => ({
 	auteur: one(auteur, {
@@ -17,23 +31,22 @@ export const auteurRelations = relations(auteur, ({many}) => ({
 	oeuvres: many(oeuvre),
 }));
 
-export const utilisateurRelations = relations(utilisateur, ({many}) => ({
-	utilisateurPreferences: many(utilisateurPreferences),
-	parcours: many(parcours),
-	emplacementParcours: many(emplacementParcours),
-}));
-
-export const oeuvreRelations = relations(oeuvre, ({one}) => ({
+export const oeuvreRelations = relations(oeuvre, ({one, many}) => ({
 	auteur: one(auteur, {
 		fields: [oeuvre.nomauteur],
 		references: [auteur.nomauteur]
 	}),
+	parcours: many(parcours),
 }));
 
 export const parcoursRelations = relations(parcours, ({one, many}) => ({
 	utilisateur: one(utilisateur, {
 		fields: [parcours.idutilisateur],
 		references: [utilisateur.idutilisateur]
+	}),
+	oeuvre: one(oeuvre, {
+		fields: [parcours.idoeuvre],
+		references: [oeuvre.idoeuvre]
 	}),
 	emplacementParcours: many(emplacementParcours),
 }));

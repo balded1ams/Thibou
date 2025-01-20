@@ -1,4 +1,4 @@
-import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -12,24 +12,37 @@ export const auteur = pgTable("auteur", {
 	unique("auteur_nomauteur_key").on(table.nomauteur),
 ]);
 
-export const emplacement = pgTable("emplacement", {
-	idemplacement: varchar({ length: 255 }).primaryKey().notNull(),
-	abscisse: integer(),
-	ordonnee: integer(),
-	etage: integer(),
-});
-
 export const utilisateur = pgTable("utilisateur", {
 	idutilisateur: serial().primaryKey().notNull(),
 	nomutilisateur: varchar({ length: 255 }).notNull(),
 	adressemail: varchar({ length: 255 }).notNull(),
 	password: varchar({ length: 255 }).notNull(),
 	dateinscription: date(),
+	iconeuser: varchar({ length: 255 }),
 }, (table) => [
 	unique("utilisateur_adressemail_key").on(table.adressemail),
 	unique("utilisateur_password_key").on(table.password),
 	check("utilisateur_dateinscription_check", sql`dateinscription <= CURRENT_DATE`),
 ]);
+
+export const resetPasswordUuid = pgTable("resetPassword_UUID", {
+	idutilisateur: integer().notNull(),
+	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
+	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "new_table_idutilisateur_fkey"
+		}),
+]);
+
+export const emplacement = pgTable("emplacement", {
+	idemplacement: varchar({ length: 255 }).primaryKey().notNull(),
+	abscisse: integer(),
+	ordonnee: integer(),
+	etage: integer(),
+});
 
 export const utilisateurPreferences = pgTable("utilisateur_preferences", {
 	idpreference: serial().primaryKey().notNull(),
@@ -73,11 +86,17 @@ export const oeuvre = pgTable("oeuvre", {
 export const parcours = pgTable("parcours", {
 	datecreation: date().notNull(),
 	idutilisateur: integer().notNull(),
+	idoeuvre: integer(),
 }, (table) => [
 	foreignKey({
 			columns: [table.idutilisateur],
 			foreignColumns: [utilisateur.idutilisateur],
 			name: "parcours_idutilisateur_fkey"
+		}),
+	foreignKey({
+			columns: [table.idoeuvre],
+			foreignColumns: [oeuvre.idoeuvre],
+			name: "parcours_idoeuvre_fkey"
 		}),
 	primaryKey({ columns: [table.datecreation, table.idutilisateur], name: "parcours_pkey"}),
 	check("parcours_datecreation_check", sql`datecreation <= CURRENT_DATE`),

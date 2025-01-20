@@ -13,16 +13,16 @@ export default function FormCompte({ params: paramsPromise }) {
 
 
   return (
-    <div
-      style={{
-        backgroundColor: systemTheme.background.primary,
-      }}
-    >
-      <main className="min-h-screen max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
-        <Header/>
-        <Form/>
-      </main>
-      <Footer/>
-    </div>
+      <div
+          style={{
+            backgroundColor: systemTheme.background.primary,
+          }}
+      >
+        <main className="min-h-screen max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
+          <Header/>
+          <Form/>
+        </main>
+        <Footer/>
+      </div>
   );
 }
