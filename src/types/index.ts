@@ -23,6 +23,9 @@ export interface Musee {
 export interface Oeuvre {
     name: string;
     description: string;
+    type_oeuvre: string;
+    artiste: string;
+    mouvement: string;
     coordinate: [number, number];
 }
 

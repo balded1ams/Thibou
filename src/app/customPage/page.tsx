@@ -27,7 +27,27 @@ export default function Preferences() {
     );
   };
 
+  
+  type typeRetour = {
+    nom: string;
+    description: string;
+    type_oeuvre: string;
+    artiste: string;
+    mouvement: string;
+    x: number;
+    y: number;
+  };
 
+  function transformOeuvre(typeRetour: typeRetour): Oeuvre {
+    return {
+      name: typeRetour.nom,
+      description: typeRetour.description,
+      type_oeuvre: typeRetour.type_oeuvre,
+      artiste: typeRetour.artiste,
+      mouvement: typeRetour.mouvement,
+      coordinate: [typeRetour.x, typeRetour.y],
+    };
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -61,23 +81,19 @@ export default function Preferences() {
         throw new Error('Erreur lors de la soumission');
       }
 
-      type OeuvreTEMP = {
-        nom: string;
-        description: string;
-        //TODO: refaire le type oeuvre
-      };
+      
 
-      const result:{[id:number]: OeuvreTEMP} = await response.json();
-      let cpt = 0;
-      for(const i in result){
-        const oeuvre = result[i];
-        //console.log("changed "+ oeuvres[cpt].name + " en " + oeuvre.nom)
-        oeuvres[cpt].name = oeuvre.nom;
 
-        //console.log("changed "+ oeuvres[cpt].description + " en " + oeuvre.description)
-        oeuvres[cpt].description = oeuvre.description;
-        cpt++;
+
+      const result:{[id:number]: typeRetour} = await response.json();
+
+      for (const e in result) {
+        const oeuvreTemp = result[e];
+        console.log(oeuvreTemp);
+        console.log(transformOeuvre(oeuvreTemp));
+        oeuvres.push(transformOeuvre(oeuvreTemp));
       }
+      
       console.log("Réponse du serveur :", result);
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');

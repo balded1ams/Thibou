@@ -269,30 +269,4 @@ musee.rooms.forEach(room => {
     }
 });
 
-const additionalOeuvres: Oeuvre[] = [
-    { name: "Sculpture1", description: "Une sculpture imposante", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture1", description: "Une peinture classique", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Statue1", description: "Une statue en marbre", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture2", description: "Une peinture moderne", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture2", description: "Une sculpture en bois", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture3", description: "Une sculpture abstraite", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture3", description: "Une peinture impressionniste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Statue2", description: "Une statue antique", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture4", description: "Une peinture surréaliste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture4", description: "Une sculpture minimaliste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture5", description: "Une sculpture en métal", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture5", description: "Une peinture cubiste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Statue3", description: "Une statue de bronze", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture6", description: "Une peinture réaliste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture6", description: "Une sculpture en pierre", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture7", description: "Une sculpture futuriste", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture7", description: "Une peinture baroque", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Statue4", description: "Une statue de marbre", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Peinture8", description: "Une peinture romantique", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-    { name: "Sculpture8", description: "Une sculpture en verre", coordinate: getRandomCoordinates(musee.map.length, musee.map[0].length, occupiedCoordinates) },
-];
-
-export const oeuvres: Oeuvre[] = [
-    { name: "Statue 1", description: "Une belle statue", coordinate: [10, 10] },
-    ...additionalOeuvres,
-];
+export const oeuvres: Oeuvre[] = [];

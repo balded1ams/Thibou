@@ -59,9 +59,11 @@ export async function POST(req: Request) {
                     acc[item.id] = {
                         nom: item.nom,
                         description: item.description,
-                        //type_oeuvre: item.type_oeuvre,
-                        //artiste: item.artiste,
-                        //mouvement: item.mouvement
+                        type_oeuvre: item.type_oeuvre,
+                        artiste: item.artiste,
+                        mouvement: item.mouvement,
+                        x: item.x,
+                        y: item.y
                     };
                     return acc;
                 }, {});

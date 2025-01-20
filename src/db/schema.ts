@@ -130,7 +130,9 @@ export const oeuvres_musee = pgTable('oeuvres_musee', {
 	description: text('description').notNull(),
 	type_oeuvre: text('type_oeuvre').notNull(),
 	artiste: text('artiste').notNull(),
-	mouvement: text('mouvement').notNull()
+	mouvement: text('mouvement').notNull(),
+	x: integer('x').notNull(),
+	y: integer('y').notNull(),
 });
 
 export const sauvegarde = pgTable('save', {

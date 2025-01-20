@@ -139,6 +139,9 @@ export async function transformOeuvres(): Promise<Oeuvre[]> {
     return rawOeuvres.map((oeuvre) => ({
         name: oeuvre.titreOeuvre || "Titre inconnu",
         description: oeuvre.description || "Aucune description disponible",
+        type_oeuvre: oeuvre.typeOeuvre || "Type inconnu",
+        artiste: oeuvre.nomauteur || "Artiste inconnu",
+        mouvement: oeuvre.nommouvement || "Mouvement inconnu",
         coordinate: [oeuvre.x ?? 0, oeuvre.y ?? 0],
     }));
 }
