@@ -7,8 +7,8 @@ import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
 import {resetPasswordUuid, utilisateur} from "@/db/schema";
 import { comparePasswords, hashPassword, setSession } from "./session";
-import {Resend} from "resend";
 import {v4 as uuidv4} from 'uuid';
+import nodemailer from "nodemailer";
 
 const authSchemaSignIn = z.object({
   email: z.string().min(1),
@@ -21,7 +21,11 @@ const authSchemaSignUp = z.object({
   username: z.string().min(1),
 });
 
-const authSchemaResetPassword = z.object({
+const authSchemaResetPasword = z.object({
+  email: z.string().min(1),
+});
+
+const authSchemaModifyPasswordThroughtReset = z.object({
   uuid: z.string().min(1),
   newpassword: z.string().min(1),
 });
@@ -101,7 +105,7 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
 });
 
 
-export const resetPassword = validatedAction(authSchemaResetPassword, async (data) => {
+export const resetPassword = validatedAction(authSchemaResetPasword, async (data) => {
   const { email } = data;
 
   const myuuid = uuidv4();
@@ -131,27 +135,41 @@ export const resetPassword = validatedAction(authSchemaResetPassword, async (dat
 
 
   const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEB_APP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p>";
+      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p>";
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
 
 
   console.log('email : ', email);
-  resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: email,
-    subject: 'Reinitialisation mot de passe Thibou',
-    html: mail_message
-  });
 
-  return true;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: process.env.EMAIL_HOST,
+      port: 587,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOption = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Réinitailisation mot de passe Thibou',
+      html: mail_message,
+      // text: message,
+    };
+
+    await transporter.sendMail(mailOption);
+
+    return true;
 
 
 });
 
 
 
-export const modifyPasswordwithReset = validatedAction(authSchemaResetPassword, async (data) => {
+export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordThroughtReset, async (data) => {
   const { uuid, newpassword } = data;
 
 

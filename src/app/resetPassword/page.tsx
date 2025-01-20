@@ -4,22 +4,34 @@ import Footer from "@/components/footer";
 import Header from "@/components/header";
 import ResetPassword from "@/components/resetPassword";
 import {useThemeContext} from "@/hooks/useTheme";
-import {NextResponse} from "next/server";
+import { useRouter } from 'next/navigation';
+import {useEffect} from "react";
 
 const Page = () => {
-    const searchParams = useSearchParams();
+    const router = useRouter();
 
-    // Get a specific query parameter
-    const uuidValue = searchParams.get('t');
+    const searchParams = useSearchParams();
 
     const { systemTheme } = useThemeContext();
 
+    const uuidValue = searchParams.get('t') ?? null;
 
-    if (typeof uuidValue !== "string") {
-        return NextResponse.error();
-    }
+    console.log('test1');
 
-    //const params = use(paramsPromise);
+
+    //Si la requete est mauvaise
+    useEffect(() => {
+        if (typeof uuidValue !== "string") {
+            router.push('/404'); // Replace '/target-page' with the actual URL
+        }
+    }, [router]);
+
+
+
+
+
+
+//const params = use(paramsPromise);
 
 
     // Log or display the query parameter

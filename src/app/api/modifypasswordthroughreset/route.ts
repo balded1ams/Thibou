@@ -21,7 +21,12 @@ export async function POST(request: Request) {
     // Call the signIn function with the form data
 
     const result = await modifyPasswordwithReset(actionState, formData);
-    return NextResponse.json({ success: "devrai marché" });
+
+    if (result) {
+        return NextResponse.json({ success: "OK" });
+    } else {
+        return NextResponse.json({ success: "KO"});
+    }
 
 
 }

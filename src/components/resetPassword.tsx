@@ -13,7 +13,7 @@ interface ResetPasswordProps {
 
 const Login: React.FC = ({uuid}: ResetPasswordProps) => {
     const {systemTheme} = useThemeContext(); // Récupérer les couleurs du thème
-    const [password, setPassword] = useState("");
+    const [newpassword, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
@@ -22,8 +22,8 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
-        event.preventDefault();
-        if (password !== confirmPassword) {
+        e.preventDefault();
+        if (newpassword !== confirmPassword) {
             alert("Les mots de passe ne correspondent pas !");
             return;
         }
@@ -35,17 +35,13 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({uuid, password}),
+                body: JSON.stringify({uuid, newpassword}),
             });
 
-            /*
-            if (!response.ok) {
-                throw new Error('Erreur lors de la soumission');
-            }*/
 
 
-            const result: ResponseMessage = await response.json();
-            console.log(result.message);
+
+
 
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');
@@ -83,7 +79,7 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
                         <input
                             type="password"
                             id="password"
-                            value={password}
+                            value={newpassword}
                             onChange={(e) => setPassword(e.target.value)}
                             className="mt-2 w-full rounded-lg border p-3 placeholder-opacity-50 shadow-sm
                                         focus:outline-none focus:ring-2"

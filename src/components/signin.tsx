@@ -122,6 +122,18 @@ const Login: React.FC = () => {
                     className="mt-4 text-center text-sm"
                     style={{ color: systemTheme.text.primary }}
                 >
+                    Mot de passe oublié ?{" "}
+                    <Link
+                        href="/askResetPassword"
+                        className="font-bold transition-all hover:underline"
+                        style={{
+                            color: systemTheme.text.title,
+                        }}
+                    >
+                        Réinitialisez-le
+                    </Link>
+                    <br/>
+
                     Pas encore de compte ?{" "}
                     <Link
                         href="/auth/signup"
