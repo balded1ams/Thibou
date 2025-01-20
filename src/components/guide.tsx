@@ -33,18 +33,14 @@ const Guide = ({onSuivant, onSave}) => {
             }}
         >
           <div>
-          {outputs.map((output, index) => (
-            <p key={index}> {"->"} {output}</p>
-          ))}
+            {outputs.map((output, index) => (
+              <p key={index}> {"->"} {output}</p>
+            ))}
           </div>
-            <div className="align-bottom gap-2 flex flex-col">
-                <Button text="Suivant" onClick={onSuivant} />
-                <Button text="sauvegarder" onClick={onSave} />
-            </div>
-            <div className="flex items-center gap-2">
-                <span>→</span>
-                <span>{detailedDirection}</span>
-            </div>
+          <div className="align-bottom gap-2 flex flex-col">
+              <Button text="Suivant" onClick={onSuivant} />
+              <Button text="Sauvegarder" onClick={onSave} />
+          </div>
         </div>
     );
 };
