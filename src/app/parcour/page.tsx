@@ -19,9 +19,29 @@ export default function fracPage() {
     setCurrentIndex(prevIndex => prevIndex + 1);
     //addOutput(`oeuvre: ${currentIndex}`)
   };
-  const savePoint = () => {
-    console.log("appell api");
+
+  const savePoint = async () => {
+    try {
+      const response = await fetch('/api/sauvegarde', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userId: 'TEST'})
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
   };
+
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { systemTheme } = useThemeContext();
 
