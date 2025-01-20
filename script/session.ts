@@ -1,3 +1,4 @@
+"use server"
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -14,7 +15,14 @@ export async function comparePasswords(
   plainTextPassword: string,
   hashedPassword: string,
 ) {
-  return compare(plainTextPassword, hashedPassword);
+  try {
+    const result = await compare(plainTextPassword, hashedPassword);
+    console.log("Résultat de la comparaison:", result);
+    return result;
+  } catch (error) {
+    console.error("Erreur lors de la comparaison des mots de passe:", error);
+    return false;
+  }
 }
 
 type SessionData = {
@@ -82,7 +90,6 @@ export async function getIdUserFromSession(
 
   try {
     const session = await verifyToken(sessionToken);
-    console.log(session);
     return session.user.id; // Return the user data
   } catch {
     return null; // Invalid or expired token

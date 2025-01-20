@@ -1,3 +1,6 @@
+import {InferModel} from "drizzle-orm";
+import {utilisateur} from "@/db/schema";
+
 export interface Theme {
     name: string;
     background: {
@@ -28,3 +31,5 @@ export interface Salle {
     cooUpLeft: [number, number];
     cooDownRight: [number, number];
 }
+
+export type utilisateurType   = InferModel<typeof utilisateur>;

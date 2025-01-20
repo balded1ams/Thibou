@@ -98,4 +98,7 @@ export async function signOut() {
   // clear session
   const c = await cookies();
   c.getAll().forEach((cookie) => c.delete(cookie.name));
+  // Retourner un objet indiquant que la déconnexion a réussi
+  return { message: "Déconnexion réussie." };
 }
+

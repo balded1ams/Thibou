@@ -23,6 +23,7 @@ export const utilisateur = pgTable("utilisateur", {
 	adressemail: varchar({ length: 255 }).notNull(),
 	password: varchar({ length: 255 }).notNull(),
 	dateinscription: date(),
+	iconeuser: varchar({ length: 255 }),
 }, (table) => [
 	unique("utilisateur_adressemail_key").on(table.adressemail),
 	unique("utilisateur_password_key").on(table.password),
