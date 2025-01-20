@@ -15,6 +15,8 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
     const {systemTheme} = useThemeContext(); // Récupérer les couleurs du thème
     const [newpassword, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [message, setMessage] = useState<JSX.Element | null>(null);
+
 
     const router = useRouter();
 
@@ -44,19 +46,30 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
             const {success} = await response.json();
 
             if (success == 'OK') {
-                router.push('/auth/signin');
+                setMessage(
+                    <>
+                        Votre mot de passe a bel et bien été modifié.<br />
+                        Vous pouvez maintenant vous connecter à votre compte.<br />
+                    </>
+                );
             } else {
-                console.log('error')
+                setMessage(
+                    <>
+                        Une erreur s'est produite lors du traitement de la demande de réinitialisation. Veuillez réessayer plus tard.<br />
+                    </>
+                );
             }
-
-
-
 
 
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');
         }
 
+    };
+
+    const handleRedirect = () => {
+        // Redirection vers une autre page
+        router.push("/auth/signin");
     };
 
     return (
@@ -125,17 +138,42 @@ const Login: React.FC = ({uuid}: ResetPasswordProps) => {
                             required
                         />
                     </div>
-                    <button
+
+                    {message && (
+                        <pre className="text-xs" style={{color: systemTheme.text.title, whiteSpace: 'pre-wrap'}}>
+                        <br/>
+                            {message}
+                    </pre>
+                    )}
+
+
+                    {message ? (<button
                         type="submit"
                         className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                        onClick={handleRedirect}
                         style={{
                             backgroundColor: systemTheme.background.button,
                             color: systemTheme.text.secondary,
                         }}
                     >
-                        Réinitialiser le mot de passe
-                    </button>
+                        Connexion
+                    </button> ) :
+                        (<button
+                            type="submit"
+                            className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                            style={{
+                                backgroundColor: systemTheme.background.button,
+                                color: systemTheme.text.secondary,
+                            }}
+                        >
+                            Réinitialiser le mot de passe
+                        </button> )
+
+                    }
+
+
                 </form>
+
 
             </div>
         </div>
