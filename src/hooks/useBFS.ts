@@ -5,7 +5,7 @@ import { fetchAllOeuvres } from "../../script/slugify";
 
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
-function calculerCheminComplet(
+export function calculerCheminComplet(
     oeuvres: Oeuvre[],
     start: [number, number],
     end: [number, number],
@@ -216,7 +216,6 @@ function toVector(point1, point2): number[] {
     return [point2[0] - point1[0], point2[1] - point1[1]];
 }
 
-
 function generateVectors(path, divide:number) {
     if (!Array.isArray(path) || path.length < 2) {
         throw new Error("La liste des points doit contenir au moins deux points.");
@@ -240,7 +239,7 @@ function generateVectors(path, divide:number) {
     return vectors;
 }
 
-function getVectorDirection(vector) {
+export function getVectorDirection(vector) {
     if (!Array.isArray(vector) || vector.length !== 2) {
         throw new Error("The input must be an array of two numbers.");
     }
