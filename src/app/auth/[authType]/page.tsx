@@ -29,10 +29,9 @@ export default function AuthPage({ params: paramsPromise }) {
     <div
       style={{
         backgroundColor: systemTheme.background.primary,
-        minHeight: "100vh", // Assure que la page occupe tout l'écran
       }}
     >
-      <main className="max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
+      <main className="min-h-screen max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
         <Header />
         <Component />
       </main>

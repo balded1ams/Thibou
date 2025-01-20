@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface CategoryProps {
-    title: string;
+    title: React.ReactNode;
     children: React.ReactNode;
 }
 
@@ -25,12 +26,8 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
             <div
                 className="flex justify-between items-center px-4 py-3 cursor-pointer transition text-center border-b border-0"
                 style={{
-                    backgroundColor: isOpen
-                        ? systemTheme.background.secondary
-                        : systemTheme.background.secondary,
-                    color: isOpen
-                        ? systemTheme.text.primary
-                        : systemTheme.text.primary,
+                    backgroundColor: systemTheme.background.secondary,
+                    color: systemTheme.text.primary,
                     borderColor: isOpen
                         ? `${systemTheme.background.button}60`
                         : systemTheme.background.secondary,
@@ -38,7 +35,18 @@ const Category: React.FC<CategoryProps> = ({ title, children }) => {
                 onClick={toggleOpen}
             >
                 <h3 className="text-lg font-medium">{title}</h3>
-                <span><i className="text-sm mr-1 font-serif">Dérouler </i>{isOpen ? "▲" : "▼"}</span>
+                <div
+                    className="flex items-center"
+                >
+                    <i className="text-sm mr-1"
+                        style={{
+                            color: `${systemTheme.text.primary}88`
+                        }}
+                    >
+                        Dérouler 
+                    </i>
+                    {isOpen ? <ChevronDown/> : <ChevronRight/>}
+                </div>
             </div>
 
             {/* Contenu avec transition */}

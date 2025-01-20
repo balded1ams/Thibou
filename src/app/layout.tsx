@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import ThemeProvider from "@/context/ThemeContext";
+import '@/index.css';
 
 export const metadata: Metadata = {
     title: 'Thibou',
-    description: 'Museum parcour ploter',
+    description: 'Museum oeuvre ploter',
 }
 
 export default function RootLayout({
@@ -13,11 +14,11 @@ export default function RootLayout({
 }) {
     return (
       <html lang="en">
-          <body>
+        <body>
           <div id="root">
-              <ThemeProvider>
-                  {children}
-              </ThemeProvider>
+            <ThemeProvider>
+                {children}
+            </ThemeProvider>
           </div>
         </body>
       </html>

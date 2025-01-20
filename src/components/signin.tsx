@@ -30,16 +30,14 @@ const Login: React.FC = () => {
                 throw new Error('Erreur lors de la soumission');
             }*/
 
-            console.log("Test4");
 
             const result: ResponseMessage = await response.json();
-            console.log(result.message); // Affiche le message du serveur
+            console.log(result.message);
 
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');
         }
-        console.log("Email:", email);
-        console.log("Password:", password);
+
     };
 
     return (

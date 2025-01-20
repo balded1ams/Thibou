@@ -1,26 +1,26 @@
 import { relations } from "drizzle-orm/relations";
-import { utilisateur, utilisateurPreferences, auteur, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
+import { auteur, utilisateurPreferences, utilisateur, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
 
 export const utilisateurPreferencesRelations = relations(utilisateurPreferences, ({one}) => ({
-	utilisateur: one(utilisateur, {
-		fields: [utilisateurPreferences.idutilisateur],
-		references: [utilisateur.idutilisateur]
-	}),
 	auteur: one(auteur, {
 		fields: [utilisateurPreferences.nomauteur],
 		references: [auteur.nomauteur]
 	}),
+	utilisateur: one(utilisateur, {
+		fields: [utilisateurPreferences.idutilisateur],
+		references: [utilisateur.idutilisateur]
+	}),
+}));
+
+export const auteurRelations = relations(auteur, ({many}) => ({
+	utilisateurPreferences: many(utilisateurPreferences),
+	oeuvres: many(oeuvre),
 }));
 
 export const utilisateurRelations = relations(utilisateur, ({many}) => ({
 	utilisateurPreferences: many(utilisateurPreferences),
 	parcours: many(parcours),
 	emplacementParcours: many(emplacementParcours),
-}));
-
-export const auteurRelations = relations(auteur, ({many}) => ({
-	utilisateurPreferences: many(utilisateurPreferences),
-	oeuvres: many(oeuvre),
 }));
 
 export const oeuvreRelations = relations(oeuvre, ({one}) => ({

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 
 const Signup: React.FC = () => {
@@ -11,7 +10,6 @@ const Signup: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const router = useRouter();
 
     interface ResponseMessage {
         message: string;
@@ -38,7 +36,6 @@ const Signup: React.FC = () => {
                             throw new Error('Erreur lors de la soumission');
                         }*/
 
-            console.log("Test4");
 
             const result: ResponseMessage = await response.json();
             console.log(result.message); // Affiche le message du serveur
@@ -47,9 +44,6 @@ const Signup: React.FC = () => {
             console.error(error.message || 'Erreur inattendue');
         }
 
-        console.log("Username:", username);
-        console.log("Email:", email);
-        console.log("Password:", password);
     };
 
     return (
