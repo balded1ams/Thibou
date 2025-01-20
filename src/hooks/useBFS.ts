@@ -1,10 +1,11 @@
 import { Oeuvre } from '@/types';
 import { musee } from "@/utils";
 import { oeuvres } from '@/utils';
+import { fetchAllOeuvres } from "../../script/slugify";
 
 
 // Fonction pour calculer un chemin passant par toutes les œuvres
-function calculerCheminComplet(
+export function calculerCheminComplet(
     oeuvres: Oeuvre[],
     start: [number, number],
     end: [number, number],
@@ -33,6 +34,39 @@ function calculerCheminComplet(
     return chemin;
 }
 
+function calculerCheminFractionne(
+  oeuvres: Oeuvre[],
+  start: [number, number],
+  end: [number, number],
+  matrix: number[][]
+): [number, number][][] {
+    const parcoursFractionne: [number, number][][] = [];
+    let currentStart = start;
+
+    for (const oeuvre of oeuvres) {
+        const oeuvreChemin = bfs(currentStart, oeuvre.coordinate, matrix);
+        if (oeuvreChemin.length === 0) {
+            console.error(`Impossible d'atteindre l'œuvre : ${oeuvre.name}`);
+            return [];
+        }
+        // Ajouter ce sous-chemin aux parcours fractionnés
+        parcoursFractionne.push(oeuvreChemin);
+        currentStart = oeuvre.coordinate;
+    }
+
+    const cheminVersSortie = bfs(currentStart, end, matrix);
+    if (cheminVersSortie.length === 0) {
+        console.error("Impossible d'atteindre la sortie");
+        return [];
+    }
+
+    // Ajouter le dernier sous-chemin vers la sortie
+    parcoursFractionne.push(cheminVersSortie);
+
+    return parcoursFractionne;
+}
+
+
 // Algorithme BFS pour calculer un chemin entre deux points
 function bfs(
     start: [number, number],
@@ -60,7 +94,6 @@ function bfs(
 
     while (queue.length > 0) {
         const current = queue.shift()!;
-        console.log(`Visite du nœud : ${current}`);
 
         if (current[0] === end[0] && current[1] === end[1]) {
             console.log("Chemin trouvé !");
@@ -79,7 +112,6 @@ function bfs(
                 queue.push(neighbor);
                 visited.add(neighbor.join(','));
                 cameFrom.set(neighbor.join(','), current);
-                console.log(`Ajout de ${neighbor} à la file`);
             }
         }
     }
@@ -101,7 +133,17 @@ function reconstructPath(
     return path;
 }
 
-export function pathing() {
+export async function transformOeuvres(): Promise<Oeuvre[]> {
+    const rawOeuvres = await fetchAllOeuvres();
+
+    return rawOeuvres.map((oeuvre) => ({
+        name: oeuvre.titreOeuvre || "Titre inconnu",
+        description: oeuvre.description || "Aucune description disponible",
+        coordinate: [oeuvre.x ?? 0, oeuvre.y ?? 0],
+    }));
+}
+
+export async function pathing() {
     const oeuvresSort: Oeuvre[] = [];
     const oeuvresTemp = [...oeuvres];
 
@@ -110,6 +152,7 @@ export function pathing() {
     while (oeuvresTemp.length > 0) {
         // Trouver l'œuvre la plus proche de la position actuelle
         let closestIndex = 0;
+
         let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
 
         for (let i = 0; i < oeuvresTemp.length; i++) {
@@ -127,16 +170,43 @@ export function pathing() {
         oeuvresTemp.splice(closestIndex, 1);
     }
 
-    return calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map);
+    return calculerCheminFractionne(oeuvresSort, [0, 13], [0, 87], musee.map);
+}
+
+export function pathing2() {
+    const oeuvresSort: Oeuvre[] = [];
+    const oeuvresTemp = [...oeuvres];
+
+    let currentPosition: [number, number] = [10, 10]; // Position de départ
+
+    while (oeuvresTemp.length > 0) {
+        // Trouver l'œuvre la plus proche de la position actuelle
+        let closestIndex = 0;
+
+        let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
+
+        for (let i = 0; i < oeuvresTemp.length; i++) {
+            const distance = dist(currentPosition, oeuvresTemp[i].coordinate);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        oeuvresSort.push(oeuvresTemp[closestIndex]);
+
+        currentPosition = oeuvresTemp[closestIndex].coordinate;
+
+        oeuvresTemp.splice(closestIndex, 1);
+    }
+
+    return [calculerCheminComplet(oeuvresSort, [0, 13], [0, 87], musee.map)];
 }
 
 function dist(pos1: [number, number], pos2: [number, number]): number {
     return Math.sqrt(
       Math.pow(pos2[0] - pos1[0], 2) + Math.pow(pos2[1] - pos1[1], 2)
     );
-}
-export function pathing2() {
-    return bfs([10, 10], oeuvres[0].coordinate, musee.map)
 }
 
 function toVector(point1, point2): number[] {
@@ -145,7 +215,6 @@ function toVector(point1, point2): number[] {
     }
     return [point2[0] - point1[0], point2[1] - point1[1]];
 }
-
 
 function generateVectors(path, divide:number) {
     if (!Array.isArray(path) || path.length < 2) {
@@ -170,7 +239,7 @@ function generateVectors(path, divide:number) {
     return vectors;
 }
 
-function getVectorDirection(vector) {
+export function getVectorDirection(vector) {
     if (!Array.isArray(vector) || vector.length !== 2) {
         throw new Error("The input must be an array of two numbers.");
     }
@@ -189,25 +258,3 @@ function getVectorDirection(vector) {
     }
     return horizontal || vertical;
 }
-
-
-function testBfs() {
-    const start: [number, number] = [10, 10];
-    const end: [number, number] = oeuvres[0].coordinate;
-
-    console.log("Test BFS 1 : Chemin simple");
-    const result1 = bfs(start, end, musee.map);
-    console.log("fin", result1, "\n\n\n");
-
-    console.log("Test chemin complet")
-    const result2 = calculerCheminComplet(oeuvres, [0, 14], [0, 87], musee.map)
-    console.log("fin", result2);
-    const vectors:number[][] = generateVectors(result2,3);
-
-    for(const [dx, dy] of vectors){
-        console.log("vectors, ", dx, ",",dy,",", getVectorDirection([dx,dy]));
-    }
-}
-
-// Appeler les tests
-testBfs();

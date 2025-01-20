@@ -1,7 +1,5 @@
-import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, text, primaryKey, json } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
-
-
 
 export const auteur = pgTable("auteur", {
 	idauteur: serial().primaryKey().notNull(),
@@ -73,11 +71,17 @@ export const oeuvre = pgTable("oeuvre", {
 export const parcours = pgTable("parcours", {
 	datecreation: date().notNull(),
 	idutilisateur: integer().notNull(),
+	idoeuvre: integer(),
 }, (table) => [
 	foreignKey({
 			columns: [table.idutilisateur],
 			foreignColumns: [utilisateur.idutilisateur],
 			name: "parcours_idutilisateur_fkey"
+		}),
+	foreignKey({
+			columns: [table.idoeuvre],
+			foreignColumns: [oeuvre.idoeuvre],
+			name: "parcours_idoeuvre_fkey"
 		}),
 	primaryKey({ columns: [table.datecreation, table.idutilisateur], name: "parcours_pkey"}),
 	check("parcours_datecreation_check", sql`datecreation <= CURRENT_DATE`),
@@ -106,3 +110,18 @@ export const emplacementParcours = pgTable("emplacement_parcours", {
 	primaryKey({ columns: [table.idutilisateur, table.idemplacement], name: "emplacement_parcours_pkey"}),
 	check("emplacement_parcours_datecreationparcours_check", sql`datecreationparcours <= CURRENT_DATE`),
 ]);
+
+export const oeuvres_musee = pgTable('oeuvres_musee', {
+	id: serial('id').primaryKey(),
+	nom: text('nom').notNull(),
+	description: text('description').notNull(),
+	type_oeuvre: text('type_oeuvre').notNull(),
+	artiste: text('artiste').notNull(),
+	mouvement: text('mouvement').notNull()
+});
+
+export const sauvegarde = pgTable('save', {
+	id: serial('id').primaryKey(),
+	user_id: text('user_id').notNull(),
+	restant: json('restant').notNull(),
+});

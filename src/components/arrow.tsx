@@ -61,9 +61,56 @@ const Arrow: React.FC<ArrowProps> = ({ from, to }) => {
         y2={lineCoords.y2}
         stroke="red"
         strokeWidth={4}
-        markerEnd="url(#arrowhead)"
+        strokeLinecap="round"
       />
     </svg>
+
+    // <svg
+    //   style={{
+    //     position: "absolute",
+    //     top: 0,
+    //     left: 0,
+    //     pointerEvents: "none",
+    //     zIndex: 1,
+    //   }}
+    //   width="100%"
+    //   height="100%"
+    // >
+    //   {/* Ligne de début à la pointe (milieu) */}
+    //   <line
+    //     x1={lineCoords.x1}
+    //     y1={lineCoords.y1}
+    //     x2={(lineCoords.x1 + lineCoords.x2) / 2} // Point médian X
+    //     y2={(lineCoords.y1 + lineCoords.y2) / 2} // Point médian Y
+    //     stroke="red"
+    //     strokeWidth={4}
+    //     markerEnd="url(#arrowhead)" // Pointe de flèche au milieu
+    //   />
+      
+    //   {/* Ligne de la pointe (milieu) à la fin */}
+    //   <line
+    //     x1={(lineCoords.x1 + lineCoords.x2) / 2} // Point médian X
+    //     y1={(lineCoords.y1 + lineCoords.y2) / 2} // Point médian Y
+    //     x2={lineCoords.x2}
+    //     y2={lineCoords.y2}
+    //     stroke="red"
+    //     strokeWidth={4}
+    //   />
+
+    //   <defs>
+    //     <marker
+    //       id="arrowhead"
+    //       markerWidth="6"
+    //       markerHeight="4.2"
+    //       refX="3"
+    //       refY="2.1"
+    //       orient="auto"
+    //       markerUnits="strokeWidth"
+    //     >
+    //       <polygon points="0 0, 6 2.1, 0 4.2" fill="red" />
+    //     </marker>
+    //   </defs>
+    // </svg>
     
   );
 };

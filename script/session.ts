@@ -37,8 +37,7 @@ export async function verifyToken(input: string) {
   return payload as SessionData;
 }
 
-
-export async function setSession(user: utilisateur) {
+export async function setSession(user) {
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const session: SessionData = {
     user: { id: user.idutilisateur! },
@@ -52,85 +51,40 @@ export async function setSession(user: utilisateur) {
     sameSite: "lax",
   });
 }
-/*
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
 
-  // Parse cookies from the request headers
-  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+export async function getIdUserFromSession(
+  headersList: Headers & {
+    append(...args: any[]): void;
+    set(...args: any[]): void;
+    delete(...args: any[]): void;
+  }
+): Promise<number | null> {
+  const cookieHeader = headersList.get("cookie");
 
-  const sessionToken = cookies.session;
+  // Parse cookies from the header
+  const cookies = cookieHeader
+    ? Object.fromEntries(
+        cookieHeader.split("; ").map((cookie) => cookie.split("="))
+      )
+    : {};
+
+  const sessionToken = cookies["session"];
+
+  // Ensure the token is a string
+  if (typeof sessionToken !== "string") {
+    console.warn("Session token is not found or is not a valid string.");
+    return null;
+  }
 
   if (!sessionToken) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
+    return null; // No session token, user is not authenticated
   }
 
   try {
-    // Verify the session token
     const session = await verifyToken(sessionToken);
-
-    return {
-      props: {
-        user: session.user, // Pass user data to the page
-      },
-    };
-  } catch (error) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
+    console.log(session);
+    return session.user.id; // Return the user data
+  } catch {
+    return null; // Invalid or expired token
   }
-};
-*/
-
-/*
-type UserProfileProps = {
-  user: {
-    id: number;
-  };
-};*/
-
-/*
-const UserProfile: FC<UserProfileProps> = ({ user }) => {
-  if (!user) {
-    return  <p></p>;
-  }
-
-  return (
-      <div>
-          <h1>Welcome, User {user.id}!</h1>
-  </div>
-);
-};
-
-export default UserProfile;*/
-
-/*
-export async function getSession(req: NextApiRequest) {
-  const sessionCookie = req.cookies["session"];
-  if (!sessionCookie) return null;
-
-  try {
-    const { payload } = await jwtVerify(sessionCookie, key, {
-      algorithms: ["HS256"],
-    });
-    return payload;
-  } catch (error) {
-    return null; // Invalid session
-  }
-}*/
-
-/*
-export async function getSession() {
-  const session = (await cookies()).get("session")?.value;
-  if (!session) return null;
-  return await verifyToken(session);
-}*/
-
+}
