@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
-import {resetPasswordUuid, utilisateur} from "@/db/schema";
+import {resetpasswordUuid, utilisateur} from "@/db/schema";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
 import nodemailer from "nodemailer";
@@ -125,9 +125,8 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
   const { idutilisateur: foundUser } = user[0];
 
-  console.log(foundUser.idutilisateur);
 
-  const [createdResetPasswordUUID] = await db.insert(resetPasswordUuid).values({
+  const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
     uuidValue : myuuid
 
@@ -135,11 +134,10 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
 
   const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p>";
+      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
 
-  console.log('email : ', email);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -175,8 +173,8 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
   const user = await db
       .select()
-      .from(resetPasswordUuid)
-      .where(eq(resetPasswordUuid.uuidValue, uuid))
+      .from(resetpasswordUuid)
+      .where(eq(resetpasswordUuid.uuidValue, uuid))
       .limit(1);
 
 
@@ -205,8 +203,8 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
       .where(eq(utilisateur.idutilisateur, idUser));
 
   await db
-      .delete(resetPasswordUuid)
-      .where(eq(resetPasswordUuid.uuidValue, uuid));
+      .delete(resetpasswordUuid)
+      .where(eq(resetpasswordUuid.uuidValue, uuid));
 
   return true;
 });

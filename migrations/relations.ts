@@ -1,15 +1,15 @@
 import { relations } from "drizzle-orm/relations";
-import { utilisateur, resetPasswordUuid, auteur, utilisateurPreferences, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
+import { utilisateur, resetpasswordUuid, auteur, utilisateurPreferences, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
 
-export const resetPasswordUuidRelations = relations(resetPasswordUuid, ({one}) => ({
+export const resetpasswordUuidRelations = relations(resetpasswordUuid, ({one}) => ({
 	utilisateur: one(utilisateur, {
-		fields: [resetPasswordUuid.idutilisateur],
+		fields: [resetpasswordUuid.idutilisateur],
 		references: [utilisateur.idutilisateur]
 	}),
 }));
 
 export const utilisateurRelations = relations(utilisateur, ({many}) => ({
-	resetPasswordUuids: many(resetPasswordUuid),
+	resetpasswordUuids: many(resetpasswordUuid),
 	utilisateurPreferences: many(utilisateurPreferences),
 	parcours: many(parcours),
 	emplacementParcours: many(emplacementParcours),
