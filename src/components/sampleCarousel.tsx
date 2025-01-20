@@ -46,14 +46,14 @@ const SampleCarousel = () => {
             }}
         >
             <p>Quelques exemples : </p>
-            <Slider {...settings} className="w-full max-w-5xl"> {/* Augmentez la largeur maximale */}
+            <Slider {...settings} className="w-full max-w-4xl"> {/* Augmentez la largeur maximale */}
                 {images.map((image, index) => (
-                    <div key={index} className="flex justify-center items-center px-2"> {/* Augmentez la hauteur */}
+                    <div key={index} className="flex justify-center items-center px-3"> {/* Augmentez la hauteur */}
                         <Image
                             src={image}
                             alt={`exemple ${index + 1}`}
-                            width={300} // Augmentez la largeur de l'image
-                            height={250} // Augmentez la hauteur de l'image
+                            width={350} // Augmentez la largeur de l'image
+                            height={300} // Augmentez la hauteur de l'image
                             className="mx-auto"
                         />
                     </div>
