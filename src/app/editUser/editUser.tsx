@@ -27,7 +27,7 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
         adressemail: userConnected?.adressemail || "",
         oldPassword: "",
         newPassword: "",
-        iconeuser: userConnected?.iconeuser || "", // Initialiser avec l'URL actuelle de l'icône
+        iconeuser: userConnected?.iconeuser || "",
     });
     const [error, setError] = useState<string | null>(null);
     const [changePassword, setChangePassword] = useState(false);
