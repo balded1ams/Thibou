@@ -64,7 +64,7 @@ const ThemeDropdown = ({ isMobile = false }: ThemeDropdownProps) => {
 
           {isOpen && (
             <div
-              className="absolute left-0 z-10 mt-1 w-full rounded-lg shadow-lg"
+              className="absolute left-0 z-20 mt-1 w-full rounded-lg shadow-lg"
               style={{
                 backgroundColor: systemTheme.background.secondary,
                 border: `1px solid ${systemTheme.text.secondary}`,
