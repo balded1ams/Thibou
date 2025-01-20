@@ -7,7 +7,7 @@ import { utilisateurType } from "@/types";
 
 const EditUser = async () => {
     const headersList = headers();
-    const idUser = await getIdUserFromSession(headersList);
+    const idUser = await getIdUserFromSession(await headersList);
     let userConnected: utilisateurType | null = null;
     
     if (idUser) {

@@ -41,10 +41,6 @@ const Guide = ({onSuivant, onSave}) => {
                 <Button text="Suivant" onClick={onSuivant} />
                 <Button text="sauvegarder" onClick={onSave} />
             </div>
-            <div className="flex items-center gap-2">
-                <span>→</span>
-                <span>{detailedDirection}</span>
-            </div>
         </div>
     );
 };
