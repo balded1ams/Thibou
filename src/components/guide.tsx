@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { addOutput } from "@/hooks/useConsole";
 import { useThemeContext } from "@/hooks/useTheme";
 
-const Guide = ({onClick}) => {
+const Guide = ({onSuivant, onSave}) => {
   const [outputs, setOutputs] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,7 +29,10 @@ const Guide = ({onClick}) => {
             <p key={index}> {"->"} {output}</p>
           ))}
           </div>
-          <Button text="Suivant" onClick={onClick} />
+            <div className="align-bottom">
+                <Button text="Suivant" onClick={onSuivant} />
+                <Button text="sauvegarder" onClick={onSave} />
+            </div>
         </div>
     );
 };

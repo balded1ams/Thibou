@@ -104,7 +104,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
             mergedSegments.push(currentSegment);
             currentSegment = [points[i]];
         }
-        addOutput(`oeuvre: ${currentIndex}, ${nextDirection}`)
+        //addOutput(`oeuvre: ${currentIndex}, ${nextDirection}`)
     }
 
     // Calculer la distance entre deux points

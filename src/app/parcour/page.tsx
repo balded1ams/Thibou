@@ -17,9 +17,11 @@ export default function fracPage() {
 
   const advancePoint = () => {
     setCurrentIndex(prevIndex => prevIndex + 1);
-    addOutput(`oeuvre: ${currentIndex}`)
+    //addOutput(`oeuvre: ${currentIndex}`)
   };
-
+  const savePoint = () => {
+    console.log("appell api");
+  };
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { systemTheme } = useThemeContext();
 
@@ -36,7 +38,8 @@ export default function fracPage() {
         <div className="flex flex-col gap-4 xl:flex-row">
           <Plan currentIndex={currentIndex} />
           <Guide
-            onClick={advancePoint}
+            onSuivant={advancePoint}
+            onSave={savePoint}
           />
         </div>
       </main>

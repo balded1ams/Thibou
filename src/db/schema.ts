@@ -1,7 +1,5 @@
-import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, text, primaryKey, json } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
-
-
 
 export const auteur = pgTable("auteur", {
 	idauteur: serial().primaryKey().notNull(),
@@ -120,4 +118,10 @@ export const oeuvres_musee = pgTable('oeuvres_musee', {
 	type_oeuvre: text('type_oeuvre').notNull(),
 	artiste: text('artiste').notNull(),
 	mouvement: text('mouvement').notNull()
+});
+
+export const sauvegarde = pgTable('save', {
+	id: serial('id').primaryKey(),
+	user_id: text('user_id').notNull(),
+	restant: json('restant').notNull(),
 });
