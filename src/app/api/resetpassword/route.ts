@@ -1,5 +1,5 @@
 import {NextResponse} from "next/server";
-import {resetPassword, signIn} from "../../../../script/login";
+import {resetPassword} from "../../../../script/login";
 
 export async function POST(request: Request) {
 
@@ -19,7 +19,11 @@ export async function POST(request: Request) {
     // Call the signIn function with the form data
 
     const result = await resetPassword(actionState, formData);
-    return NextResponse.json({ success: "devrai marché" });
 
+    if (result) {
+        return NextResponse.json({ success: "OK" });
+    } else {
+        return NextResponse.json({ success: "KO"});
+    }
 
 }

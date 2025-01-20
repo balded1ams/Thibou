@@ -125,7 +125,6 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
   const { idutilisateur: foundUser } = user[0];
 
-  console.log(foundUser.idutilisateur);
 
   const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
@@ -135,11 +134,10 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
 
   const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p>";
+      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
 
-  console.log('email : ', email);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
