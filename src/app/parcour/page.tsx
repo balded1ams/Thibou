@@ -27,7 +27,7 @@ export default function fracPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userId: 'TEST'})
+        body: JSON.stringify({userId: 'test_user'})
       });
 
       if (!response.ok) {
