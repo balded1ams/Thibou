@@ -12,7 +12,7 @@ interface HeaderProps {
     userConnected : utilisateurType;
 }
 
-async function App({userConnected}) {
+function App({userConnected}) {
 
     const {systemTheme} = useThemeContext();
     return (

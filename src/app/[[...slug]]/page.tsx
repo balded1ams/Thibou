@@ -20,5 +20,6 @@ export default async function Page() {
     } else {
          userConnected = null;
     }
-    return <ClientOnly userConnected={userConnected}/>
+
+  return <ClientOnly userConnected={userConnected}/>
 }

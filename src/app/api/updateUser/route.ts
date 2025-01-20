@@ -37,8 +37,10 @@ export async function POST(request: Request) {
         }
 
         // Mettre à jour l'icône de l'utilisateur si une URL est fournie
-        if (iconeuser) {
+        if (iconeuser && iconeuser.trim() !== "") {
             updateData.iconeuser = iconeuser;
+        }else{
+            updateData.iconeuser = "/shrek.jpg";
         }
 
         // Mettre à jour l'utilisateur dans la base de données

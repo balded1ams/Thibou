@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { signOut } from "@/../script/login"; // Assurez-vous que le chemin est correct
 
-export async function POST(request: Request) {
+export async function POST() {
     try {
         // Aucune donnée n'est attendue pour signOut, mais vous pouvez loguer les cookies ou d'autres informations si nécessaire
         console.log("Déconnexion demandée");
