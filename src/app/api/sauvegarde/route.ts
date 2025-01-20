@@ -17,7 +17,6 @@ export async function POST(req: Request) {
                 .select()
                 .from(sauvegarde)
                 .where(sql`${sauvegarde.user_id} = ${userId}`);
-
             return NextResponse.json(savedData, { status: 200 });
         } catch (error) {
             console.error("Erreur lors de la récupération :", error);

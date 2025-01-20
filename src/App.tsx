@@ -1,18 +1,12 @@
-"use client"
 import Header from "./components/header";
 import Start from "./components/getStarted";
 import Title from "./components/title";
 import Intro from "./components/introduction";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
-import {utilisateurType} from "@/types";
 import SampleCarousel from "./components/sampleCarousel";
 
-interface HeaderProps {
-    userConnected : utilisateurType;
-}
-
-async function App({userConnected}) {
+async function App() {
 
     const {systemTheme} = useThemeContext();
     return (
@@ -27,7 +21,7 @@ async function App({userConnected}) {
                 className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0"
                 style={{}}
             >
-                <Header showAuthButtons={true} userConnected={userConnected}/>
+                <Header showAuthButtons={true}/>
                 <Title>Présentation de Thibou</Title>
                 <Start/>
                 <Intro/>
