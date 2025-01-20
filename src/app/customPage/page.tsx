@@ -9,6 +9,7 @@ import Item from "@/components/Item";
 import Title from "@/components/title";
 import { X, Check, Presentation, Palette, CalendarRange } from "lucide-react";
 import {Oeuvre} from "@/types"; //TODO: mettre a jour le type
+import {oeuvres} from "@/utils";
 import {useRouter} from "next/navigation";
 
 export default function Preferences() {
@@ -67,15 +68,21 @@ export default function Preferences() {
       };
 
       const result:{[id:number]: OeuvreTEMP} = await response.json();
+      let cpt = 0;
       for(const i in result){
         const oeuvre = result[i];
+        //console.log("changed "+ oeuvres[cpt].name + " en " + oeuvre.nom)
+        oeuvres[cpt].name = oeuvre.nom;
 
+        //console.log("changed "+ oeuvres[cpt].description + " en " + oeuvre.description)
+        oeuvres[cpt].description = oeuvre.description;
+        cpt++;
       }
       console.log("Réponse du serveur :", result);
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');
     }
-    //await router.push("/fraction")
+    await router.push("/fraction")
   };
 
   return (
