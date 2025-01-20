@@ -18,13 +18,22 @@ const ParcoursFractionne: React.FC = () => {
                 <Plan currentIndex={0} allPathing={true} />
             </div>
 
-            <label htmlFor="timeInput">Choisissez une heure :</label>
-            <input type="time" id="timeInput" name="timeInput" />
+            <label htmlFor="timeInput">Choisissez une durée (en minutes) :</label>
+            <input 
+                type="textField" 
+                id="timeInput" 
+                name="timeInput" 
+                placeholder="30"
+            />
 
             <p>Nombre de parties : </p>
-
+            <input 
+                type="textField" 
+                id="nbParties" 
+                name="nbParties" 
+                placeholder="1 à 10"
+            />
         </div>
     );
 };
 export default ParcoursFractionne;
-
