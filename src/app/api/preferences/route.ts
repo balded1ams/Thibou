@@ -42,6 +42,7 @@ export async function POST(req: Request) {
                     sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
                 );
 
+                // TODO : Si un des trois au dessus est vide, on ne doit pas l'ajouter à la requête
                 const queryConditionTypeOeuvre = sql.join(conditionsTypeOeuvre, sql` OR `);
                 const queryConditionArtiste = sql.join(conditionsArtiste, sql` OR `);
                 const queryConditionMouvement = sql.join(conditionsMouvement, sql` OR `);
