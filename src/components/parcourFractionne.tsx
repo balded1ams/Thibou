@@ -7,7 +7,7 @@ const ParcoursFractionne: React.FC = () => {
     const { systemTheme } = useThemeContext();
     return(
         <div
-            className="flex flex-col items-center gap-8 py-8 text-xl font-semibold"
+            className="flex flex-col items-center gap-8 p-8 text-xl font-semibold rounded-2xl"
             style={{
                 color: systemTheme.text.primary,
                 backgroundColor: systemTheme.background.secondary,
@@ -20,6 +20,7 @@ const ParcoursFractionne: React.FC = () => {
 
             <label htmlFor="timeInput">Choisissez une heure :</label>
             <input type="time" id="timeInput" name="timeInput" />
+
             <p>Nombre de parties : </p>
 
         </div>
