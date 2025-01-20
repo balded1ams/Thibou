@@ -46,7 +46,7 @@ export async function POST(req: Request) {
                 const queryConditionArtiste = sql.join(conditionsArtiste, sql` OR `);
                 const queryConditionMouvement = sql.join(conditionsMouvement, sql` OR `);
 
-                const TEMP_tab = [queryConditionArtiste, queryConditionMouvement, queryConditionTypeOeuvre]
+                const TEMP_tab = [queryConditionArtiste, queryConditionMouvement, queryConditionTypeOeuvre];
 
                 const queryCondition = sql.join(TEMP_tab, sql` OR `)
 

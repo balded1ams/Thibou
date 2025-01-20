@@ -7,7 +7,7 @@ import { useThemeContext } from "@/hooks/useTheme";
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowBigLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 import { findOeuvres } from "@/hooks/useOeuvre";
 import ArtworkDesc from "@/components/ArtworkDesc";
@@ -71,15 +71,15 @@ export default function Page({ params: paramsPromise }) {
                 color: systemTheme.text.secondary
             }}
           >
-            <ArrowBigLeft/>Retour
+            <ChevronLeft />Retour
           </Link>
           <div className="flex flex-col gap-4 xl:flex-row">
             <ImageOeuvre />
             <ArtworkDesc
-              author={"[PLACEHOLDER]"}
+              author={currentOeuvre.artiste}
               description={currentOeuvre.description}
-              movement={"[PLACEHOLDER]"}
-              technique={"[PLACEHOLDER]"}
+              movement={currentOeuvre.mouvement}
+              technique={currentOeuvre.type_oeuvre}
               title={currentOeuvre.name}
               year={"[PL/AC/EHOL]"}
             />

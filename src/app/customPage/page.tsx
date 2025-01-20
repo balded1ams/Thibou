@@ -98,7 +98,7 @@ export default function Preferences() {
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');
     }
-    await router.push("/parcour")
+    await router.push("/fraction");
   };
 
   return (

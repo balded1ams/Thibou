@@ -150,15 +150,15 @@ export async function pathing() {
     const oeuvresSort: Oeuvre[] = [];
     const oeuvresTemp = [...oeuvres];
 
-    let currentPosition: [number, number] = [10, 10]; // Position de départ
+    let currentPosition: [number, number] = [0, 13]; // Position de départ
 
     while (oeuvresTemp.length > 0) {
         // Trouver l'œuvre la plus proche de la position actuelle
         let closestIndex = 0;
 
-        let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
+        let closestDistance = dist(currentPosition ,oeuvres[0].coordinate);
 
-        for (let i = 0; i < oeuvresTemp.length; i++) {
+        for (let i = 1; i < oeuvresTemp.length; i++) {
             const distance = dist(currentPosition, oeuvresTemp[i].coordinate);
             if (distance < closestDistance) {
                 closestDistance = distance;
@@ -180,15 +180,15 @@ export function pathing2() {
     const oeuvresSort: Oeuvre[] = [];
     const oeuvresTemp = [...oeuvres];
 
-    let currentPosition: [number, number] = [10, 10]; // Position de départ
+    let currentPosition: [number, number] = [0, 13]; // Position de départ
 
     while (oeuvresTemp.length > 0) {
         // Trouver l'œuvre la plus proche de la position actuelle
         let closestIndex = 0;
 
-        let closestDistance = dist(oeuvresTemp[0].coordinate ,oeuvres[0].coordinate);
+        let closestDistance = dist(currentPosition ,oeuvres[0].coordinate);
 
-        for (let i = 0; i < oeuvresTemp.length; i++) {
+        for (let i = 1; i < oeuvresTemp.length; i++) {
             const distance = dist(currentPosition, oeuvresTemp[i].coordinate);
             if (distance < closestDistance) {
                 closestDistance = distance;
