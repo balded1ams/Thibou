@@ -1,6 +1,5 @@
 import { useThemeContext } from "@/hooks/useTheme";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import React from "react"; // Hook pour la navigation
 
 const Start = () => {

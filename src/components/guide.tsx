@@ -4,6 +4,13 @@ import React, { useEffect, useState } from 'react';
 
 import { addOutput } from "@/hooks/useConsole";
 import { useThemeContext } from "@/hooks/useTheme";
+import { calculerCheminComplet } from '@/hooks/useBFS';
+import { musee, oeuvres } from '@/utils';
+import { pathing2 } from '@/hooks/useBFS';
+
+const points = pathing2();
+const cooOeuvre = points[points.length - 1];
+
 
 const Guide = ({onSuivant, onSave}) => {
   const [outputs, setOutputs] = useState<string[]>([]);
@@ -12,6 +19,7 @@ const Guide = ({onSuivant, onSave}) => {
     const updatedOutputs = addOutput('');
     setOutputs(updatedOutputs);
   }, [addOutput]);
+
 
     const { systemTheme } = useThemeContext();
 
@@ -29,9 +37,13 @@ const Guide = ({onSuivant, onSave}) => {
             <p key={index}> {"->"} {output}</p>
           ))}
           </div>
-            <div className="align-bottom">
+            <div className="align-bottom gap-2 flex flex-col">
                 <Button text="Suivant" onClick={onSuivant} />
                 <Button text="sauvegarder" onClick={onSave} />
+            </div>
+            <div className="flex items-center gap-2">
+                <span>→</span>
+                <span>{detailedDirection}</span>
             </div>
         </div>
     );

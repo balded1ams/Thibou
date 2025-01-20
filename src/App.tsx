@@ -2,13 +2,13 @@ import Header from "./components/header";
 import Start from "./components/getStarted";
 import Title from "./components/title";
 import Intro from "./components/introduction";
-import Samples from "./components/samples";
 import { useThemeContext } from "./hooks/useTheme";
 import Footer from "./components/footer";
 import SampleCarousel from "./components/sampleCarousel";
 
 function App() {
-    const { systemTheme } = useThemeContext();
+
+    const {systemTheme} = useThemeContext();
     return (
         <div
             className="min-h-screen w-full overflow-y-auto"
@@ -23,11 +23,11 @@ function App() {
             >
                 <Header showAuthButtons={true}/>
                 <Title>Présentation de Thibou</Title>
-                <Start />
-                <Intro />
+                <Start/>
+                <Intro/>
                 <SampleCarousel/>
             </main>
-            <Footer />
+            <Footer/>
 
         </div>
     );

@@ -91,7 +91,7 @@ export default function Preferences() {
             className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 pb-8"
             style={{ backgroundColor: systemTheme.background.primary }}
         >
-          <Header />
+          <Header/>
 
           <Title>Choisissez vos préférences</Title>
 
