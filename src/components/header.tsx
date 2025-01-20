@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import { useState, useEffect } from "react";
 import { utilisateurType } from "@/types/index";
-import {LogOut, Pencil} from "lucide-react";
+import { LogOut, Pencil } from "lucide-react";
 import Image from "next/image";
 
 interface HeaderProps {
     showAuthButtons?: boolean;
-    userConnected: utilisateurType;
+    userConnected?: utilisateurType;
 }
 
 const useAuth = (userConnected?: utilisateurType) => {
@@ -93,7 +93,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                 {/* Menu desktop */}
                 <div className="hidden items-center gap-4 lg:flex">
                     <ThemeDropdown />
-                    {estConnecte ? (
+                    {userConnected ? (
                         <div className="relative">
                             <div
                                 className="cursor-pointer border-2 rounded-full overflow-hidden"
@@ -116,14 +116,14 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                                         className="flex w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                                         onClick={handleEditProfile}
                                     >
-                                        <Pencil className="mr-2"  />
+                                        <Pencil className="mr-2" />
                                         Modifier le profil
                                     </button>
                                     <button
                                         className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                         onClick={handleLogout}
                                     >
-                                        <LogOut className="mr-2"  />
+                                        <LogOut className="mr-2" />
                                         Déconnexion
                                     </button>
                                 </div>
