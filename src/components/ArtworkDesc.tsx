@@ -29,7 +29,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
       }}  
     >
 
-      <div className="flex flex-col">
+      <div className="flex flex-col g">
         {/* Titre de l'œuvre et l'année */}
         <h1 className="text-2xl font-bold pb-0 mb-0">
           {title} – {year}

@@ -1,9 +1,13 @@
-import { drizzle } from "drizzle-orm/node-postgres"
+import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
 const pool = new Pool({
-    connectionString: process.env.PSQL_DATABASE,
+    host: "localhost",
+    port: 5432,
+    user: "test",
+    password: "1234",
+    database: "oeuvres"
 });
 
 const db = drizzle(pool);
-export { db }
+export { db };

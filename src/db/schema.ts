@@ -112,3 +112,12 @@ export const emplacementParcours = pgTable("emplacement_parcours", {
 	primaryKey({ columns: [table.idutilisateur, table.idemplacement], name: "emplacement_parcours_pkey"}),
 	check("emplacement_parcours_datecreationparcours_check", sql`datecreationparcours <= CURRENT_DATE`),
 ]);
+
+export const oeuvres_musee = pgTable('oeuvres_musee', {
+	id: serial('id').primaryKey(),
+	nom: text('nom').notNull(),
+	description: text('description').notNull(),
+	type_oeuvre: text('type_oeuvre').notNull(),
+	artiste: text('artiste').notNull(),
+	mouvement: text('mouvement').notNull()
+});
