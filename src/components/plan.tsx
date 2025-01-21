@@ -261,7 +261,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
                                         borderColor: `${systemTheme.text.primary}60`,
                                     }}
                                 >
-                                    Click me!
+                                    Click moi!
                                 </div>
                             </div>
                         )}

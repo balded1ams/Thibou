@@ -67,10 +67,11 @@ export default function Page({ params: paramsPromise }) {
           <div className="flex max-w-5xl flex-col mx-auto gap-3 px-4">
             <Link
               href={"/fraction"}
-              className="flex gap-1 w-min pr-4 p-2 rounded-lg"
+              className="flex gap-1 w-min pr-4 p-2 rounded-lg shadow border"
               style={{
-                  background: systemTheme.background.button,
-                  color: systemTheme.text.secondary
+                  background: systemTheme.background.primary,
+                  color: systemTheme.background.button,
+                  borderColor: systemTheme.background.button,
               }}
             >
               <ChevronLeft />Retour
@@ -78,11 +79,11 @@ export default function Page({ params: paramsPromise }) {
             <div className="mx-auto flex flex-col gap-4 xl:flex-row">
               <ImageOeuvre />
               <ArtworkDesc
-                author={currentOeuvre.artiste}
-                description={currentOeuvre.description}
-                movement={currentOeuvre.mouvement}
-                technique={currentOeuvre.type_oeuvre}
-                title={currentOeuvre.name}
+                author={currentOeuvre.artiste[0].toUpperCase() + currentOeuvre.artiste.slice(1)}
+                description={currentOeuvre.description[0].toUpperCase() + currentOeuvre.description.slice(1)}
+                movement={currentOeuvre.mouvement[0].toUpperCase() + currentOeuvre.mouvement.slice(1)}
+                technique={currentOeuvre.type_oeuvre[0].toUpperCase() + currentOeuvre.type_oeuvre.slice(1)}
+                title={currentOeuvre.name[0].toUpperCase() + currentOeuvre.name.slice(1)}
                 year={"[PL/AC/EHOL]"}
               />
             </div>
