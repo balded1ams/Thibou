@@ -53,7 +53,7 @@ export default function fracPage() {
         color: systemTheme.text.primary,
       }}
     >
-      <main className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0">
+      <main className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0 mb-8">
         <Header />
         <div className="flex flex-col gap-4 xl:flex-row">
           <Plan currentIndex={currentIndex} />

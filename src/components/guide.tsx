@@ -37,10 +37,10 @@ const Guide = ({onSuivant, onSave}) => {
               <p key={index}> {"->"} {output}</p>
             ))}
           </div>
-            <div className="align-bottom gap-2 flex flex-col">
-                <Button text="Suivant" onClick={onSuivant} />
-                <Button text="sauvegarder" onClick={onSave} />
-            </div>
+          <div className="align-bottom gap-2 flex flex-col">
+              <Button text="Sauvegarder" onClick={onSave} reverse={true} />
+              <Button text="Suivant" onClick={onSuivant} />
+          </div>
         </div>
     );
 };
