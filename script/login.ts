@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
 import { utilisateur } from "@/db/schema";
+import { verifyToken } from "@/../script/session";
 import { comparePasswords, hashPassword, setSession } from "./session";
 
 const authSchemaSignIn = z.object({
@@ -100,5 +101,42 @@ export async function signOut() {
   c.getAll().forEach((cookie) => c.delete(cookie.name));
   // Retourner un objet indiquant que la déconnexion a réussi
   return { message: "Déconnexion réussie." };
+}
+
+
+export async function deleteAccount() {
+  try {
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const userId = session.user.id;
+
+    // Supprimer l'utilisateur de la base de données
+    const deletedRows = await db
+      .delete(utilisateur)
+      .where(eq(utilisateur.idutilisateur, userId))
+      .returning();
+
+    if (deletedRows.length === 0) {
+      return { error: "Erreur lors de la suppression du compte.", status: 500 };
+    }
+
+    // Supprimer le cookie de session
+    (await cookies()).delete("session");
+
+    return { message: "Compte supprimé avec succès.", status: 200 };
+  } catch (error) {
+    console.error("Erreur lors de la suppression du compte :", error);
+    return { error: "Erreur interne du serveur.", status: 500 };
+  }
 }
 

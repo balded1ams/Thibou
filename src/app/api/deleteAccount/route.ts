@@ -1,55 +1,19 @@
-import { db } from "@/db/db";
-import { eq } from "drizzle-orm";
-import { cookies } from "next/headers";
-import { utilisateur } from "@/db/schema";
-import { verifyToken } from "@/../script/session";
+import { NextResponse } from "next/server";
+import { deleteAccount } from "@/../script/login"; // Assurez-vous que le chemin est correct
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
-    const sessionCookie = (await cookies()).get("session");
+    const result = await deleteAccount();
 
-    if (!sessionCookie) {
-      return new Response(
-        JSON.stringify({ error: "Utilisateur non authentifié." }),
-        { status: 401 }
-      );
+    if (result.error) {
+      return NextResponse.json({ error: result.error }, { status: result.status });
     }
 
-    const session = await verifyToken(sessionCookie.value);
-
-    if (!session || !session.user) {
-      return new Response(
-        JSON.stringify({ error: "Session invalide ou expirée." }),
-        { status: 401 }
-      );
-    }
-
-    const userId = session.user.id;
-
-    // Supprimer l'utilisateur de la base de données
-    const deletedRows = await db
-      .delete(utilisateur)
-      .where(eq(utilisateur.idutilisateur, userId))
-      .returning();
-
-    if (deletedRows.length === 0) {
-      return new Response(
-        JSON.stringify({ error: "Erreur lors de la suppression du compte." }),
-        { status: 500 }
-      );
-    }
-
-    // Supprimer le cookie de session
-    (await cookies()).delete("session");
-
-    return new Response(
-      JSON.stringify({ message: "Compte supprimé avec succès." }),
-      { status: 200 }
-    );
+    return NextResponse.json({ message: result.message }, { status: result.status });
   } catch (error) {
-    console.error("Erreur lors de la suppression du compte :", error);
-    return new Response(
-      JSON.stringify({ error: "Erreur interne du serveur." }),
+    console.error("Erreur lors de la suppression via l'API :", error);
+    return NextResponse.json(
+      { error: "Une erreur inattendue s'est produite." },
       { status: 500 }
     );
   }
