@@ -21,21 +21,18 @@ export async function POST(req: Request) {
         try {
             if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2).length > 0) ||
                 (Object.keys(Auteur).filter(key => Auteur[key] === 2).length > 0) ||
-                (Object.keys(Mouvement).filter(key => Mouvement[key] === 2).length > 0)||
-                (Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
-                (Object.keys(Auteur).filter(key => Auteur[key] === 1).length > 0) ||
-                (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)){
+                (Object.keys(Mouvement).filter(key => Mouvement[key] === 2).length > 0)) {
 
                 const selectionsAccept = [
-                    { nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2) },
-                    { nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 2) },
-                    { nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2) }
+                    {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2)},
+                    {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 2)},
+                    {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2)}
                 ];
 
                 const selectionsRef = [
-                    { nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1) },
-                    { nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 1) },
-                    { nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 1) }
+                    {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1)},
+                    {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 1)},
+                    {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 1)}
                 ];
 
                 const conditionsAcceptTypeOeuvre = selectionsAccept[0].valeurs.map(valeur =>
@@ -50,40 +47,48 @@ export async function POST(req: Request) {
                     sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
                 );
 
-                const conditionsRefTypeOeuvre = selectionsRef[0].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
-                );
-
-                const conditionsRefArtiste = selectionsRef[1].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
-                );
-
-                const conditionsRefMouvement = selectionsRef[2].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
-                );
-
                 const queryAcceptConditionTypeOeuvre = sql.join(conditionsAcceptTypeOeuvre, sql` OR `);
                 const queryAcceptConditionArtiste = sql.join(conditionsAcceptArtiste, sql` OR `);
                 const queryAcceptConditionMouvement = sql.join(conditionsAcceptMouvement, sql` OR `);
 
-                const queryRefConditionTypeOeuvre = sql.join(conditionsRefTypeOeuvre, sql` OR `);
-                const queryRefConditionArtiste = sql.join(conditionsRefArtiste, sql` OR `);
-                const queryRefConditionMouvement = sql.join(conditionsRefMouvement, sql` OR `);
-
                 const TEMP_Accepttab = [queryAcceptConditionTypeOeuvre, queryAcceptConditionArtiste, queryAcceptConditionMouvement];
-                const TEMP_Reftab = [queryRefConditionTypeOeuvre, queryRefConditionArtiste, queryRefConditionMouvement];
 
                 const queryAcceptCondition = sql.join(TEMP_Accepttab, sql` OR `);
-                const queryRefCondition = sql.join(TEMP_Reftab, sql` OR `);
+                let queryCondition;
 
-                const TempQueryCondition = [queryAcceptCondition, queryRefCondition];
+                if ((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
+                    (Object.keys(Auteur).filter(key => Auteur[key] === 1).length > 0) ||
+                    (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
 
-                const queryCondition = sql.join(TempQueryCondition, sql` AND `);
+                    const conditionsRefTypeOeuvre = selectionsRef[0].valeurs.map(valeur =>
+                        sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
+                    );
+
+                    const conditionsRefArtiste = selectionsRef[1].valeurs.map(valeur =>
+                        sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
+                    );
+
+                    const conditionsRefMouvement = selectionsRef[2].valeurs.map(valeur =>
+                        sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
+                    );
+
+                    const queryRefConditionTypeOeuvre = sql.join(conditionsRefTypeOeuvre, sql` OR `);
+                    const queryRefConditionArtiste = sql.join(conditionsRefArtiste, sql` OR `);
+                    const queryRefConditionMouvement = sql.join(conditionsRefMouvement, sql` OR `);
+
+                    const TEMP_Reftab = [queryRefConditionTypeOeuvre, queryRefConditionArtiste, queryRefConditionMouvement];
+
+                    const queryRefCondition = sql.join(TEMP_Reftab, sql` OR `);
+                    const TEMPQueryCondition = [queryAcceptCondition, queryRefCondition];
+                    queryCondition = sql.join(TEMPQueryCondition, sql` AND `);
+                } else{
+                    queryCondition = queryAcceptCondition;
+                }
 
                 const dbResult = await db
                     .select()
                     .from(oeuvres_musee)
-                    .where(queryRefCondition);
+                    .where(queryCondition);
 
                 const formattedResult = dbResult.reduce((acc, item) => {
                     acc[item.id] = {
