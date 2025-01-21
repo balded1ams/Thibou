@@ -40,7 +40,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     .limit(1);
 
   if (existingUserName.length > 0) {
-    console.log("Username already taken. Please try again." )
     return { error: "Username already taken. Please try again." };
   }
 
@@ -51,7 +50,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
       .limit(1);
 
   if (existingMailAdress.length > 0) {
-    console.log("Mail adress already taken. Please try again." )
     return { error: "Mail adress already taken. Please try again." };
   }
 
