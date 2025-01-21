@@ -78,12 +78,12 @@ export async function POST(req: Request) {
 
                 const TempQueryCondition = [queryAcceptCondition, queryRefCondition];
 
-                const queryCondition = sql.join(TempQueryCondition, sql` AND `)
+                const queryCondition = sql.join(TempQueryCondition, sql` AND `);
 
                 const dbResult = await db
                     .select()
                     .from(oeuvres_musee)
-                    .where(queryCondition);
+                    .where(queryRefCondition);
 
                 const formattedResult = dbResult.reduce((acc, item) => {
                     acc[item.id] = {
