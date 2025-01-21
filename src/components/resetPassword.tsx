@@ -8,10 +8,10 @@ import {useRouter} from "next/navigation";
 
 
 interface ResetPasswordProps {
-    uuid?: string
+    uuid?: string | null;
 }
 
-const Login: React.FC = ({uuid}: ResetPasswordProps) => {
+const Login: React.FC<ResetPasswordProps> = ({uuid}: ResetPasswordProps) => {
     const {systemTheme} = useThemeContext(); // Récupérer les couleurs du thème
     const [newpassword, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

@@ -7,7 +7,6 @@ const pool = new Pool({
     user: process.env.PSQL_USER ,
     password: process.env.PSQL_PASSWORD,
     database: process.env.PSQL_DB,
-    connectionString : process.env.PSQL_DATABASE,
 });
 
 const db = drizzle(pool);
