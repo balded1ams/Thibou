@@ -19,57 +19,6 @@ export async function POST(req: Request) {
         }
 
         try {
-            //si l'utilisateur ne met RIEN
-            if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2).length > 0) ||
-                (Object.keys(Auteur).filter(key => Auteur[key] === 2).length > 0) ||
-                (Object.keys(Mouvement).filter(key => Mouvement[key] === 2).length > 0)){
-
-                const selections = [
-                    { nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2) },
-                    { nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 2) },
-                    { nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2) }
-                ];
-
-                const conditionsTypeOeuvre = selections[0].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
-                );
-
-                const conditionsArtiste = selections[1].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
-                );
-
-                const conditionsMouvement = selections[2].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
-                );
-
-                // TODO : Si un des trois au dessus est vide, on ne doit pas l'ajouter à la requête
-                const queryConditionTypeOeuvre = sql.join(conditionsTypeOeuvre, sql` OR `);
-                const queryConditionArtiste = sql.join(conditionsArtiste, sql` OR `);
-                const queryConditionMouvement = sql.join(conditionsMouvement, sql` OR `);
-
-                const TEMP_tab = [queryConditionArtiste, queryConditionMouvement, queryConditionTypeOeuvre];
-
-                const queryCondition = sql.join(TEMP_tab, sql` OR `)
-
-                const dbResult = await db
-                    .select()
-                    .from(oeuvres_musee)
-                    .where(queryCondition);
-
-                const formattedResult = dbResult.reduce((acc, item) => {
-                    acc[item.id] = {
-                        nom: item.nom,
-                        description: item.description,
-                        type_oeuvre: item.type_oeuvre,
-                        artiste: item.artiste,
-                        mouvement: item.mouvement,
-                        x: item.x,
-                        y: item.y
-                    };
-                    return acc;
-                }, {});
-                return NextResponse.json(formattedResult);
-            }
             if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2).length > 0) ||
                 (Object.keys(Auteur).filter(key => Auteur[key] === 2).length > 0) ||
                 (Object.keys(Mouvement).filter(key => Mouvement[key] === 2).length > 0)||
