@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StaticColors as colors } from "@/utils/index";
-import { X, Check, Ban } from "lucide-react";
+import { X, Check, MoveHorizontal } from "lucide-react";
 import { useThemeContext } from "@/hooks/useTheme";
 
 
@@ -68,7 +68,7 @@ const Checkbox = ({
           internalState === 0 ? "w-1/2 opacity-100" : "w-1/4 opacity-50"
         }`}
       >
-        <Ban />
+        <MoveHorizontal />
       </div>
       <div
         onClick={handleClickRight}

@@ -82,38 +82,41 @@ export default function Preferences() {
         </p>
 
         <div className="mx-auto flex w-full max-w-2xl text-xs justify-end gap-2">
-          <h2 className="h-min text-lg self-center w-full">Boutons à effet global :</h2>
+          
+          {/* Tout refuser */}
           <div
             onClick={handleRejectAll}
-            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-1 py-1 transition hover:opacity-80`}
             style={{
               backgroundColor: systemTheme.background.secondary,
               border: `1px solid ${systemTheme.background.button}60`,
               color: systemTheme.text.primary,
             }}
           >
-            <p className="max-w-16">Tout refuser</p> 
+            <p>Tout refuser</p> 
             <div 
-              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              className="flex justify-center items-center rounded-md min-h-10 min-w-10"
               style={{
                 backgroundColor: colors.red,
               }}
-            >           
+            >
               <X />
             </div>
           </div>
+
+          {/* Neutre partout */}
           <div
             onClick={handleNullifyAll}
-            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-1 py-1 transition hover:opacity-80`}
             style={{
               backgroundColor: systemTheme.background.secondary,
               border: `1px solid ${systemTheme.background.button}60`,
               color: systemTheme.text.primary,
             }}
           >
-            <p className="max-w-20">Neutre partout</p>
+            <p>Neutre partout</p>
             <div 
-              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              className="flex justify-center items-center rounded-md min-h-10 min-w-10"
               style={{
                 backgroundColor: colors.white,
               }}
@@ -121,18 +124,20 @@ export default function Preferences() {
               <MoveHorizontal/>
             </div>
           </div>
+
+          {/* Tout vouloir */}
           <div
             onClick={handleAcceptAll}
-            className={`flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-1 transition hover:opacity-80`}
+            className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-1 py-1 transition hover:opacity-80`}
             style={{
               backgroundColor: systemTheme.background.secondary,
               border: `1px solid ${systemTheme.background.button}60`,
               color: systemTheme.text.primary,
             }}
           >
-            <p className="max-w-16">Tout vouloir</p>
+            <p>Tout vouloir</p>
             <div 
-              className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
+              className="flex justify-center items-center rounded-md min-h-10 min-w-10"
               style={{
                 backgroundColor: colors.green,
               }}
