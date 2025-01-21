@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
 import { sauvegarde } from '@/db/schema';
-import { sql } from "drizzle-orm";
+import {eq, sql} from "drizzle-orm";
 
 export async function POST(req: Request) {
     try {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
             const savedData = await db
                 .select()
                 .from(sauvegarde)
-                .where(sql`${sauvegarde.user_id} = ${userId}`);
+                .where(eq(sauvegarde.idutilisateur, userId));
             return NextResponse.json(savedData, { status: 200 });
         } catch (error) {
             console.error("Erreur lors de la récupération :", error);

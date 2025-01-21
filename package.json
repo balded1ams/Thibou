@@ -14,18 +14,18 @@
     "create:tables": "ts-node --files ./migrations/migrator.ts"
   },
   "dependencies": {
-    "@types/nodemailer": "^6.4.17",
-    "autoprefixer": "^10.4.20",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@nextui-org/tabs": "^2.0.37",
     "@react-spring/web": "^9.7.5",
+    "@types/nodemailer": "^6.4.17",
+    "autoprefixer": "^10.4.20",
     "bcryptjs": "^2.4.3",
     "cookie": "^1.0.2",
     "cookies-next": "^5.0.2",
     "drizzle-orm": "^0.38.3",
-    "formidable": "^3.5.2",
     "express": "^4.21.2",
+    "formidable": "^3.5.2",
     "html2canvas": "^1.4.1",
     "jose": "^5.9.6",
     "lucide-react": "^0.469.0",
@@ -41,9 +41,9 @@
     "react-toastify": "^11.0.2",
     "react-tooltip": "^5.16.1",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.0.2",
     "tailwindcss": "^3.4.17",
     "uuid": "^11.0.5",
-    "styled-components": "^6.0.2",
     "zod": "^3.24.1"
   },
   "devDependencies": {

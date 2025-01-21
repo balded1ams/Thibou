@@ -1,4 +1,4 @@
-import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, json, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -28,13 +28,14 @@ export const utilisateur = pgTable("utilisateur", {
 export const resetpasswordUuid = pgTable("resetpassword_uuid", {
 	idutilisateur: integer().notNull(),
 	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
-	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
+	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`).notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.idutilisateur],
 			foreignColumns: [utilisateur.idutilisateur],
 			name: "new_table_idutilisateur_fkey"
 		}),
+	unique("unique_uuidvalue").on(table.uuidValue),
 ]);
 
 export const emplacement = pgTable("emplacement", {
@@ -43,6 +44,17 @@ export const emplacement = pgTable("emplacement", {
 	ordonnee: integer(),
 	etage: integer(),
 });
+
+export const sauvegarde = pgTable("sauvegarde", {
+	idutilisateur: integer().primaryKey().notNull(),
+	restant: json().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}),
+]);
 
 export const utilisateurPreferences = pgTable("utilisateur_preferences", {
 	idpreference: serial().primaryKey().notNull(),

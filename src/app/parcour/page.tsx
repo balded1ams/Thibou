@@ -29,7 +29,6 @@ export default function FracPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: 'test_user',
           trajet_restant: result,
         }),
       });

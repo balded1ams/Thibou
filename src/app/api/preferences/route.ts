@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
 import { oeuvres_musee } from '@/db/schema';
-import { sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
+import { sql } from "drizzle-orm";
 
 export async function POST(req: Request) {
     try {
