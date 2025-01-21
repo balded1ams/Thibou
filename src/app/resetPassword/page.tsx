@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from 'next/navigation';
+import {notFound, useSearchParams} from 'next/navigation';
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import ResetPassword from "@/components/resetPassword";
@@ -16,13 +16,12 @@ const Page = () => {
 
     const uuidValue = searchParams.get('t') ?? null;
 
-    console.log('test1');
 
 
     //Si la requete est mauvaise
     useEffect(() => {
         if (typeof uuidValue !== "string") {
-            router.push('/404'); // Replace '/target-page' with the actual URL
+            notFound();
         }
     }, [router]);
 

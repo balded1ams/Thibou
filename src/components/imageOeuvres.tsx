@@ -5,7 +5,7 @@ const ImageOeuvre = () => {
   return (
     <>
       <Image
-        className="rounded-lg"
+        className="rounded-lg shadow"
         src={"/oeuvre.jpg"}
         alt="Plan de musée"
         width={625}
