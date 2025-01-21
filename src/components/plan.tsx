@@ -8,6 +8,7 @@ import { useThemeContext } from '@/hooks/useTheme';
 import Link from "next/link";
 import { CircleX } from 'lucide-react';
 import { addOutput } from "@/hooks/useConsole";
+import { Pointer } from 'lucide-react';
 
 interface PlanProps {
     currentIndex: number;
@@ -27,6 +28,8 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
     const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
     const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
+    const [highlightedOeuvreIndex, setHighlightedOeuvreIndex] = useState<number | null>(0); // L'index de l'œuvre avec "Click me"
+
 
     // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
     useEffect(() => {
@@ -54,8 +57,21 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
     useEffect(() => {
         if (dataLoaded) {
             setOeuvrePositions(oeuvres);
+            if (highlightedOeuvreIndex === null) {
+                setHighlightedOeuvreIndex(0); // Met par défaut le premier index
+            }
         }
     }, [dataLoaded]);
+
+    // Gestion du clic sur une œuvre
+    const handleOeuvreClick = (oeuvre: Oeuvre, index: number) => {
+        setSelectedOeuvre(oeuvre);
+
+        // Désactiver définitivement le "Click me" après le clic
+        if (highlightedOeuvreIndex === index) {
+            setHighlightedOeuvreIndex(null);
+        }
+    };
 
     // Mettre à jour la position du curseur relative au plan
     useEffect(() => {
@@ -200,28 +216,56 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
             {oeuvrePositions.map((oeuvre, index) => {
                 const isSelected = selectedOeuvre === oeuvre;
                 const radius = getRadius(oeuvre);
-                const selectedRadius = isSelected ? radius * 1.5 : radius; // Augmenter la taille si sélectionné
+                const selectedRadius = isSelected ? radius * 1.5 : radius;
+                const clickMeOffset = 20;
+
                 return (
-                    <svg
-                        key={`oeuvre-${oeuvre.coordinate[0]}-${oeuvre.coordinate[1]}-${index}`}
-                        className={`absolute cursor-pointer z-10 ${isSelected ? 'animate-pulse' : ''}`}
-                        style={{
-                            left: `${(oeuvre.coordinate[1] / cols) * 100}%`,
-                            top: `${(oeuvre.coordinate[0] / rows) * 100}%`,
-                            transform: "translate(-50%, -50%)",
-                            width: `${selectedRadius * 2}px`,
-                            height: `${selectedRadius * 2}px`,
-                        }}
-                        onClick={() => setSelectedOeuvre(oeuvre)}
-                    >
-                        <circle
-                            cx={selectedRadius}
-                            cy={selectedRadius}
-                            r={selectedRadius}
-                            fill="blue"
-                            className="cursor-pointer"
-                        />
-                    </svg>
+                    <React.Fragment key={`oeuvre-${oeuvre.coordinate[0]}-${oeuvre.coordinate[1]}-${index}`}>
+                        {/* Cercle interactif de l'œuvre */}
+                        <svg
+                            className={`absolute cursor-pointer z-20 ${isSelected ? 'animate-pulse' : ''}`}
+                            style={{
+                                left: `${(oeuvre.coordinate[1] / cols) * 100}%`,
+                                top: `${(oeuvre.coordinate[0] / rows) * 100}%`,
+                                transform: "translate(-50%, -50%)",
+                                width: `${selectedRadius * 2}px`,
+                                height: `${selectedRadius * 2}px`,
+                            }}
+                            onClick={() => handleOeuvreClick(oeuvre, index)}
+                        >
+                            <circle
+                                cx={selectedRadius}
+                                cy={selectedRadius}
+                                r={selectedRadius}
+                                fill="blue"
+                                className="cursor-pointer"
+                            />
+                        </svg>
+
+                        {/* Texte "Click me" uniquement pour l'œuvre ciblée */}
+                        {highlightedOeuvreIndex === index && (
+                            <div
+                                className="absolute z-10 text-sm font-bold flex flex-col justify-center items-center"
+                                style={{
+                                    left: `calc(${(oeuvre.coordinate[1] / cols) * 100}% + .24rem)`,
+                                    top: `calc(${(oeuvre.coordinate[0] / rows) * 100}% + ${clickMeOffset}px + 1rem)`,
+                                    transform: "translate(-50%, -50%)",
+                                    color: systemTheme.text.primary
+                                }}
+                            >
+                                <Pointer className="animate-bounce"/> 
+                                <div 
+                                    className="rounded border shadow px-2 py-1 backdrop-blur-md min-w-24 text-center" 
+                                    style={{
+                                        backgroundColor: `${systemTheme.background.primary}AA`,
+                                        borderColor: `${systemTheme.text.primary}60`,
+                                    }}
+                                >
+                                    Click me!
+                                </div>
+                            </div>
+                        )}
+                    </React.Fragment>
                 );
             })}
 
