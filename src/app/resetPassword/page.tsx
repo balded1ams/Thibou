@@ -43,7 +43,7 @@ const Page = () => {
         >
             <main className="min-h-screen max-w-5xl mx-auto flex h-full flex-col gap-4 px-4">
                 <Header />
-                <ResetPassword uuid={uuidValue}/>
+                <ResetPassword uuid={uuidValue} />
             </main>
             <Footer />
         </div>
