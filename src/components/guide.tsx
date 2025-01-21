@@ -12,7 +12,7 @@ const points = pathing2();
 const cooOeuvre = points[points.length - 1];
 
 
-const Guide = ({onSuivant, onSave}) => {
+const Guide = ({onSuivant}) => {
   const [outputs, setOutputs] = useState<string[]>([]);
 
   useEffect(() => {
@@ -37,10 +37,9 @@ const Guide = ({onSuivant, onSave}) => {
               <p key={index}> {"->"} {output}</p>
             ))}
           </div>
-          <div className="align-bottom gap-2 flex flex-col">
-              <Button text="Sauvegarder" onClick={onSave} reverse={true} />
-              <Button text="Suivant" onClick={onSuivant} />
-          </div>
+            <div className="align-bottom gap-2 flex flex-col">
+                <Button text="Suivant" onClick={onSuivant} />
+            </div>
         </div>
     );
 };

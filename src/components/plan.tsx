@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { musee, oeuvres } from "@/utils";
 import { Oeuvre } from "@/types"; // Assuming the type is defined in "@/types"
-import {pathing, pathing2} from "@/hooks/useBFS";
 import Arrow from "@/components/arrow";
 import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
@@ -12,10 +11,11 @@ import { Pointer } from 'lucide-react';
 
 interface PlanProps {
     currentIndex: number;
-    allPathing?: boolean;
+    path: [number,number][][];
+    dataLoaded?: boolean;
 }
 
-const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
+const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = false }) => {
     const { systemTheme } = useThemeContext();
     const planRef = useRef<HTMLDivElement>(null);
 
@@ -23,35 +23,21 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, allPathing = false }) => {
     const cols = musee.map[0].length;
 
     const [points, setPoints] = useState<[number, number][]>([]);
-    const [result, setResult] = useState<[number, number][][]>([]);
-    const [dataLoaded, setDataLoaded] = useState(false);
+
     const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
     const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
     const [highlightedOeuvreIndex, setHighlightedOeuvreIndex] = useState<number | null>(0); // L'index de l'œuvre avec "Click me"
 
 
-    // Récupérer la liste complète des chemins et générer les œuvres aléatoirement une seule fois
-    useEffect(() => {
-        const fetchPoints = async () => {
-            const result = await (allPathing ? pathing2() : pathing());
-            setResult(result);
-            setDataLoaded(true);
-        };
-
-        if (!dataLoaded) {
-            fetchPoints();
-        }
-    }, [dataLoaded]);
-
     // Récupérer le chemin actuel en fonction de l'index actuel
     useEffect(() => {
-        if (result[currentIndex]) {
-            setPoints(result[currentIndex]);
+        if (path[currentIndex]) {
+            setPoints(path[currentIndex]);
         } else {
             setPoints([]);
         }
-    }, [currentIndex, result]);
+    }, [currentIndex, path]);
 
     // Mettre à jour les positions des œuvres lorsque les données sont chargées
     useEffect(() => {
