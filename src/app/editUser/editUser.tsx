@@ -16,7 +16,7 @@ type User = {
     adressemail: string;
     oldPassword: string;
     newPassword: string;
-    iconeuser: string; // Ajout de l'URL de l'icône
+    iconeuser: string;
 };
 
 const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
@@ -27,9 +27,9 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
         adressemail: userConnected?.adressemail || "",
         oldPassword: "",
         newPassword: "",
-        iconeuser: userConnected?.iconeuser || "", // Initialiser avec l'URL actuelle de l'icône
+        iconeuser: userConnected?.iconeuser || "",
     });
-    const [error, setError] = useState<string | null>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const [changePassword, setChangePassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,35 +38,43 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
             ...prev,
             [name]: value,
         }));
+        setErrors((prev) => ({
+            ...prev,
+            [name]: "",
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
+        const newErrors: Record<string, string> = {};
 
         if (formData.nomutilisateur.trim() === "") {
-            setError("Le nom d'utilisateur ne peut pas être vide.");
-            return;
+            newErrors.nomutilisateur = "Le nom d'utilisateur ne peut pas être vide.";
         }
 
         if (changePassword) {
-            if (!formData.oldPassword || !formData.newPassword) {
-                setError("Veuillez remplir les deux champs de mot de passe.");
-                return;
+            if (!formData.oldPassword) {
+                newErrors.oldPassword = "L'ancien mot de passe est requis.";
             }
-            if (formData.newPassword === formData.oldPassword) {
-                setError(
-                    "Le nouveau mot de passe ne peut pas être identique à l'ancien."
-                );
-                return;
+            if (!formData.newPassword) {
+                newErrors.newPassword = "Le nouveau mot de passe est requis.";
+            } else if (formData.newPassword === formData.oldPassword) {
+                newErrors.newPassword =
+                  "Le nouveau mot de passe ne peut pas être identique à l'ancien.";
             }
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
         }
 
         try {
             const dataToSend = {
                 idutilisateur: userConnected.idutilisateur,
                 nomutilisateur: formData.nomutilisateur,
-                iconeuser: formData.iconeuser, // Inclure l'URL de l'icône
+                iconeuser: formData.iconeuser,
                 ...(changePassword && {
                     oldPassword: formData.oldPassword,
                     newPassword: formData.newPassword,
@@ -86,206 +94,223 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                 router.push("/");
             } else {
                 const data = await response.json();
-                setError(
-                    data.error || "Erreur lors de la mise à jour de l'utilisateur."
-                );
+                setErrors({ general: data.error || "Erreur lors de la mise à jour." });
             }
         } catch (error) {
             console.error("Error updating user:", error);
-            setError("Une erreur s'est produite. Veuillez réessayer plus tard.");
+            setErrors({ general: "Une erreur s'est produite. Veuillez réessayer plus tard." });
         }
     };
 
     return (
-        <div style={{ backgroundColor: systemTheme.background.primary }}>
-            <main
-                className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 pb-8"
-                style={{ backgroundColor: systemTheme.background.primary }}
-            >
-                <Header userConnected={userConnected} />
-                <div
-                    className="flex items-center justify-center my-16"
-                    style={{ backgroundColor: systemTheme.background.primary }}
-                >
-                    <div
-                        className="w-full max-w-md rounded-3xl border p-8 shadow-lg backdrop-blur-xl m-4"
-                        style={{
-                            backgroundColor: systemTheme.background.secondary,
-                            borderColor: systemTheme.background.button,
-                        }}
-                    >
-                        <h2
-                            className="mb-6 text-center text-3xl font-bold"
-                            style={{ color: systemTheme.text.title }}
+      <div style={{ backgroundColor: systemTheme.background.primary }}>
+          <main
+            className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 pb-8"
+            style={{ backgroundColor: systemTheme.background.primary }}
+          >
+              <Header userConnected={userConnected} />
+              <div className="flex items-center justify-center my-16">
+                  <div
+                    className="w-full max-w-md rounded-3xl border p-8 shadow-lg backdrop-blur-xl"
+                    style={{
+                        backgroundColor: systemTheme.background.secondary,
+                        borderColor: systemTheme.background.button,
+                    }}
+                  >
+                      <h2
+                        className="mb-6 text-center text-3xl font-bold"
+                        style={{ color: systemTheme.text.title }}
+                      >
+                          Modifier le compte
+                      </h2>
+                      {errors.general && (
+                        <p
+                          className="mb-4 text-sm text-center"
+                          style={{
+                              color: "red",
+                          }}
                         >
-                            Modifier le compte
-                        </h2>
-                        {error && (
-                            <p
-                                className="mb-4 text-sm"
+                            {errors.general}
+                        </p>
+                      )}
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                          <div>
+                              <label
+                                htmlFor="nomutilisateur"
+                                className="block text-sm font-bold"
+                                style={{ color: systemTheme.text.title }}
+                              >
+                                  Nom d'utilisateur
+                              </label>
+                              <input
+                                type="text"
+                                id="nomutilisateur"
+                                name="nomutilisateur"
+                                value={formData.nomutilisateur}
+                                onChange={handleChange}
+                                className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                                 style={{
-                                    color: "red",
+                                    backgroundColor: systemTheme.background.primary,
+                                    borderColor: errors.nomutilisateur
+                                      ? "red"
+                                      : systemTheme.background.button,
+                                    color: systemTheme.text.primary,
                                 }}
-                            >
-                                {error}
-                            </p>
-                        )}
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label
-                                    htmlFor="nomutilisateur"
-                                    className="block text-sm font-bold"
-                                    style={{ color: systemTheme.text.title }}
-                                >
-                                    Nom d'utilisateur
-                                </label>
-                                <input
-                                    type="text"
-                                    id="nomutilisateur"
-                                    name="nomutilisateur"
-                                    value={formData.nomutilisateur}
-                                    onChange={handleChange}
-                                    className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
-                                    style={{
-                                        backgroundColor: systemTheme.background.primary,
-                                        borderColor: systemTheme.background.button,
-                                        color: systemTheme.text.primary,
-                                    }}
-                                    placeholder="Entrez votre nom d'utilisateur"
-                                />
-                            </div>
+                                placeholder="Entrez votre nom d'utilisateur"
+                              />
+                              {errors.nomutilisateur && (
+                                <p className="text-sm" style={{ color: "red" }}>
+                                    {errors.nomutilisateur}
+                                </p>
+                              )}
+                          </div>
 
-                            <div>
-                                <label
-                                    htmlFor="adressemail"
-                                    className="block text-sm font-bold"
-                                    style={{ color: systemTheme.text.title }}
-                                >
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="adressemail"
-                                    name="adressemail"
-                                    value={formData.adressemail}
-                                    readOnly
-                                    className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
-                                    style={{
-                                        backgroundColor: systemTheme.background.primary,
-                                        borderColor: systemTheme.background.button,
-                                        color: systemTheme.text.primary,
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="iconeuser"
-                                    className="block text-sm font-bold"
-                                    style={{ color: systemTheme.text.title }}
-                                >
-                                    URL de l'icône
-                                </label>
-                                <input
-                                    type="text"
-                                    id="iconeuser"
-                                    name="iconeuser"
-                                    value={formData.iconeuser}
-                                    onChange={handleChange}
-                                    className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
-                                    style={{
-                                        backgroundColor: systemTheme.background.primary,
-                                        borderColor: systemTheme.background.button,
-                                        color: systemTheme.text.primary,
-                                    }}
-                                    placeholder="Entrez l'URL de votre icône"
-                                />
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    id="changePassword"
-                                    checked={changePassword}
-                                    onChange={(e) => setChangePassword(e.target.checked)}
-                                />
-                                <label
-                                    htmlFor="changePassword"
-                                    className="text-sm font-bold"
-                                    style={{ color: systemTheme.text.title }}
-                                >
-                                    Changer le mot de passe
-                                </label>
-                            </div>
-
-                            {changePassword && (
-                                <>
-                                    <div>
-                                        <label
-                                            htmlFor="oldPassword"
-                                            className="block text-sm font-bold"
-                                            style={{ color: systemTheme.text.title }}
-                                        >
-                                            Ancien mot de passe
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="oldPassword"
-                                            name="oldPassword"
-                                            value={formData.oldPassword}
-                                            onChange={handleChange}
-                                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
-                                            style={{
-                                                backgroundColor: systemTheme.background.primary,
-                                                borderColor: systemTheme.background.button,
-                                                color: systemTheme.text.primary,
-                                            }}
-                                            placeholder="Entrez votre ancien mot de passe"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            htmlFor="newPassword"
-                                            className="block text-sm font-bold"
-                                            style={{ color: systemTheme.text.title }}
-                                        >
-                                            Nouveau mot de passe
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="newPassword"
-                                            name="newPassword"
-                                            value={formData.newPassword}
-                                            onChange={handleChange}
-                                            className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
-                                            style={{
-                                                backgroundColor: systemTheme.background.primary,
-                                                borderColor: systemTheme.background.button,
-                                                color: systemTheme.text.primary,
-                                            }}
-                                            placeholder="Entrez votre nouveau mot de passe"
-                                        />
-                                    </div>
-                                </>
-                            )}
-
-                            <button
-                                type="submit"
-                                className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                          <div>
+                              <label
+                                htmlFor="adressemail"
+                                className="block text-sm font-bold"
+                                style={{ color: systemTheme.text.title }}
+                              >
+                                  Email <span style={{ color: "gray" }}>(non modifiable)</span>
+                              </label>
+                              <input
+                                type="email"
+                                id="adressemail"
+                                name="adressemail"
+                                value={formData.adressemail}
+                                readOnly
+                                className="mt-2 w-full rounded-lg border p-3 shadow-sm"
                                 style={{
-                                    backgroundColor: systemTheme.background.button,
-                                    color: systemTheme.text.secondary,
+                                    backgroundColor: systemTheme.background.primary,
+                                    borderColor: "gray",
+                                    color: systemTheme.text.primary,
+                                    cursor: "not-allowed",
                                 }}
-                            >
-                                Mettre à jour
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </main>
-            <Footer />
-        </div>
+                              />
+                          </div>
+
+                          <div>
+                              <label
+                                htmlFor="iconeuser"
+                                className="block text-sm font-bold"
+                                style={{ color: systemTheme.text.title }}
+                              >
+                                  URL de l'icône
+                              </label>
+                              <input
+                                type="text"
+                                id="iconeuser"
+                                name="iconeuser"
+                                value={formData.iconeuser}
+                                onChange={handleChange}
+                                className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
+                                style={{
+                                    backgroundColor: systemTheme.background.primary,
+                                    borderColor: systemTheme.background.button,
+                                    color: systemTheme.text.primary,
+                                }}
+                                placeholder="Entrez l'URL de votre icône"
+                              />
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                id="changePassword"
+                                checked={changePassword}
+                                onChange={(e) => setChangePassword(e.target.checked)}
+                              />
+                              <label
+                                htmlFor="changePassword"
+                                className="text-sm font-bold"
+                                style={{ color: systemTheme.text.title }}
+                              >
+                                  Changer le mot de passe
+                              </label>
+                          </div>
+
+                          {changePassword && (
+                            <>
+                                <div>
+                                    <label
+                                      htmlFor="oldPassword"
+                                      className="block text-sm font-bold"
+                                      style={{ color: systemTheme.text.title }}
+                                    >
+                                        Ancien mot de passe
+                                    </label>
+                                    <input
+                                      type="password"
+                                      id="oldPassword"
+                                      name="oldPassword"
+                                      value={formData.oldPassword}
+                                      onChange={handleChange}
+                                      className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
+                                      style={{
+                                          backgroundColor: systemTheme.background.primary,
+                                          borderColor: errors.oldPassword
+                                            ? "red"
+                                            : systemTheme.background.button,
+                                          color: systemTheme.text.primary,
+                                      }}
+                                      placeholder="Entrez votre ancien mot de passe"
+                                    />
+                                    {errors.oldPassword && (
+                                      <p className="text-sm" style={{ color: "red" }}>
+                                          {errors.oldPassword}
+                                      </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label
+                                      htmlFor="newPassword"
+                                      className="block text-sm font-bold"
+                                      style={{ color: systemTheme.text.title }}
+                                    >
+                                        Nouveau mot de passe
+                                    </label>
+                                    <input
+                                      type="password"
+                                      id="newPassword"
+                                      name="newPassword"
+                                      value={formData.newPassword}
+                                      onChange={handleChange}
+                                      className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
+                                      style={{
+                                          backgroundColor: systemTheme.background.primary,
+                                          borderColor: errors.newPassword
+                                            ? "red"
+                                            : systemTheme.background.button,
+                                          color: systemTheme.text.primary,
+                                      }}
+                                      placeholder="Entrez votre nouveau mot de passe"
+                                    />
+                                    {errors.newPassword && (
+                                      <p className="text-sm" style={{ color: "red" }}>
+                                          {errors.newPassword}
+                                      </p>
+                                    )}
+                                </div>
+                            </>
+                          )}
+
+                          <button
+                            type="submit"
+                            className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                            style={{
+                                backgroundColor: systemTheme.background.button,
+                                color: systemTheme.text.secondary,
+                            }}
+                          >
+                              Mettre à jour
+                          </button>
+                      </form>
+                  </div>
+              </div>
+          </main>
+          <Footer />
+      </div>
     );
 };
 

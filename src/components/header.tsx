@@ -4,9 +4,9 @@ import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { utilisateurType } from "@/types/index";
-import {LogOut, Pencil} from "lucide-react";
+import { LogOut, Pencil, Trash2 } from "lucide-react";
 
 interface HeaderProps {
     showAuthButtons?: boolean;
@@ -35,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
     const { estConnecte, userAvatar } = useAuth(userConnected);
 
     const [showModal, setShowModal] = useState(false);
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const handleLogout = async () => {
         try {
@@ -79,6 +80,20 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
         router.push("/editUser");
     };
 
+    // Gestion de la fermeture du modal en cliquant à l'extérieur
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                setShowModal(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
       <header
         className="relative flex flex-col items-center justify-between py-8"
@@ -100,7 +115,12 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
               </div>
 
               {/* Menu burger pour mobile */}
-              <BurgerMenu />
+              <BurgerMenu
+                userConnected={userConnected}
+                handleLogout={handleLogout}
+                handleDeleteAccount={handleDeleteAccount}
+                handleEditProfile={handleEditProfile}
+              />
 
               {/* Menu desktop */}
               <div className="hidden items-center gap-4 lg:flex">
@@ -121,6 +141,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 
                         {showModal && (
                           <div
+                            ref={modalRef} // Référence pour détecter les clics externes
                             className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-10"
                             style={{ backgroundColor: systemTheme.background.secondary }}
                           >
@@ -142,7 +163,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                                 className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                 onClick={handleDeleteAccount}
                               >
-                                  <LogOut className="mr-2" />
+                                  <Trash2 className="mr-2" />
                                   Supprimer le compte
                               </button>
                           </div>
@@ -189,4 +210,3 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 };
 
 export default Header;
-
