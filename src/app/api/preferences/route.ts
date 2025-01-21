@@ -125,11 +125,11 @@ export async function POST(req: Request) {
                 const TEMP_Reftab = [queryRefConditionTypeOeuvre, queryRefConditionArtiste, queryRefConditionMouvement];
 
                 const queryAcceptCondition = sql.join(TEMP_Accepttab, sql` OR `);
-                const queryRefCondition = sql.join(TEMP_Reftab, sql` AND `);
+                const queryRefCondition = sql.join(TEMP_Reftab, sql` OR `);
 
                 const TempQueryCondition = [queryAcceptCondition, queryRefCondition];
 
-                const queryCondition = sql.join(TempQueryCondition, sql` OR `)
+                const queryCondition = sql.join(TempQueryCondition, sql` AND `)
 
                 const dbResult = await db
                     .select()
