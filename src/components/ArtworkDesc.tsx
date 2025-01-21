@@ -40,7 +40,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
       </div>
 
       {/* Mouvement et technique */}
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 text-lg">
         <p className="font-bold">Mouvement</p>
         <p>{movement}</p>
         <p className="font-bold">Technique</p>

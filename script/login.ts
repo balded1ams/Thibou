@@ -40,7 +40,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     .limit(1);
 
   if (existingUserName.length > 0) {
-    console.log("Username already taken. Please try again." )
     return { error: "Username already taken. Please try again." };
   }
 
@@ -51,7 +50,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
       .limit(1);
 
   if (existingMailAdress.length > 0) {
-    console.log("Mail adress already taken. Please try again." )
     return { error: "Mail adress already taken. Please try again." };
   }
 
@@ -125,7 +123,6 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
   const { idutilisateur: foundUser } = user[0];
 
-  console.log(foundUser.idutilisateur);
 
   const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
@@ -135,11 +132,10 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
 
   const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p>";
+      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
 
-  console.log('email : ', email);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",

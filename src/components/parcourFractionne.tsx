@@ -31,10 +31,11 @@ const ParcoursFractionne: React.FC = () => {
     const { systemTheme } = useThemeContext();
     return(
         <div
-            className="flex flex-col items-center gap-8 p-4 text-xl font-semibold rounded-2xl mx-auto"
+            className="flex flex-col items-center gap-8 p-4 text-xl font-semibold rounded-2xl mx-auto border"
             style={{
-                color: systemTheme.text.primary,
+                borderColor: `${systemTheme.background.button}60`,
                 backgroundColor: systemTheme.background.secondary,
+                color: systemTheme.text.primary,
             }}>
             <div
                 className="flex gap-4 max-w-md">

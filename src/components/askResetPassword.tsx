@@ -30,18 +30,29 @@ const Login: React.FC = () => {
                 body: JSON.stringify({ email }),
             });
 
-            setMessage(
-                <>
-                    Si un compte existe avec l'adresse email que vous avez fournie, un lien de réinitialisation de mot de passe vous a été envoyé.<br />
-                    Merci de suivre les instructions dans cet email pour réinitialiser votre mot de passe.<br />
-                    <br/>
-                    <em>Si vous ne recevez pas d'email dans les prochaines minutes, pensez à vérifier vos courriers indésirables (spams).</em>
-                </>
-            );
+            const {success} = await response.json();
+
+            if (success == 'OK') {
+                setMessage(
+                    <>
+                        Si un compte existe avec l'adresse email que vous avez fournie, un lien de réinitialisation de mot de passe vous a été envoyé.<br />
+                        Merci de suivre les instructions dans cet email pour réinitialiser votre mot de passe.<br />
+                        <br/>
+                        <em>Si vous ne recevez pas d'email dans les prochaines minutes, pensez à vérifier vos courriers indésirables (spams).</em>
+                    </>
+                );
+            } else {
+                setMessage(
+                    <>
+                        Une erreur s'est produite lors du traitement de la demande de réinitialisation. Veuillez réessayer plus tard.<br />
+                    </>
+                );
+
+            }
 
 
-            //const result: ResponseMessage = await response.json();
-            //console.log(result.message);
+
+
 
         } catch (error: any) {
             console.error(error.message || 'Erreur inattendue');
@@ -93,6 +104,9 @@ const Login: React.FC = () => {
                             required
                         />
                     </div>
+
+
+
                     <button
                         type="submit"
                         className="w-full rounded-lg py-3 text-lg font-bold transition-all"
@@ -105,13 +119,14 @@ const Login: React.FC = () => {
                     </button>
                 </form>
 
-
                 {message && (
                     <pre className="text-xs" style={{color: systemTheme.text.title, whiteSpace: 'pre-wrap'}}>
                         <br/>
                         {message}
                     </pre>
                 )}
+
+
             </div>
 </div>
 );
