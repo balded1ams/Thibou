@@ -76,8 +76,9 @@ export default function Preferences() {
 
         <Title>Choisissez vos préférences</Title>
 
-        <p className="mx-auto w-full max-w-2xl text-center mb-4">
-          Indiquez si vous êtes intéressé, moyennement intéressé ou pas du tout intéressé. 
+        <p className="mx-auto w-full max-w-2xl text-justify mb-4 ">
+        Indiquez vos préférences (type d’œuvre, auteur, mouvement) : choisissez si elles ne doivent pas être prises en compte,
+         si leur intégration est sans importance, ou si elles doivent absolument être intégrées dans votre parcours. 
         </p>
 
         <div className="mx-auto flex w-full max-w-2xl text-xs justify-end gap-2">
@@ -114,7 +115,7 @@ export default function Preferences() {
             <div 
               className="flex justify-center items-center rounded-lg min-h-10 min-w-10"
               style={{
-                backgroundColor: colors.gray,
+                backgroundColor: colors.white,
               }}
             >    
               <MoveHorizontal/>

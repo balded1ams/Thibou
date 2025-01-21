@@ -19,12 +19,3 @@ export function findSalleForOeuvre(oeuvre: Oeuvre): Salle | undefined {
 export function findSalleForCoordonnee(coordinate: [number, number]): Salle | undefined {
     return musee.rooms.find((salle) => roomForCoordinates(salle, coordinate));
 }
-
-// Exemple d'utilisation
-const oeuvre: Oeuvre = { name: "Statue 1", description: "Une belle statue", coordinate: [0, 3] };
-const salle = findSalleForOeuvre(oeuvre);
-console.log(salle ? salle.name : "Oeuvre non trouvée dans une salle");
-
-const coordonnee: [number, number] = [0, 3];
-const salleParCoordonnee = findSalleForCoordonnee(coordonnee);
-console.log(salleParCoordonnee ? salleParCoordonnee.name : "Coordonnée non trouvée dans une salle");
