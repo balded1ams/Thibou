@@ -5,28 +5,21 @@ import { sql } from "drizzle-orm";
 
 export async function POST(req: Request) {
     try {
-        // Parse le JSON de la requête
         const body = await req.json();
+        const { userId } = body;
 
-        const {
-            user,
-            trajet_restant,
-        } = body;
-
-        if (!user || !trajet_restant) {
+        if (!userId) {
             return NextResponse.json({ error: 'Données manquantes ou invalides.' }, { status: 400 });
         }
 
         try {
-            // Insertion des données dans la table sauvegarde
-            await db.insert(sauvegarde).values({
-                user_id: user,
-                restant: trajet_restant
-            });
-
-            return NextResponse.json({ message: 'Données sauvegardées avec succès.' }, { status: 200 });
+            const savedData = await db
+                .select()
+                .from(sauvegarde)
+                .where(sql`${sauvegarde.user_id} = ${userId}`);
+            return NextResponse.json(savedData, { status: 200 });
         } catch (error) {
-            console.error("Erreur lors de l'insertion :", error);
+            console.error("Erreur lors de la récupération :", error);
             return NextResponse.error();
         }
     } catch (error) {
