@@ -37,20 +37,12 @@ export async function POST(request: Request) {
         const actionState = {};
 
         // Call the signIn function with the form data
-        const result = await signUp(actionState, formData);
-/*
-        // Handle the result (e.g., success or error)
-        if (result.error) {
-            return NextResponse.json({ error: result.error }, { status: 400 });
-        }*/
+        return  NextResponse.json(await signUp(actionState, formData));
 
-        // Handle success (you can customize this as needed)
-        return NextResponse.json({ success: "Login checked, not sure if it is succesful!" });
+
     } catch (error) {
-        // Handle unexpected errors
-        console.error("Error during sign-in:", error);
         return NextResponse.json(
-            { error: "An unexpected error occurred." },
+            { error: "KO" },
             { status: 500 }
         );
     }
