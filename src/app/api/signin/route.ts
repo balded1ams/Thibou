@@ -30,17 +30,14 @@ export async function POST(request: Request) {
          }*/
 
         if (result) {
-            return NextResponse.json({ success: "Authentification confirmé" });
+            return NextResponse.json({ 'authentification': 'OK' });
         } else  {
-            return NextResponse.json({ success: "Echec de l'authentification" });
-
+            return NextResponse.json({ 'authentification': 'KO' });
         }
     } catch (error) {
         // Handle unexpected errors
-        console.error("Error during sign-in:", error);
         return NextResponse.json(
-            { error: "An unexpected error occurred." },
-            { status: 500 }
+            { error: "KO" }, { status: 500 }
         );
     }
 

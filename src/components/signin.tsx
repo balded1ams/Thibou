@@ -9,6 +9,8 @@ const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState<JSX.Element | null>(null);
+
     const router=useRouter();
 
     interface ResponseMessage {
@@ -18,27 +20,43 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch('/api/signin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+
+        const response = await fetch('/api/signin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
 /*
             if (!response.ok) {
                 throw new Error('Erreur lors de la soumission');
             }*/
-            console.log(response);
-            const result: ResponseMessage = await response.json();
-            console.log(result.message);
 
-            router.push("/");
-        } catch (error: any) {
-            console.error(error.message || 'Erreur inattendue');
-        }
-    };
+        const respData= await response.json();
+
+        if ('authentification' in respData) {
+            console.log(respData.authentification);
+
+            if (respData.authentification === 'OK') {
+                router.push('/');
+            } else {
+                console.log(respData.authentification);
+                setMessage(
+                <>
+                      Adresse mail ou mot de passe invalide<br />
+                </>
+                )
+            }
+        } else {
+        setMessage(
+            <>
+                 Une erreur s'est produite lors du traitement de votre demande d'authentification. <br />
+                 Veuillez réessayer plus tard.
+            </>
+        )}
+    }
+
 
     return (
         <div
@@ -107,6 +125,14 @@ const Login: React.FC = () => {
                             required
                         />
                     </div>
+
+                    {message && (
+                      <pre className="text-xs" style={{color: systemTheme.text.title, whiteSpace: 'pre-wrap'}}>
+                        <br/>
+                          {message}
+                    </pre>
+                    )}
+
                     <button
                         type="submit"
                         className="w-full rounded-lg py-3 text-lg font-bold transition-all"
