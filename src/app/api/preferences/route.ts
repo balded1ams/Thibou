@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
 import { oeuvresMusee } from '@/db/schema';
-import { eq, sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
+import { sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
 
 export async function POST(req: Request) {
     try {
@@ -36,15 +36,15 @@ export async function POST(req: Request) {
                 ];
 
                 const conditionsAcceptTypeOeuvre = selectionsAccept[0].valeurs.map(valeur =>
-                    eq(oeuvresMusee.typeOeuvre,valeur.toLowerCase())
+                  sql`${oeuvresMusee.typeOeuvre} = ${valeur.toLowerCase()}`
                 );
 
                 const conditionsAcceptArtiste = selectionsAccept[1].valeurs.map(valeur =>
-                  eq(oeuvresMusee.artiste,valeur.toLowerCase())
+                  sql`${oeuvresMusee.artiste} = ${valeur.toLowerCase()}`
                 );
 
                 const conditionsAcceptMouvement = selectionsAccept[2].valeurs.map(valeur =>
-                  eq(oeuvresMusee.mouvement,valeur.toLowerCase())
+                  sql`${oeuvresMusee.artiste} = ${valeur.toLowerCase()}`
                 );
 
                 const queryAcceptConditionTypeOeuvre = sql.join(conditionsAcceptTypeOeuvre, sql` OR `);
@@ -61,15 +61,15 @@ export async function POST(req: Request) {
                     (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
 
                     const conditionsRefTypeOeuvre = selectionsRef[0].valeurs.map(valeur =>
-                      eq(oeuvresMusee.typeOeuvre,valeur.toLowerCase())
+                      sql`${oeuvresMusee.typeOeuvre} = ${valeur.toLowerCase()}`
                     );
 
                     const conditionsRefArtiste = selectionsRef[1].valeurs.map(valeur =>
-                      eq(oeuvresMusee.artiste,valeur.toLowerCase())
+                      sql`${oeuvresMusee.artiste} = ${valeur.toLowerCase()}`
                     );
 
                     const conditionsRefMouvement = selectionsRef[2].valeurs.map(valeur =>
-                      eq(oeuvresMusee.mouvement,valeur.toLowerCase())
+                      sql`${oeuvresMusee.mouvement} = ${valeur.toLowerCase()}`
                     );
 
                     const queryRefConditionTypeOeuvre = sql.join(conditionsRefTypeOeuvre, sql` OR `);
