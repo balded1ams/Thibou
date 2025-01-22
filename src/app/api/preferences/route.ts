@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
 import { oeuvres_musee } from '@/db/schema';
 import { sql } from "drizzle-orm";
+import { except } from 'drizzle-orm/pg-core'
 
 export async function POST(req: Request) {
     try {
@@ -9,10 +10,12 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         const {
-            "Type d'œuvre": typeOeuvre,
-            Auteur,
-            Mouvement
+            "type_oeuvre": typeOeuvre,
+            "artiste": Auteur,
+            "mouvement": Mouvement
         } = body;
+
+        console.log(body);
 
         if (!typeOeuvre || !Auteur || !Mouvement) {
             return NextResponse.json({ error: 'Données manquantes ou invalides.' }, { status: 400 });
@@ -29,10 +32,10 @@ export async function POST(req: Request) {
                     {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2)}
                 ];
                 const conditionsAccept = selectionsAccept.flatMap(({ nom, valeurs }) =>
-                    valeurs.map(valeur => sql`${oeuvres_musee[nom]} = ${valeur.toLowerCase()}`)
+                    valeurs.map(valeur => sql`${oeuvres_musee[nom]} = ${valeur}`)
                 );
                 const queryAcceptCondition = sql.join(conditionsAccept, sql` OR `);
-                let finalCondition;
+                let dbResult;
                 if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
                     (Object.keys(Auteur).filter(key => Auteur[key] === 1).length > 0) ||
                     (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
@@ -46,16 +49,23 @@ export async function POST(req: Request) {
                     );
                     const queryRefCondition = sql.join(conditionsRef, sql` AND `);
 
-                    finalCondition = sql`${queryAcceptCondition} AND ${queryRefCondition}`;
+                    const req1 =  db
+                        .select()
+                        .from(oeuvres_musee)
+                        .where(queryAcceptCondition);
+                    const req2 = db
+                        .select()
+                        .from(oeuvres_musee)
+                        .where(queryRefCondition);
+
+                    dbResult = await except(req1, req2);
                 }
                 else {
-                    finalCondition = queryAcceptCondition;
+                    dbResult = await db
+                        .select()
+                        .from(oeuvres_musee)
+                        .where(queryAcceptCondition);
                 }
-
-                const dbResult = await db
-                .select()
-                .from(oeuvres_musee)
-                .where(finalCondition);
 
                 const formattedResult = dbResult.reduce((acc, item) => {
                     acc[item.id] = {
