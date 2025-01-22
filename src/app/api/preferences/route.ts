@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
 import { oeuvres_musee } from '@/db/schema';
-import { sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
+import { sql } from "drizzle-orm";
 
 export async function POST(req: Request) {
     try {
@@ -28,67 +28,34 @@ export async function POST(req: Request) {
                     {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 2)},
                     {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2)}
                 ];
-
-                const selectionsRef = [
-                    {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1)},
-                    {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 1)},
-                    {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 1)}
-                ];
-
-                const conditionsAcceptTypeOeuvre = selectionsAccept[0].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
+                const conditionsAccept = selectionsAccept.flatMap(({ nom, valeurs }) =>
+                    valeurs.map(valeur => sql`${oeuvres_musee[nom]} = ${valeur.toLowerCase()}`)
                 );
-
-                const conditionsAcceptArtiste = selectionsAccept[1].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
-                );
-
-                const conditionsAcceptMouvement = selectionsAccept[2].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
-                );
-
-                const queryAcceptConditionTypeOeuvre = sql.join(conditionsAcceptTypeOeuvre, sql` OR `);
-                const queryAcceptConditionArtiste = sql.join(conditionsAcceptArtiste, sql` OR `);
-                const queryAcceptConditionMouvement = sql.join(conditionsAcceptMouvement, sql` OR `);
-
-                const TEMP_Accepttab = [queryAcceptConditionTypeOeuvre, queryAcceptConditionArtiste, queryAcceptConditionMouvement];
-
-                const queryAcceptCondition = sql.join(TEMP_Accepttab, sql` OR `);
-                let queryCondition;
-
-                if ((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
+                const queryAcceptCondition = sql.join(conditionsAccept, sql` OR `);
+                let finalCondition;
+                if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
                     (Object.keys(Auteur).filter(key => Auteur[key] === 1).length > 0) ||
                     (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
-
-                    const conditionsRefTypeOeuvre = selectionsRef[0].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
+                    const selectionsRef = [
+                        {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1)},
+                        {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 1)},
+                        {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 1)}
+                    ];
+                    const conditionsRef = selectionsRef.flatMap(({ nom, valeurs }) =>
+                        valeurs.map(valeur => sql`${oeuvres_musee[nom]} != ${valeur.toLowerCase()}`)
                     );
+                    const queryRefCondition = sql.join(conditionsRef, sql` AND `);
 
-                    const conditionsRefArtiste = selectionsRef[1].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
-                    );
-
-                    const conditionsRefMouvement = selectionsRef[2].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
-                    );
-
-                    const queryRefConditionTypeOeuvre = sql.join(conditionsRefTypeOeuvre, sql` OR `);
-                    const queryRefConditionArtiste = sql.join(conditionsRefArtiste, sql` OR `);
-                    const queryRefConditionMouvement = sql.join(conditionsRefMouvement, sql` OR `);
-
-                    const TEMP_Reftab = [queryRefConditionTypeOeuvre, queryRefConditionArtiste, queryRefConditionMouvement];
-
-                    const queryRefCondition = sql.join(TEMP_Reftab, sql` OR `);
-                    const TEMPQueryCondition = [queryAcceptCondition, queryRefCondition];
-                    queryCondition = sql.join(TEMPQueryCondition, sql` AND `);
-                } else{
-                    queryCondition = queryAcceptCondition;
+                    finalCondition = sql`${queryAcceptCondition} AND ${queryRefCondition}`;
+                }
+                else {
+                    finalCondition = queryAcceptCondition;
                 }
 
                 const dbResult = await db
-                    .select()
-                    .from(oeuvres_musee)
-                    .where(queryCondition);
+                .select()
+                .from(oeuvres_musee)
+                .where(finalCondition);
 
                 const formattedResult = dbResult.reduce((acc, item) => {
                     acc[item.id] = {
@@ -113,7 +80,6 @@ export async function POST(req: Request) {
             console.error("Erreur lors de la requête :", error);
             return NextResponse.error();
         }
-
 
 
     } catch (error) {

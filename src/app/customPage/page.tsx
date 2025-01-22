@@ -9,10 +9,12 @@ import Category from "@/components/Category";
 import Item from "@/components/Item";
 import Title from "@/components/title";
 import { X, Check, MoveHorizontal } from "lucide-react";
-import { StaticColors as colors } from "@/utils/index";
+import {oeuvres, StaticColors as colors} from "@/utils/index";
+import {useRouter} from "next/navigation";
 
 export default function Preferences() {
   const { systemTheme } = useThemeContext();
+  const router = useRouter();
 
   const [itemStates, setItemStates] = useState<number[]>([0, 0, 0, 0, 0, 0, 0]); // 7 items initialisés à neutre
 
@@ -58,12 +60,28 @@ export default function Preferences() {
         throw new Error('Erreur lors de la soumission');
       }
 
-      const result = await response.json();
+      type OeuvreTEMP = {
+        nom: string;
+        description: string;
+        //TODO: refaire le type oeuvre
+      };
+
+      const result:{[id:number]: OeuvreTEMP} = await response.json();
+      let cpt = 0;
+      for(const i in result){
+        const oeuvre = result[i];
+        //console.log("changed "+ oeuvres[cpt].name + " en " + oeuvre.nom)
+        oeuvres[cpt].name = oeuvre.nom;
+
+        //console.log("changed "+ oeuvres[cpt].description + " en " + oeuvre.description)
+        oeuvres[cpt].description = oeuvre.description;
+        cpt++;
+      }
       console.log("Réponse du serveur :", result);
-      
     } catch (error: any) {
       console.error(error.message || 'Erreur inattendue');
     }
+    await router.push("/parcour")
   };
 
   return (

@@ -238,17 +238,6 @@ export const musee: Musee = {
         { name: "Salle 8", cooUpLeft: [15, 10], cooDownRight: [19, 19] },
     ],
 };
-
-const getRandomCoordinates = (rows: number, cols: number, occupied: Set<string>): [number, number] => {
-    let x, y;
-    do {
-        x = Math.floor(Math.random() * rows);
-        y = Math.floor(Math.random() * cols);
-    } while (occupied.has(`${x},${y}`));
-    occupied.add(`${x},${y}`);
-    return [x, y];
-};
-
 // Initialiser les coordonnées occupées
 const occupiedCoordinates = new Set<string>();
 
