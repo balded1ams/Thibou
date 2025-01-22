@@ -47,13 +47,6 @@ const Footer: React.FC = () => {
                     >
                         Accueil
                     </li>
-                    <li 
-                        onClick={() => router.push("/about")}
-                        className="hover:underline cursor-pointer"
-                        style={{ color: systemTheme.text.primary }}
-                    >                            
-                        À propos
-                    </li>
                     <li
                         onClick={() => router.push("/auth/signin")}
                         className="hover:underline cursor-pointer"
