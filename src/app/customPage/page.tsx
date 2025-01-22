@@ -55,18 +55,18 @@ export default function Preferences() {
     event.preventDefault();
 
     const data = {
-      "Type d'œuvre": {
-        Peinture: itemStates[0],
-        Sculpture: itemStates[1],
+      "type_oeuvre": {
+        "peinture": itemStates[0],
+        "sculpture": itemStates[1],
       },
-      Auteur: {
-        "Michel-Ange": itemStates[2],
-        "Léonard de Vinci": itemStates[3],
+      "artiste": {
+        "Michael Ange": itemStates[2],
+        "Leonard De Vinci": itemStates[3],
       },
-      Mouvement: {
-        "Le maniérisme": itemStates[4],
-        "Le baroque": itemStates[5],
-        "Le romantisme": itemStates[6],
+      "mouvement": {
+        "maniérisme": itemStates[4],
+        "baroque": itemStates[5],
+        "romantisme": itemStates[6],
       },
     };
 
