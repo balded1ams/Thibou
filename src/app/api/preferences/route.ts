@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
-import { oeuvres_musee } from '@/db/schema';
-import { sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
+import { oeuvresMusee } from '@/db/schema';
+import { eq, sql } from "drizzle-orm"; // Schéma Drizzle (adapte selon ton projet)
 
 export async function POST(req: Request) {
     try {
@@ -36,15 +36,15 @@ export async function POST(req: Request) {
                 ];
 
                 const conditionsAcceptTypeOeuvre = selectionsAccept[0].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
+                    eq(oeuvresMusee.typeOeuvre,valeur.toLowerCase())
                 );
 
                 const conditionsAcceptArtiste = selectionsAccept[1].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
+                  eq(oeuvresMusee.artiste,valeur.toLowerCase())
                 );
 
                 const conditionsAcceptMouvement = selectionsAccept[2].valeurs.map(valeur =>
-                    sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
+                  eq(oeuvresMusee.mouvement,valeur.toLowerCase())
                 );
 
                 const queryAcceptConditionTypeOeuvre = sql.join(conditionsAcceptTypeOeuvre, sql` OR `);
@@ -61,15 +61,15 @@ export async function POST(req: Request) {
                     (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
 
                     const conditionsRefTypeOeuvre = selectionsRef[0].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.type_oeuvre} = ${valeur.toLowerCase()}`
+                      eq(oeuvresMusee.typeOeuvre,valeur.toLowerCase())
                     );
 
                     const conditionsRefArtiste = selectionsRef[1].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.artiste} = ${valeur.toLowerCase()}`
+                      eq(oeuvresMusee.artiste,valeur.toLowerCase())
                     );
 
                     const conditionsRefMouvement = selectionsRef[2].valeurs.map(valeur =>
-                        sql`${oeuvres_musee.mouvement} = ${valeur.toLowerCase()}`
+                      eq(oeuvresMusee.mouvement,valeur.toLowerCase())
                     );
 
                     const queryRefConditionTypeOeuvre = sql.join(conditionsRefTypeOeuvre, sql` OR `);
@@ -87,14 +87,14 @@ export async function POST(req: Request) {
 
                 const dbResult = await db
                     .select()
-                    .from(oeuvres_musee)
+                    .from(oeuvresMusee)
                     .where(queryCondition);
 
                 const formattedResult = dbResult.reduce((acc, item) => {
                     acc[item.id] = {
                         nom: item.nom,
                         description: item.description,
-                        type_oeuvre: item.type_oeuvre,
+                        type_oeuvre: item.typeOeuvre,
                         artiste: item.artiste,
                         mouvement: item.mouvement,
                         x: item.x,
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
                 return NextResponse.json(formattedResult);
             }
             else{
-                const dbResult = await db.select().from(oeuvres_musee);
+                const dbResult = await db.select().from(oeuvresMusee);
                 return NextResponse.json(dbResult);
             }
 

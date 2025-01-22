@@ -1,5 +1,7 @@
-import { pgTable, unique, serial, varchar, integer, check, date, foreignKey, timestamp, text, primaryKey, json } from "drizzle-orm/pg-core"
+import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, json, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+
+
 
 export const auteur = pgTable("auteur", {
 	idauteur: serial().primaryKey().notNull(),
@@ -26,13 +28,14 @@ export const utilisateur = pgTable("utilisateur", {
 export const resetpasswordUuid = pgTable("resetpassword_uuid", {
 	idutilisateur: integer().notNull(),
 	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
-	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
+	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`).notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "new_table_idutilisateur_fkey"
-	}),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "new_table_idutilisateur_fkey"
+		}),
+	unique("unique_uuidvalue").on(table.uuidValue),
 ]);
 
 export const emplacement = pgTable("emplacement", {
@@ -40,6 +43,28 @@ export const emplacement = pgTable("emplacement", {
 	abscisse: integer(),
 	ordonnee: integer(),
 	etage: integer(),
+});
+
+export const sauvegarde = pgTable("sauvegarde", {
+	idutilisateur: integer().primaryKey().notNull(),
+	restant: json().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}),
+]);
+
+export const oeuvresMusee = pgTable("oeuvres_musee", {
+	id: serial().primaryKey().notNull(),
+	nom: varchar({ length: 255 }).notNull(),
+	description: varchar({ length: 255 }).notNull(),
+	typeOeuvre: varchar("type_oeuvre", { length: 255 }).notNull(),
+	artiste: varchar({ length: 255 }).notNull(),
+	mouvement: varchar({ length: 255 }).notNull(),
+	x: integer().notNull(),
+	y: integer().notNull(),
 });
 
 export const utilisateurPreferences = pgTable("utilisateur_preferences", {
@@ -123,20 +148,3 @@ export const emplacementParcours = pgTable("emplacement_parcours", {
 	primaryKey({ columns: [table.idutilisateur, table.idemplacement], name: "emplacement_parcours_pkey"}),
 	check("emplacement_parcours_datecreationparcours_check", sql`datecreationparcours <= CURRENT_DATE`),
 ]);
-
-export const oeuvres_musee = pgTable('oeuvres_musee', {
-	id: serial('id').primaryKey(),
-	nom: text('nom').notNull(),
-	description: text('description').notNull(),
-	type_oeuvre: text('type_oeuvre').notNull(),
-	artiste: text('artiste').notNull(),
-	mouvement: text('mouvement').notNull(),
-	x: integer('x').notNull(),
-	y: integer('y').notNull(),
-});
-
-export const sauvegarde = pgTable('save', {
-	id: serial('id').primaryKey(),
-	user_id: text('user_id').notNull(),
-	restant: json('restant').notNull(),
-});
