@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 const Signup: React.FC = () => {
     const { systemTheme } = useThemeContext();
@@ -10,6 +11,12 @@ const Signup: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [messageUserName, setMessageUserName] = useState<JSX.Element | null>(null);
+    const [messageMailAdress, setMessageMailAdress] = useState<JSX.Element | null>(null);
+    const [message, setMessage] = useState<JSX.Element | null>(null);
+    const router=useRouter();
+
+
 
     interface ResponseMessage {
         message: string;
@@ -31,17 +38,49 @@ const Signup: React.FC = () => {
                 },
                 body: JSON.stringify({username, email, password}),
             });
-            /*
-                        if (!response.ok) {
-                            throw new Error('Erreur lors de la soumission');
-                        }*/
 
+            const respData = await response.json();
 
-            const result: ResponseMessage = await response.json();
-            console.log(result.message); // Affiche le message du serveur
+            if ('success' in respData) {
+                console.log('test3');
 
+                if (respData.success === 'OK') {
+                    router.push('/');
+                }
+            }  else if (('username' in respData) && ('mail' in respData)) {
+                console.log('test1');
+                if (respData.mail === 'KO') {
+                    setMessageUserName(<>
+                        Ce nom d'utilisateur existe déja. Veuillez en choisir un autre. <br />
+                    </>)
+                }
+                if (respData.username === 'KO') {
+                    setMessageMailAdress(<>
+                        Cette adresse mail existe déja. Veuillez en choisir une autre. <br />
+                        <br />
+                        Veuillez réessayer de vous connecter ultérieurement.
+                    </>)
+                }
+            } else {
+                console.log('test4');
+                setMessage(
+                    <>
+                        Une erreur s'est produite lors du traitement de votre demande
+                        d'authentification. <br />
+                        <br />
+                        Veuillez réessayer de vous connecter ultérieurement.
+                    </>
+                );
+            }
         } catch (error: any) {
-            console.error(error.message || 'Erreur inattendue');
+            setMessage(
+                <>
+                    Une erreur s'est produite lors du traitement de votre demande
+                    d'authentification. <br />
+                    <br />
+                    Veuillez réessayer de vous connecter ultérieurement.
+                </>
+            );
         }
 
     };
@@ -88,6 +127,11 @@ const Signup: React.FC = () => {
                             required
                         />
                     </div>
+                    {messageUserName && (
+                        <pre className="text-l  font-bold" style={{color: 'red' , whiteSpace: 'pre-wrap'}}>
+                          {messageUserName}
+                    </pre>
+                    )}
                     <div>
                         <label
                             htmlFor="email"
@@ -111,6 +155,11 @@ const Signup: React.FC = () => {
                             required
                         />
                     </div>
+                    {messageMailAdress && (
+                        <pre className="text-l  font-bold" style={{color: 'red' , whiteSpace: 'pre-wrap'}}>
+                          {messageMailAdress}
+                    </pre>
+                    )}
                     <div>
                         <label
                             htmlFor="password"
@@ -168,6 +217,11 @@ const Signup: React.FC = () => {
                         S'inscrire
                     </button>
                 </form>
+                {message && (
+                    <pre className="text-l  font-bold" style={{color: 'red' , whiteSpace: 'pre-wrap'}}>
+                          {message}
+                    </pre>
+                )}
                 <p
                     className="mt-4 text-center text-sm"
                     style={{ color: systemTheme.text.primary }}

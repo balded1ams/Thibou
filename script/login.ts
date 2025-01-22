@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import {eq, or} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
@@ -33,25 +33,37 @@ const authSchemaModifyPasswordThroughtReset = z.object({
 
 export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   const { email, username, password } = data;
-  const existingUserName = await db
-    .select()
-    .from(utilisateur)
-    .where(eq(utilisateur.nomutilisateur, username))
-    .limit(1);
 
-  if (existingUserName.length > 0) {
-    return { error: "Username already taken. Please try again." };
-  }
+  //Vérifier si le nom d'utilisateur ou l'adresse mail existe déja
 
-  const existingMailAdress = await db
-      .select()
+  const existingUser = await db
+      .select({
+        nomutilisateur: utilisateur.nomutilisateur,
+        adressemail: utilisateur.adressemail,
+      })
       .from(utilisateur)
-      .where(eq(utilisateur.adressemail, email))
+      .where(
+          or(
+              eq(utilisateur.nomutilisateur, username),
+              eq(utilisateur.adressemail, email)
+          )
+      )
       .limit(1);
 
-  if (existingMailAdress.length > 0) {
-    return { error: "Mail adress already taken. Please try again." };
+  if (existingUser.length > 0) {
+    const isUsernameTaken = existingUser[0].nomutilisateur === username;
+    const isEmailTaken = existingUser[0].adressemail === email;
+
+    if (isUsernameTaken && isEmailTaken) {
+      return { username: 'KO', mail : 'KO'}
+    } else if (isUsernameTaken) {
+      return { username: 'KO', mail : 'OK'}
+    } else if (isEmailTaken) {
+      return { username: 'OK', mail : 'KO'}
+    }
   }
+
+
 
   const passwordHash = await hashPassword(password);
 
@@ -69,6 +81,8 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     return { error: "Failed to create signin. Please try again." };
   }
   await setSession(createdUser);
+
+  return {success : 'OK'};
 });
 
 export const signIn = validatedAction(authSchemaSignIn, async (data) => {

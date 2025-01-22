@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
+import {Dispatcher} from "undici-types";
+import ResponseData = Dispatcher.ResponseData;
 
 const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
@@ -33,10 +35,9 @@ const Login: React.FC = () => {
                 throw new Error('Erreur lors de la soumission');
             }*/
 
-        const respData= await response.json();
+        const respData = await response.json();
 
         if ('authentification' in respData) {
-            console.log(respData.authentification);
 
             if (respData.authentification === 'OK') {
                 router.push('/');
