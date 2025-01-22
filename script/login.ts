@@ -60,7 +60,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     nomutilisateur: username,
     adressemail: email,
     password: passwordHash,
-    dateinscription: new Date(), // Current date
+    dateinscription: new Date().toISOString(), // Current date
     // other columns not included here will use their default or NULL values if applicable
   }).returning();
 
@@ -83,7 +83,7 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
     .limit(1);
 
   if (user.length === 0) {
-    return { error: "Invalid username or password. Please try again." };
+    return false;
   }
 
   const { adressemail: foundUser } = user[0];
