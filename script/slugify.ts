@@ -5,6 +5,11 @@ import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
 import { utilisateurType, oeuvreType} from "@/types";
 import { cookies } from "next/headers";
 import { verifyToken } from "./session";
+import { z} from "zod";
+
+const authSchematrajetRestant = z.object({
+    trajet_restant: z.array(z.array(z.tuple([z.number(), z.number()]))),
+});
 
 function cleanData(data) {
     const parsedData = JSON.parse(data);
@@ -44,6 +49,19 @@ async function upsertData(idUtilisateur, trajet_restant) {
 
 export async function updateSauvegarde(trajet_restant) {
 
+    const validation = authSchematrajetRestant.safeParse({ trajet_restant: trajet_restant });
+
+    if (!trajet_restant) {
+        return { error: 'Données manquantes ou invalides.' };
+    }
+
+    if (!validation.success) {
+        console.error("Validation failed:", validation.error.errors);
+        throw { error : "Données manquantes ou invalides." };
+    }
+
+    //Identifier l'utilisateur connecté
+
     const sessionCookie = (await cookies()).get("session");
 
     if (!sessionCookie) {
@@ -58,9 +76,7 @@ export async function updateSauvegarde(trajet_restant) {
 
     const userId = session.user.id;
 
-    if (!trajet_restant) {
-        return { error: 'Données manquantes ou invalides.' };
-    }
+
 
     const cleanedTrajet = cleanData(JSON.stringify(trajet_restant));
 

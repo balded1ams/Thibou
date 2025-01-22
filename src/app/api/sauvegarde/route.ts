@@ -11,11 +11,6 @@ export async function POST(req) {
 
 
 
-
-
-    const actionState = {};
-
-
     const result = await updateSauvegarde(trajet_restant);
 
 
