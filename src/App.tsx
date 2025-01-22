@@ -29,7 +29,7 @@ function App({userConnected}) {
             >
                 <Header showAuthButtons={true} userConnected={userConnected}/>
                 <Title>Présentation de Thibou</Title>
-                <Start/>
+                <Start userConnected={userConnected}/>
                 <Intro/>
                 <SampleCarousel />
             </main>

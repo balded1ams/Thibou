@@ -1,10 +1,25 @@
 import { useThemeContext } from "@/hooks/useTheme";
 import { useRouter } from "next/navigation";
-import React from "react"; // Hook pour la navigation
+import React, {useEffect, useState} from "react"; // Hook pour la navigation
 
-const Start = () => {
+interface StartProps {
+    userConnected?: unknown;
+}
+
+const Start: React.FC<StartProps> =  ({userConnected })=> {
     const { systemTheme } = useThemeContext();
+    const [message, setMessage] = useState<JSX.Element | null>(null);
     const router = useRouter(); // Initialiser le hook de navigation
+
+    useEffect(() => {
+        if (userConnected) {
+            setMessage(<>Commencer</>);
+        } else {
+            setMessage(<>Commencer en tant qu’invité</>);
+        }
+    }, []);
+
+
 
     return (
       <div className="flex items-center justify-center py-8 ">
@@ -16,7 +31,7 @@ const Start = () => {
             backgroundColor: systemTheme.background.button,
           }}
         >
-          Commencer en tant qu’invité
+            {message}
         </button>
 
       </div>
