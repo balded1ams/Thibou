@@ -49,12 +49,14 @@ const Login: React.FC = () => {
                 )
             }
         } else {
-        setMessage(
+            setMessage(
             <>
-                 Une erreur s'est produite lors du traitement de votre demande d'authentification. <br />
-                 Veuillez réessayer plus tard.
+                Une erreur s'est produite lors du traitement de votre demande
+                d'authentification. <br />
+                <br />
+                Veuillez réessayer de vous connecter ultérieurement.
             </>
-        )}
+        );}
     }
 
 
@@ -127,8 +129,7 @@ const Login: React.FC = () => {
                     </div>
 
                     {message && (
-                      <pre className="text-xs" style={{color: systemTheme.text.title, whiteSpace: 'pre-wrap'}}>
-                        <br/>
+                      <pre className="text-l  font-bold" style={{color: 'red' , whiteSpace: 'pre-wrap'}}>
                           {message}
                     </pre>
                     )}
