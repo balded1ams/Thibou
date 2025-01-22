@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { useThemeContext } from "@/hooks/useTheme";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
-import {Dispatcher} from "undici-types";
-import ResponseData = Dispatcher.ResponseData;
+
 
 const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
@@ -15,12 +14,11 @@ const Login: React.FC = () => {
 
     const router=useRouter();
 
-    interface ResponseMessage {
-        message: string;
-    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setMessage(<></>)
+
 
 
         const response = await fetch('/api/signin', {

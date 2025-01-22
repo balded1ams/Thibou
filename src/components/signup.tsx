@@ -18,12 +18,14 @@ const Signup: React.FC = () => {
 
 
 
-    interface ResponseMessage {
-        message: string;
-    }
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+
+        setMessageMailAdress(<></>);
+        setMessageUserName(<></>);
+        setMessage(<></>)
+
+
         if (password !== confirmPassword) {
             alert("Les mots de passe ne correspondent pas !");
             return;
@@ -42,23 +44,16 @@ const Signup: React.FC = () => {
             const respData = await response.json();
 
             if ('success' in respData) {
-                console.log('test3');
-
-                if (respData.success === 'OK') {
-                    router.push('/');
-                }
+                router.push('/');
             }  else if (('username' in respData) && ('mail' in respData)) {
-                console.log('test1');
                 if (respData.mail === 'KO') {
-                    setMessageUserName(<>
-                        Ce nom d'utilisateur existe déja. Veuillez en choisir un autre. <br />
+                    setMessageMailAdress(<>
+                        Cette adresse mail existe déja. Veuillez en choisir une autre. <br />
                     </>)
                 }
                 if (respData.username === 'KO') {
-                    setMessageMailAdress(<>
-                        Cette adresse mail existe déja. Veuillez en choisir une autre. <br />
-                        <br />
-                        Veuillez réessayer de vous connecter ultérieurement.
+                    setMessageUserName(<>
+                        Ce nom d'utilisateur existe déja. Veuillez en choisir un autre. <br />
                     </>)
                 }
             } else {

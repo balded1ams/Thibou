@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import {eq, or} from "drizzle-orm";
+import {eq} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
@@ -35,33 +35,47 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   const { email, username, password } = data;
 
   //Vérifier si le nom d'utilisateur ou l'adresse mail existe déja
+  let isUsernameTaken  = false;
+  let isEmailTaken   = false;
 
-  const existingUser = await db
+  const existingNomUtilisateur = await db
       .select({
         nomutilisateur: utilisateur.nomutilisateur,
+      })
+      .from(utilisateur)
+      .where(eq(utilisateur.nomutilisateur, username))
+      .limit(1);
+
+
+  if (existingNomUtilisateur.length > 0) {
+      isUsernameTaken = true;
+  }
+
+  const existingAdresseMail = await db
+      .select({
         adressemail: utilisateur.adressemail,
       })
       .from(utilisateur)
-      .where(
-          or(
-              eq(utilisateur.nomutilisateur, username),
-              eq(utilisateur.adressemail, email)
-          )
-      )
+      .where(eq(utilisateur.adressemail, email))
       .limit(1);
 
-  if (existingUser.length > 0) {
-    const isUsernameTaken = existingUser[0].nomutilisateur === username;
-    const isEmailTaken = existingUser[0].adressemail === email;
+  if (existingAdresseMail.length > 0) {
+     isEmailTaken = true;
+  }
 
-    if (isUsernameTaken && isEmailTaken) {
+  console.log('ex1', isEmailTaken);
+
+  console.log('ex2', isUsernameTaken);
+
+
+  if (isUsernameTaken && isEmailTaken) {
       return { username: 'KO', mail : 'KO'}
     } else if (isUsernameTaken) {
       return { username: 'KO', mail : 'OK'}
     } else if (isEmailTaken) {
       return { username: 'OK', mail : 'KO'}
     }
-  }
+
 
 
 
