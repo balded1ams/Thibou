@@ -1,5 +1,5 @@
 import React from "react";
-import EditUserComponent from "../../components/editUser";
+import ViewUserComponent from "@/components/viewUser";
 import { headers } from "next/headers";
 import { getIdUserFromSession } from "../../../script/session";
 import { fetchUtilisateur } from "../../../script/slugify";
@@ -18,7 +18,7 @@ const EditUser = async () => {
         return <div>Chargement...</div>;
     }
 
-    return <EditUserComponent userConnected={userConnected} />;
+    return <ViewUserComponent userConnected={userConnected} />;
 };
 
 export default EditUser;
