@@ -74,13 +74,17 @@ export default function FracPage() {
         console.log(sauvegarde.result.data)
         if (sauvegarde && sauvegarde.result.data?.length) {
           setResult(sauvegarde.result.data);
+          setDataLoaded(true);
+
         } else {
           const result = await pathing();
           setResult(result);
+          setDataLoaded(true);
         }
       } else {
         const result = await pathing();
         setResult(result);
+        setDataLoaded(true);
       }
       setDataLoaded(true);
     };

@@ -6,7 +6,6 @@ import Footer from "@/components/footer";
 import { useThemeContext } from "@/hooks/useTheme";
 
 import { use, useEffect, useState } from "react";
-import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
 import { findOeuvres } from "@/hooks/useOeuvre";
@@ -19,6 +18,8 @@ export default function Page({ params: paramsPromise }) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const oeuvreDesc = params?.oeuvreDesc;
+
+  const router = useRouter()
 
   const [name, setName] = useState(null);
   //TODO: trouver un type un data, le pauvre
@@ -65,8 +66,8 @@ export default function Page({ params: paramsPromise }) {
           <Header />
           
           <div className="flex max-w-5xl flex-col mx-auto gap-3 px-4">
-            <Link
-              href={"/parcour"}
+            <button
+              onClick={() => router.push("/parcour")}
               className="flex gap-1 w-min pr-4 p-2 rounded-lg shadow border"
               style={{
                   background: systemTheme.background.primary,
@@ -75,7 +76,7 @@ export default function Page({ params: paramsPromise }) {
               }}
             >
               <ChevronLeft />Retour
-            </Link>
+            </button>
             <div className="mx-auto flex flex-col gap-4 xl:flex-row">
               <ImageOeuvre  source={currentOeuvre.image[0].toUpperCase() + currentOeuvre.image.slice(1)}/>
               <ArtworkDesc
