@@ -1,11 +1,12 @@
 "use server";
 
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import {eq} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
 import {resetpasswordUuid, utilisateur} from "@/db/schema";
+import { verifyToken } from "@/../script/session";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
 import nodemailer from "nodemailer";
@@ -33,25 +34,51 @@ const authSchemaModifyPasswordThroughtReset = z.object({
 
 export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   const { email, username, password } = data;
-  const existingUserName = await db
-    .select()
-    .from(utilisateur)
-    .where(eq(utilisateur.nomutilisateur, username))
-    .limit(1);
 
-  if (existingUserName.length > 0) {
-    return { error: "Username already taken. Please try again." };
+  //Vérifier si le nom d'utilisateur ou l'adresse mail existe déja
+  let isUsernameTaken  = false;
+  let isEmailTaken   = false;
+
+  const existingNomUtilisateur = await db
+      .select({
+        nomutilisateur: utilisateur.nomutilisateur,
+      })
+      .from(utilisateur)
+      .where(eq(utilisateur.nomutilisateur, username))
+      .limit(1);
+
+
+  if (existingNomUtilisateur.length > 0) {
+      isUsernameTaken = true;
   }
 
-  const existingMailAdress = await db
-      .select()
+  const existingAdresseMail = await db
+      .select({
+        adressemail: utilisateur.adressemail,
+      })
       .from(utilisateur)
       .where(eq(utilisateur.adressemail, email))
       .limit(1);
 
-  if (existingMailAdress.length > 0) {
-    return { error: "Mail adress already taken. Please try again." };
+  if (existingAdresseMail.length > 0) {
+     isEmailTaken = true;
   }
+
+  console.log('ex1', isEmailTaken);
+
+  console.log('ex2', isUsernameTaken);
+
+
+  if (isUsernameTaken && isEmailTaken) {
+      return { username: 'KO', mail : 'KO'}
+    } else if (isUsernameTaken) {
+      return { username: 'KO', mail : 'OK'}
+    } else if (isEmailTaken) {
+      return { username: 'OK', mail : 'KO'}
+    }
+
+
+
 
   const passwordHash = await hashPassword(password);
 
@@ -60,7 +87,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     nomutilisateur: username,
     adressemail: email,
     password: passwordHash,
-    dateinscription: new Date(), // Current date
+    dateinscription: new Date().toISOString(), // Current date
     // other columns not included here will use their default or NULL values if applicable
   }).returning();
 
@@ -69,6 +96,8 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     return { error: "Failed to create signin. Please try again." };
   }
   await setSession(createdUser);
+
+  return {success : 'OK'};
 });
 
 export const signIn = validatedAction(authSchemaSignIn, async (data) => {
@@ -83,7 +112,7 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
     .limit(1);
 
   if (user.length === 0) {
-    return { error: "Invalid username or password. Please try again." };
+    return false;
   }
 
   const { adressemail: foundUser } = user[0];
@@ -217,3 +246,38 @@ export async function signOut() {
   return { message: "Déconnexion réussie." };
 }
 
+export async function deleteAccount() {
+  try {
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const userId = session.user.id;
+
+    // Supprimer l'utilisateur de la base de données
+    const deletedRows = await db
+        .delete(utilisateur)
+        .where(eq(utilisateur.idutilisateur, userId))
+        .returning();
+
+    if (deletedRows.length === 0) {
+      return { error: "Erreur lors de la suppression du compte.", status: 500 };
+    }
+
+    // Supprimer le cookie de session
+    (await cookies()).delete("session");
+
+    return { message: "Compte supprimé avec succès.", status: 200 };
+  } catch (error) {
+    console.error("Erreur lors de la suppression du compte :", error);
+    return { error: "Erreur interne du serveur.", status: 500 };
+  }
+}

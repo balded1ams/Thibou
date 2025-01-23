@@ -66,7 +66,7 @@ export default function Page({ params: paramsPromise }) {
           
           <div className="flex max-w-5xl flex-col mx-auto gap-3 px-4">
             <Link
-              href={"/fraction"}
+              href={"/parcour"}
               className="flex gap-1 w-min pr-4 p-2 rounded-lg shadow border"
               style={{
                   background: systemTheme.background.primary,

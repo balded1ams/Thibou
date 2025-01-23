@@ -60,8 +60,8 @@ export default function Preferences() {
         "sculpture": itemStates[1],
       },
       "artiste": {
-        "Michael Ange": itemStates[2],
-        "Leonard De Vinci": itemStates[3],
+        "michael ange": itemStates[2],
+        "leonard de vinci": itemStates[3],
       },
       "mouvement": {
         "maniérisme": itemStates[4],
