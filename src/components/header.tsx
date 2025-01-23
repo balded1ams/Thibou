@@ -5,7 +5,7 @@ import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import { useState, useEffect } from "react";
-import { utilisateurType } from "@/types/index";
+import { utilisateurType } from "@/types";
 import { LogOut, Pencil } from "lucide-react";
 import Image from "next/image";
 
@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 
             if (response.ok) {
                 console.log("Déconnexion réussie");
-                router.push("/");
+                window.location.reload();
             } else {
                 console.error("Erreur lors de la déconnexion");
             }
