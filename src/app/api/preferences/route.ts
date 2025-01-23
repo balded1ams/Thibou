@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/db';
-import { oeuvres_musee } from '@/db/schema';
+import { oeuvresMusee } from '@/db/schema';
 import { sql } from "drizzle-orm";
-import { except } from 'drizzle-orm/pg-core'
 
 export async function POST(req: Request) {
     try {
@@ -15,84 +14,76 @@ export async function POST(req: Request) {
             "mouvement": Mouvement
         } = body;
 
-        console.log(body);
-
         if (!typeOeuvre || !Auteur || !Mouvement) {
             return NextResponse.json({ error: 'Données manquantes ou invalides.' }, { status: 400 });
         }
 
         try {
-            if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2).length > 0) ||
-                (Object.keys(Auteur).filter(key => Auteur[key] === 2).length > 0) ||
-                (Object.keys(Mouvement).filter(key => Mouvement[key] === 2).length > 0)) {
+            // Refusés uniquement
+            const conditionsRef: any[] = [];
 
-                const selectionsAccept = [
-                    {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 2)},
-                    {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 2)},
-                    {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 2)}
-                ];
-                const conditionsAccept = selectionsAccept.flatMap(({ nom, valeurs }) =>
-                    valeurs.map(valeur => sql`${oeuvres_musee[nom]} = ${valeur}`)
-                );
-                const queryAcceptCondition = sql.join(conditionsAccept, sql` OR `);
-                let dbResult;
-                if((Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1).length > 0) ||
-                    (Object.keys(Auteur).filter(key => Auteur[key] === 1).length > 0) ||
-                    (Object.keys(Mouvement).filter(key => Mouvement[key] === 1).length > 0)) {
-                    const selectionsRef = [
-                        {nom: "type_oeuvre", valeurs: Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1)},
-                        {nom: "artiste", valeurs: Object.keys(Auteur).filter(key => Auteur[key] === 1)},
-                        {nom: "mouvement", valeurs: Object.keys(Mouvement).filter(key => Mouvement[key] === 1)}
-                    ];
-                    const conditionsRef = selectionsRef.flatMap(({ nom, valeurs }) =>
-                        valeurs.map(valeur => sql`${oeuvres_musee[nom]} != ${valeur.toLowerCase()}`)
-                    );
-                    const queryRefCondition = sql.join(conditionsRef, sql` AND `);
-
-                    const req1 =  db
-                        .select()
-                        .from(oeuvres_musee)
-                        .where(queryAcceptCondition);
-                    const req2 = db
-                        .select()
-                        .from(oeuvres_musee)
-                        .where(queryRefCondition);
-
-                    dbResult = await except(req1, req2);
-                }
-                else {
-                    dbResult = await db
-                        .select()
-                        .from(oeuvres_musee)
-                        .where(queryAcceptCondition);
-                }
-
-                const formattedResult = dbResult.reduce((acc, item) => {
-                    acc[item.id] = {
-                        nom: item.nom,
-                        description: item.description,
-                        type_oeuvre: item.type_oeuvre,
-                        artiste: item.artiste,
-                        mouvement: item.mouvement,
-                        x: item.x,
-                        y: item.y,
-                        image: item.image
-                    };
-                    return acc;
-                }, {});
-                return NextResponse.json(formattedResult);
-            }
-            else{
-                const dbResult = await db.select().from(oeuvres_musee);
-                return NextResponse.json(dbResult);
+            // Gestion des types d'œuvres refusés
+            if (Object.keys(typeOeuvre).length > 0) {
+                const typesRef = Object.keys(typeOeuvre).filter(key => typeOeuvre[key] === 1);
+                typesRef.forEach(type => {
+                    conditionsRef.push(sql`${oeuvresMusee.typeOeuvre} NOT ILIKE ${'%' + type + '%'}`);
+                });
             }
 
+            // Gestion des artistes refusés
+            if (Object.keys(Auteur).length > 0) {
+                const auteursRef = Object.keys(Auteur).filter(key => Auteur[key] === 1);
+                auteursRef.forEach(auteur => {
+                    conditionsRef.push(sql`${oeuvresMusee.artiste} NOT ILIKE ${'%' + auteur + '%'}`);
+                });
+            }
+
+            // Gestion des mouvements refusés
+            if (Object.keys(Mouvement).length > 0) {
+                const mouvementsRef = Object.keys(Mouvement).filter(key => Mouvement[key] === 1);
+                mouvementsRef.forEach(mouvement => {
+                    conditionsRef.push(sql`${oeuvresMusee.mouvement} NOT ILIKE ${'%' + mouvement + '%'}`);
+                });
+            }
+
+            let dbResult;
+
+            // Si tout est refusé, appliquer le filtre
+            if (conditionsRef.length > 0) {
+                const queryRefCondition = sql.join(conditionsRef, sql` AND `);
+                dbResult = await db
+                  .select()
+                  .from(oeuvresMusee)
+                  .where(queryRefCondition)
+                  .limit(25);
+            } else {
+                // Si aucun critère n'est refusé, renvoyer toutes les œuvres
+                dbResult = await db
+                  .select()
+                  .from(oeuvresMusee)
+                  .limit(25);
+            }
+
+            // Formatage des résultats
+            const formattedResult = dbResult.reduce((acc, item) => {
+                acc[item.id] = {
+                    nom: item.nom,
+                    description: item.description,
+                    type_oeuvre: item.type_oeuvre,
+                    artiste: item.artiste,
+                    mouvement: item.mouvement,
+                    x: item.x,
+                    y: item.y,
+                    image: item.image
+                };
+                return acc;
+            }, {});
+
+            return NextResponse.json(formattedResult);
         } catch (error) {
             console.error("Erreur lors de la requête :", error);
-            return NextResponse.error();
+            return NextResponse.json({ error: 'Erreur interne lors de la requête.' }, { status: 500 });
         }
-
-
     } catch (error) {
         console.error('Erreur lors du traitement de la requête :', error);
         return NextResponse.json({ error: 'Erreur interne du serveur.' }, { status: 500 });

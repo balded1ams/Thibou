@@ -6,7 +6,7 @@ interface ArtworkDescProps {
   year: string;
   author: string;
   movement: string;
-  technique: string;
+  //technique: string;
   description: string;
 }
 
@@ -15,18 +15,18 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
   year,
   author,
   movement,
-  technique,
+  //technique,
   description,
 }) => {
   const { systemTheme } = useThemeContext();
 
 
   return (
-    <div 
+    <div
       className="max-w-md bg-beige rounded-lg flex flex-col gap-4"
       style={{
         color: systemTheme.text.primary,
-      }}  
+      }}
     >
 
       <div className="flex flex-col g">
@@ -44,7 +44,6 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
         <p className="font-bold">Mouvement</p>
         <p>{movement}</p>
         <p className="font-bold">Technique</p>
-        <p>{technique}</p>
       </div>
 
       {/* Description */}
