@@ -120,18 +120,6 @@ export const utilisateurlogin = pgTable("utilisateurlogin", {
 		}).onDelete("cascade"),
 ]);
 
-export const utilisateursession = pgTable("utilisateursession", {
-	idutilisateur: integer().primaryKey().notNull(),
-	session: varchar({ length: 255 }).notNull(),
-	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
-}, (table) => [
-	foreignKey({
-			columns: [table.idutilisateur],
-			foreignColumns: [utilisateur.idutilisateur],
-			name: "fk_utilisateur"
-		}).onDelete("cascade"),
-]);
-
 export const parcours = pgTable("parcours", {
 	datecreation: date().notNull(),
 	idutilisateur: integer().notNull(),
