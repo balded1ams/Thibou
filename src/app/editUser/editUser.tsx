@@ -31,6 +31,9 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [changePassword, setChangePassword] = useState(false);
+    if (userConnected == null) {
+        router.push('/');
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

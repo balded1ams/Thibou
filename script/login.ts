@@ -197,7 +197,6 @@ export const askResetPassword = validatedAction(authSchemaResetPasword, async (d
       process.env.WEBAPP_DOMAIN_NAME + mail_message_port + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
-    console.log(mail_message);
     try {
       const transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
@@ -262,11 +261,10 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
   const passwordHash = await hashPassword(newpassword);
 
-
   await db
       .update(utilisateurlogin)
       .set({password: passwordHash })
-      .where(eq(utilisateur.idutilisateur, idUser));
+      .where(eq(utilisateurlogin.idutilisateur, idUser));
 
   await db
       .delete(resetpasswordUuid)
@@ -360,7 +358,7 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
 export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUserAndPassword, async(data) => {
 
   try {
-
+    console.log('200');
     const sessionCookie = (await cookies()).get("session");
 
     if (!sessionCookie) {
@@ -399,9 +397,9 @@ export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUse
 
 
     // Vérifier si l'utilisateur veut changer son mot de passe
-    let isUpdatePassword = (/[a-zA-Z]/.test(oldPassword));
+    let isUpdatePassword = (/[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/.test(oldPassword));
 
-    isUpdatePassword = (isUpdatePassword && (/[a-zA-Z]/.test(newPassword)));
+    isUpdatePassword = isUpdatePassword && (/[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/.test(newPassword));
 
 
 
@@ -424,12 +422,12 @@ export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUse
       const newPasswordHash = await hashPassword(newPassword);
 
 
+      console.log(newPasswordHash);
       //Mettre à jour le mot de passe de l'utilisateur
       await db
           .update(utilisateurlogin)
           .set({ password : newPasswordHash})
           .where(eq(utilisateurlogin.idutilisateur, idutilisateur));
-
     }
 
     //On vérifie si le nom d'utilisateur existe déja
