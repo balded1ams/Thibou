@@ -14,9 +14,13 @@ const Signup: React.FC = () => {
     const [messageUserName, setMessageUserName] = useState<JSX.Element | null>(null);
     const [messageMailAdress, setMessageMailAdress] = useState<JSX.Element | null>(null);
     const [message, setMessage] = useState<JSX.Element | null>(null);
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const router=useRouter();
 
-
+    const handleTermsClick = (event: React.MouseEvent) => {
+        event.preventDefault();
+        router.push("/CGUFinales.pdf");
+    };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -28,6 +32,11 @@ const Signup: React.FC = () => {
 
         if (password !== confirmPassword) {
             alert("Les mots de passe ne correspondent pas !");
+            return;
+        }
+
+        if (!termsAccepted) {
+            alert("Vous devez accepter les termes et conditions pour vous inscrire.");
             return;
         }
         // Logique de soumission
@@ -200,6 +209,24 @@ const Signup: React.FC = () => {
                             placeholder="Confirmez votre mot de passe"
                             required
                         />
+                    </div>
+                    <div className="gap-2 flex items-center">
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            checked={termsAccepted}
+                            onChange={(e) => setTermsAccepted(e.target.checked)}
+                        />
+                        <label htmlFor="terms">
+                            J'accepte les{" "}
+                            <span
+                            onClick={handleTermsClick}
+                            style={{ color: "blue", textDecoration: "underline", cursor: "pointer" }}
+                        >
+                            conditions générales d'utilisation
+                        </span>
+                        </label>
+
                     </div>
                     <button
                         type="submit"
