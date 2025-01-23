@@ -37,8 +37,7 @@ export default async function Page({ params }: { params: { slug?: string[] } }) 
         notFound();
     }
 
-    const headersList = await headers();
-    const idUser: number | null = await getIdUserFromSession(headersList);
+    const idUser: number | null = await getIdUserFromSession();
 
     let userConnected: utilisateurType | null;
     if (typeof idUser == "number") {
