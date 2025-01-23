@@ -1,8 +1,28 @@
-This repository is a french school project made by 7 university students. 
+---
+# Thibou  
+Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
 
-It is an application for those who want to visit museums while not having the time to do so. Users select what they want to see and the application makes a custom path for them where they can see everything they want. They can also see the details of what they are looking at and save their path for later. 
+## Prérequis  
+- **Node.js** installé.  
+- Redirection de port pour accéder à la base de données :  
+  ```bash
+  ssh -L 5432:192.168.14.123:5432 connection.com
+  ```
 
-It is done with the NextJS support. We're using typescript for the back-end and both HTML and Tailwind CSS for the front-end. 
+## Installation et exécution en local  
+1. Installer les dépendances :  
+   ```bash
+   npm install
+   ```  
 
-Unfortunately, since obtaining a real museum's consent is difficult, we use a fictional one.
+2. Lancer le serveur en mode développement :  
+   ```bash
+   npm run dev
+   ```  
+   Ces commandes permettent de faire fonctionner le projet en local.  
 
+## Accès en production  
+Lorsque le projet est déployé, il est accessible à l'adresse suivante :  
+[**thibou.com**](https://thibou.com)  
+
+---  
