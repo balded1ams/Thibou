@@ -16,7 +16,7 @@ type User = {
     adressemail: string;
     oldPassword: string;
     newPassword: string;
-    iconeuser: string;
+    iconeuser: string; // Ajout de l'URL de l'icône
 };
 
 const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
@@ -29,7 +29,7 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
         newPassword: "",
         iconeuser: userConnected?.iconeuser || "",
     });
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [error, setError] = useState<string | null>(null);
     const [changePassword, setChangePassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,43 +38,35 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
             ...prev,
             [name]: value,
         }));
-        setErrors((prev) => ({
-            ...prev,
-            [name]: "",
-        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newErrors: Record<string, string> = {};
+        setError(null);
 
         if (formData.nomutilisateur.trim() === "") {
-            newErrors.nomutilisateur = "Le nom d'utilisateur ne peut pas être vide.";
+            setError("Le nom d'utilisateur ne peut pas être vide.");
+            return;
         }
 
         if (changePassword) {
-            if (!formData.oldPassword) {
-                newErrors.oldPassword = "L'ancien mot de passe est requis.";
+            if (!formData.oldPassword || !formData.newPassword) {
+                setError("Veuillez remplir les deux champs de mot de passe.");
+                return;
             }
-            if (!formData.newPassword) {
-                newErrors.newPassword = "Le nouveau mot de passe est requis.";
-            } else if (formData.newPassword === formData.oldPassword) {
-                newErrors.newPassword =
-                    "Le nouveau mot de passe ne peut pas être identique à l'ancien.";
+            if (formData.newPassword === formData.oldPassword) {
+                setError(
+                    "Le nouveau mot de passe ne peut pas être identique à l'ancien."
+                );
+                return;
             }
-        }
-
-        setErrors(newErrors);
-
-        if (Object.keys(newErrors).length > 0) {
-            return;
         }
 
         try {
             const dataToSend = {
                 idutilisateur: userConnected.idutilisateur,
                 nomutilisateur: formData.nomutilisateur,
-                iconeuser: formData.iconeuser,
+                iconeuser: formData.iconeuser, // Inclure l'URL de l'icône
                 ...(changePassword && {
                     oldPassword: formData.oldPassword,
                     newPassword: formData.newPassword,
@@ -94,11 +86,13 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                 router.push("/");
             } else {
                 const data = await response.json();
-                setErrors({ general: data.error || "Erreur lors de la mise à jour." });
+                setError(
+                    data.error || "Erreur lors de la mise à jour de l'utilisateur."
+                );
             }
         } catch (error) {
             console.error("Error updating user:", error);
-            setErrors({ general: "Une erreur s'est produite. Veuillez réessayer plus tard." });
+            setError("Une erreur s'est produite. Veuillez réessayer plus tard.");
         }
     };
 
@@ -109,9 +103,12 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                 style={{ backgroundColor: systemTheme.background.primary }}
             >
                 <Header userConnected={userConnected} />
-                <div className="flex items-center justify-center my-16">
+                <div
+                    className="flex items-center justify-center my-16"
+                    style={{ backgroundColor: systemTheme.background.primary }}
+                >
                     <div
-                        className="w-full max-w-md rounded-3xl border p-8 shadow-lg backdrop-blur-xl"
+                        className="w-full max-w-md rounded-3xl border p-8 shadow-lg backdrop-blur-xl m-4"
                         style={{
                             backgroundColor: systemTheme.background.secondary,
                             borderColor: systemTheme.background.button,
@@ -123,14 +120,14 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                         >
                             Modifier le compte
                         </h2>
-                        {errors.general && (
+                        {error && (
                             <p
-                                className="mb-4 text-sm text-center"
+                                className="mb-4 text-sm"
                                 style={{
                                     color: "red",
                                 }}
                             >
-                                {errors.general}
+                                {error}
                             </p>
                         )}
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -151,18 +148,11 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                                     className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                                     style={{
                                         backgroundColor: systemTheme.background.primary,
-                                        borderColor: errors.nomutilisateur
-                                            ? "red"
-                                            : systemTheme.background.button,
+                                        borderColor: systemTheme.background.button,
                                         color: systemTheme.text.primary,
                                     }}
                                     placeholder="Entrez votre nom d'utilisateur"
                                 />
-                                {errors.nomutilisateur && (
-                                    <p className="text-sm" style={{ color: "red" }}>
-                                        {errors.nomutilisateur}
-                                    </p>
-                                )}
                             </div>
 
                             <div>
@@ -171,7 +161,7 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                                     className="block text-sm font-bold"
                                     style={{ color: systemTheme.text.title }}
                                 >
-                                    Email <span style={{ color: "gray" }}>(non modifiable)</span>
+                                    Email
                                 </label>
                                 <input
                                     type="email"
@@ -179,12 +169,11 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                                     name="adressemail"
                                     value={formData.adressemail}
                                     readOnly
-                                    className="mt-2 w-full rounded-lg border p-3 shadow-sm"
+                                    className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                                     style={{
                                         backgroundColor: systemTheme.background.primary,
-                                        borderColor: "gray",
+                                        borderColor: systemTheme.background.button,
                                         color: systemTheme.text.primary,
-                                        cursor: "not-allowed",
                                     }}
                                 />
                             </div>
@@ -248,18 +237,11 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                                             className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                                             style={{
                                                 backgroundColor: systemTheme.background.primary,
-                                                borderColor: errors.oldPassword
-                                                    ? "red"
-                                                    : systemTheme.background.button,
+                                                borderColor: systemTheme.background.button,
                                                 color: systemTheme.text.primary,
                                             }}
                                             placeholder="Entrez votre ancien mot de passe"
                                         />
-                                        {errors.oldPassword && (
-                                            <p className="text-sm" style={{ color: "red" }}>
-                                                {errors.oldPassword}
-                                            </p>
-                                        )}
                                     </div>
 
                                     <div>
@@ -279,18 +261,11 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
                                             className="mt-2 w-full rounded-lg border p-3 shadow-sm focus:outline-none focus:ring-2"
                                             style={{
                                                 backgroundColor: systemTheme.background.primary,
-                                                borderColor: errors.newPassword
-                                                    ? "red"
-                                                    : systemTheme.background.button,
+                                                borderColor: systemTheme.background.button,
                                                 color: systemTheme.text.primary,
                                             }}
                                             placeholder="Entrez votre nouveau mot de passe"
                                         />
-                                        {errors.newPassword && (
-                                            <p className="text-sm" style={{ color: "red" }}>
-                                                {errors.newPassword}
-                                            </p>
-                                        )}
                                     </div>
                                 </>
                             )}

@@ -1,13 +1,88 @@
 "use server"
 import { db } from "@/db/db";
-import {oeuvre, utilisateur} from "@/db/schema";
+import { oeuvre, sauvegarde, utilisateur } from "@/db/schema";
 import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
+import { utilisateurType, oeuvreType} from "@/types";
+import { cookies } from "next/headers";
+import { verifyToken } from "./session";
+import { z} from "zod";
 
+const authSchematrajetRestant = z.object({
+    trajet_restant: z.array(z.array(z.tuple([z.number(), z.number()]))),
+});
 
+function cleanData(data) {
+    const parsedData = JSON.parse(data);
+    delete parsedData.id; // Supprime la clé `id`
+    return JSON.stringify(parsedData);
+}
+// Insère ou met à jour une entrée dans la table
+async function upsertData(idUtilisateur, trajet_restant) {
+    try {
+        // Vérifie si l'utilisateur existe
+        const existingEntry = await db
+            .select()
+            .from(sauvegarde)
+            .where(eq(sauvegarde.idutilisateur, idUtilisateur))
+            .limit(1);
+        if (existingEntry.length > 0) {
+            // Mise à jour de l'entrée existante
+            await db
+                .update(sauvegarde)
+                .set({ restant: trajet_restant })
+                .where(eq(sauvegarde.idutilisateur, idUtilisateur));
 
+            console.log(`Mise à jour réussie pour l'utilisateur : `, idUtilisateur);
+        } else {
+            // Insertion d'une nouvelle entrée
+            await db.insert(sauvegarde).values({
+                idutilisateur: idUtilisateur,
+                restant: trajet_restant,
+            });
+            console.log(`Nouvelle entrée insérée pour l'utilisateur : `, idUtilisateur);
+        }
+    } catch (error) {
+        console.error('Erreur lors de l’insertion ou de la mise à jour :', error);
+        throw error;
+    }
+}
 
-type oeuvreType   = InferModel<typeof oeuvre>;
-type utilisateurType   = InferModel<typeof utilisateur>;
+export async function updateSauvegarde(trajet_restant) {
+
+    const validation = authSchematrajetRestant.safeParse({ trajet_restant: trajet_restant });
+
+    if (!trajet_restant) {
+        return { error: 'Données manquantes ou invalides.' };
+    }
+
+    if (!validation.success) {
+        console.error("Validation failed:", validation.error.errors);
+        throw { error : "Données manquantes ou invalides." };
+    }
+
+    //Identifier l'utilisateur connecté
+
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+        return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+        return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const userId = session.user.id;
+
+    const cleanedTrajet = cleanData(JSON.stringify(trajet_restant));
+
+    await upsertData(userId, cleanedTrajet);
+
+    return true;
+
+}
 
 
 export async function fetchUtilisateur(idUtilisateur : number) : Promise<utilisateurType | null> {

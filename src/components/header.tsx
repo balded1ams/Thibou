@@ -4,14 +4,13 @@ import { useThemeContext } from "@/hooks/useTheme";
 import BurgerMenu from "@/components/burgerMenu";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
-import { useState, useEffect } from "react";
-import { utilisateurType } from "@/types";
-import { LogOut, Pencil } from "lucide-react";
-import Image from "next/image";
+import React, { useState, useEffect, useRef } from "react";
+import { utilisateurType } from "@/types/index";
+import { LogOut, Pencil, Trash2 } from "lucide-react";
 
 interface HeaderProps {
     showAuthButtons?: boolean;
-    userConnected?: utilisateurType;
+    userConnected: utilisateurType;
 }
 
 const useAuth = (userConnected?: utilisateurType) => {
@@ -36,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
     const { estConnecte, userAvatar } = useAuth(userConnected);
 
     const [showModal, setShowModal] = useState(false);
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const handleLogout = async () => {
         try {
@@ -54,9 +54,45 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
         }
     };
 
+    const handleDeleteAccount = async () => {
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.");
+        if (!confirmation) return;
+
+        try {
+            const response = await fetch("/api/deleteAccount", {
+                method: "POST",
+            });
+
+            if (response.ok) {
+                alert("Votre compte a été supprimé avec succès.");
+                router.push("/"); // Redirige vers la page d'accueil
+            } else {
+                const data = await response.json();
+                alert(data.error || "Erreur lors de la suppression du compte.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la suppression du compte :", error);
+            alert("Une erreur est survenue. Veuillez réessayer.");
+        }
+    };
+
     const handleEditProfile = () => {
         router.push("/editUser");
     };
+
+    // Gestion de la fermeture du modal en cliquant à l'extérieur
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                setShowModal(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <header
@@ -74,26 +110,22 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <Image
-                        className={"max-w-16"}
-                        src={"/thibou.png"}
-                        alt={"Thibou logo"}
-                        width={50}
-                        height={50}
-
-                    />
-                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
-                        Thibou.
-                    </h1>
+                    <img className={"max-w-16"} src={"/thibou.png"} alt={"Thibou logo"} />
+                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>Thibou.</h1>
                 </div>
 
                 {/* Menu burger pour mobile */}
-                <BurgerMenu />
+                <BurgerMenu
+                    userConnected={userConnected}
+                    handleLogout={handleLogout}
+                    handleDeleteAccount={handleDeleteAccount}
+                    handleEditProfile={handleEditProfile}
+                />
 
                 {/* Menu desktop */}
                 <div className="hidden items-center gap-4 lg:flex">
                     <ThemeDropdown />
-                    {userConnected ? (
+                    {estConnecte ? (
                         <div className="relative">
                             <div
                                 className="cursor-pointer border-2 rounded-full overflow-hidden"
@@ -109,6 +141,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 
                             {showModal && (
                                 <div
+                                    ref={modalRef} // Référence pour détecter les clics externes
                                     className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-10"
                                     style={{ backgroundColor: systemTheme.background.secondary }}
                                 >
@@ -125,6 +158,13 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                                     >
                                         <LogOut className="mr-2" />
                                         Déconnexion
+                                    </button>
+                                    <button
+                                        className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                        onClick={handleDeleteAccount}
+                                    >
+                                        <Trash2 className="mr-2" />
+                                        Supprimer le compte
                                     </button>
                                 </div>
                             )}

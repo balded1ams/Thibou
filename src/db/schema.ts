@@ -135,8 +135,13 @@ export const oeuvres_musee = pgTable('oeuvres_musee', {
 	y: integer('y').notNull(),
 });
 
-export const sauvegarde = pgTable('save', {
-	id: serial('id').primaryKey(),
-	user_id: text('user_id').notNull(),
-	restant: json('restant').notNull(),
-});
+export const sauvegarde = pgTable("sauvegarde", {
+	idutilisateur: integer().primaryKey().notNull(),
+	restant: json().notNull(),
+}, (table) => [
+	foreignKey({
+		columns: [table.idutilisateur],
+		foreignColumns: [utilisateur.idutilisateur],
+		name: "fk_utilisateur"
+	}),
+]);

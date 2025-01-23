@@ -60,13 +60,20 @@ export async function setSession(user) {
   });
 }
 
+
+/*
 export async function getIdUserFromSession(
-  headersList: Headers & {
+
+    headersList: Headers & {
     append(...args: any[]): void;
     set(...args: any[]): void;
     delete(...args: any[]): void;
   }
 ): Promise<number | null> {
+  const cookieHeader = headersList.get("cookie");
+*/
+
+export async function getIdUserFromSession(headersList: Headers): Promise<number | null>  {
   const cookieHeader = headersList.get("cookie");
 
   // Parse cookies from the header
