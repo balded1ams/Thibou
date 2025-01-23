@@ -5,6 +5,7 @@ import { useThemeContext } from "@/hooks/useTheme";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 
+
 const Login: React.FC = () => {
     const { systemTheme } = useThemeContext(); // Récupérer les couleurs du thème
     const [email, setEmail] = useState("");
@@ -13,12 +14,11 @@ const Login: React.FC = () => {
 
     const router=useRouter();
 
-    interface ResponseMessage {
-        message: string;
-    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setMessage(<></>)
+
 
 
         const response = await fetch('/api/signin', {
@@ -33,10 +33,9 @@ const Login: React.FC = () => {
                 throw new Error('Erreur lors de la soumission');
             }*/
 
-        const respData= await response.json();
+        const respData = await response.json();
 
         if ('authentification' in respData) {
-            console.log(respData.authentification);
 
             if (respData.authentification === 'OK') {
                 router.push('/');
