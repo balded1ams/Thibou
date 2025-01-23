@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-
+import {useEffect, useState} from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
@@ -8,9 +7,9 @@ import Plan from "@/components/plan";
 import Guide from "@/components/guide";
 
 import { useThemeContext } from "@/hooks/useTheme";
-import { addOutput } from "@/hooks/useConsole"
+import {pathing} from "@/hooks/useBFS";
 
-export default function fracPage() {
+export default function FracPage() {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,6 +17,7 @@ export default function fracPage() {
   const advancePoint = () => {
     setCurrentIndex(prevIndex => prevIndex + 1);
     //addOutput(`oeuvre: ${currentIndex}`)
+    savePoint();
   };
 
   const savePoint = async () => {
@@ -27,7 +27,9 @@ export default function fracPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userId: 'test_user'})
+        body: JSON.stringify({
+          trajet_restant: result,
+        }),
       });
 
       if (!response.ok) {
@@ -41,6 +43,19 @@ export default function fracPage() {
     }
   };
 
+  const [result, setResult] = useState<[number, number][][]>([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    const fetchPoints = async () => {
+      const result = await pathing();
+      setResult(result);
+      setDataLoaded(true);
+    };
+    if (!dataLoaded) {
+      fetchPoints();
+    }
+  }, [dataLoaded]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { systemTheme } = useThemeContext();
@@ -56,10 +71,9 @@ export default function fracPage() {
       <main className="mx-auto flex h-full min-h-screen max-w-5xl flex-col gap-4 px-4 xl:px-0 mb-8">
         <Header />
         <div className="flex flex-col gap-4 xl:flex-row">
-          <Plan currentIndex={currentIndex} />
+          <Plan currentIndex={currentIndex}  path={result}/>
           <Guide
             onSuivant={advancePoint}
-            onSave={savePoint}
           />
         </div>
       </main>

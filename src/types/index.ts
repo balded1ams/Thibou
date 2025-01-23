@@ -1,5 +1,5 @@
 import {InferModel} from "drizzle-orm";
-import {utilisateur} from "@/db/schema";
+import {oeuvre, utilisateur} from "@/db/schema";
 
 export interface Theme {
     name: string;
@@ -36,3 +36,5 @@ export interface Salle {
 }
 
 export type utilisateurType   = InferModel<typeof utilisateur>;
+
+export type oeuvreType   = InferModel<typeof oeuvre>;
