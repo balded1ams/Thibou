@@ -48,7 +48,6 @@ export async function getSauvegarde() {
 
         return { success: true, data: userData };
     } catch (error) {
-        console.error("Erreur lors de la récupération des données :", error);
         return { error: "Erreur interne lors de la récupération des données.", status: 500 };
     }
 }

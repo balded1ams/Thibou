@@ -7,6 +7,9 @@ const pool = new Pool({
     user: process.env.PSQL_USER ,
     password: process.env.PSQL_PASSWORD,
     database: process.env.PSQL_DB,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
 
 const db = drizzle(pool);

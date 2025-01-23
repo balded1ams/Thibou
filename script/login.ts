@@ -120,7 +120,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
   }).returning();
 
   if (!createdUser) {
-    console.log("Failed to create signin. Please try again." );
+
     return { error: "Failed to create signin. Please try again." };
   }
   await setSession(idUser);
@@ -184,11 +184,10 @@ export const askResetPassword = validatedAction(authSchemaResetPasword, async (d
   const { idutilisateur: foundUser } = user[0];
 
 
-  const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
+  await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
     uuidValue : myuuid
-
-  }).returning();
+  });
 
     let mail_message_port;
     if (process.env.WEBAPP_PROTOCOL == 'https' && process.env.WEBAPP_PORT == '443') {
@@ -225,7 +224,7 @@ export const askResetPassword = validatedAction(authSchemaResetPasword, async (d
 
 
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
 
 
@@ -295,7 +294,6 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
     }
 
     const idutilisateur = session.user.id;
-    console.log(idutilisateur);
 
 
 
@@ -309,7 +307,6 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
         .where(eq(utilisateur.idutilisateur, idutilisateur))
         .limit(1);
 
-    console.log('test3');
 
 
     if (!user) {
@@ -324,12 +321,10 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
         .limit(1);
 
 
-    console.log('test5');
 
     if (existingNomUtilisateur.length > 0 && (existingNomUtilisateur[0].idutilisateur !== idutilisateur)) {
       return { userNAME: "KO"};
     } else {
-      console.log('test54');
       await db
           .update(utilisateur)
           .set({ nomutilisateur : nomutilisateur})
@@ -337,7 +332,6 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
     }
 
 
-    console.log(iconeuser);
 
     // Mettre à jour l'icône de l'utilisateur si une URL est fournie
     if (iconeuser) {
@@ -364,7 +358,6 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
 export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUserAndPassword, async(data) => {
 
   try {
-    console.log('200');
     const sessionCookie = (await cookies()).get("session");
 
     if (!sessionCookie) {
@@ -378,7 +371,6 @@ export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUse
     }
 
     const idutilisateur = session.user.id;
-    console.log(idutilisateur);
 
 
 
@@ -392,7 +384,6 @@ export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUse
         .where(eq(utilisateur.idutilisateur, idutilisateur))
         .limit(1);
 
-    console.log('test3');
 
 
     if (!user) {
@@ -428,7 +419,6 @@ export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUse
       const newPasswordHash = await hashPassword(newPassword);
 
 
-      console.log(newPasswordHash);
       //Mettre à jour le mot de passe de l'utilisateur
       await db
           .update(utilisateurlogin)
@@ -559,7 +549,6 @@ export async function deleteAccount() {
 
     return { message: "Compte supprimé avec succès.", status: 200 };
   } catch (error) {
-    console.error("Erreur lors de la suppression du compte :", error);
     return { error: "Erreur interne du serveur.", status: 500 };
   }
 }

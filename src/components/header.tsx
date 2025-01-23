@@ -47,7 +47,6 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
             });
 
             if (response.ok) {
-                console.log("Déconnexion réussie");
                 window.location.reload();
             } else {
                 console.error("Erreur lors de la déconnexion");

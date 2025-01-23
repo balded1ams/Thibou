@@ -66,7 +66,6 @@ const Signup: React.FC = () => {
                     </>)
                 }
             } else {
-                console.log('test4');
                 setMessage(
                     <>
                         Une erreur s'est produite lors du traitement de votre demande
@@ -76,7 +75,7 @@ const Signup: React.FC = () => {
                     </>
                 );
             }
-        } catch (error: any) {
+        } catch (error) {
             setMessage(
                 <>
                     Une erreur s'est produite lors du traitement de votre demande
