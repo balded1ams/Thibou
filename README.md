@@ -10,7 +10,7 @@ Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
   ```
 
 ## Installation et exécution en local  
-1.  Remplir le fichier .env présent à la racine du répertoire en suivant les instructions indiqués :  
+1.  Remplir le fichier .env présent à la racine du répertoire en suivant les instructions indiqués.
      
 
 2. Installer les dépendances :  
