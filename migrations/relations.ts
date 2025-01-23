@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { utilisateur, resetpasswordUuid, auteur, utilisateurPreferences, oeuvre, parcours, emplacementParcours, emplacement } from "./schema";
+import { utilisateur, resetpasswordUuid, sauvegarde, auteur, utilisateurPreferences, utilisateurlogin, utilisateursession, parcours, oeuvre, emplacementParcours, emplacement } from "./schema";
 
 export const resetpasswordUuidRelations = relations(resetpasswordUuid, ({one}) => ({
 	utilisateur: one(utilisateur, {
@@ -10,9 +10,19 @@ export const resetpasswordUuidRelations = relations(resetpasswordUuid, ({one}) =
 
 export const utilisateurRelations = relations(utilisateur, ({many}) => ({
 	resetpasswordUuids: many(resetpasswordUuid),
+	sauvegardes: many(sauvegarde),
 	utilisateurPreferences: many(utilisateurPreferences),
+	utilisateurlogins: many(utilisateurlogin),
+	utilisateursessions: many(utilisateursession),
 	parcours: many(parcours),
 	emplacementParcours: many(emplacementParcours),
+}));
+
+export const sauvegardeRelations = relations(sauvegarde, ({one}) => ({
+	utilisateur: one(utilisateur, {
+		fields: [sauvegarde.idutilisateur],
+		references: [utilisateur.idutilisateur]
+	}),
 }));
 
 export const utilisateurPreferencesRelations = relations(utilisateurPreferences, ({one}) => ({
@@ -28,15 +38,20 @@ export const utilisateurPreferencesRelations = relations(utilisateurPreferences,
 
 export const auteurRelations = relations(auteur, ({many}) => ({
 	utilisateurPreferences: many(utilisateurPreferences),
-	oeuvres: many(oeuvre),
 }));
 
-export const oeuvreRelations = relations(oeuvre, ({one, many}) => ({
-	auteur: one(auteur, {
-		fields: [oeuvre.nomauteur],
-		references: [auteur.nomauteur]
+export const utilisateurloginRelations = relations(utilisateurlogin, ({one}) => ({
+	utilisateur: one(utilisateur, {
+		fields: [utilisateurlogin.idutilisateur],
+		references: [utilisateur.idutilisateur]
 	}),
-	parcours: many(parcours),
+}));
+
+export const utilisateursessionRelations = relations(utilisateursession, ({one}) => ({
+	utilisateur: one(utilisateur, {
+		fields: [utilisateursession.idutilisateur],
+		references: [utilisateur.idutilisateur]
+	}),
 }));
 
 export const parcoursRelations = relations(parcours, ({one, many}) => ({
@@ -49,6 +64,10 @@ export const parcoursRelations = relations(parcours, ({one, many}) => ({
 		references: [oeuvre.idoeuvre]
 	}),
 	emplacementParcours: many(emplacementParcours),
+}));
+
+export const oeuvreRelations = relations(oeuvre, ({many}) => ({
+	parcours: many(parcours),
 }));
 
 export const emplacementParcoursRelations = relations(emplacementParcours, ({one}) => ({

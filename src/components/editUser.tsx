@@ -64,7 +64,6 @@ const EditUserComponent: React.FC<EditUserProps> = ({ userConnected }) => {
 
         try {
             const dataToSend = {
-                idutilisateur: userConnected.idutilisateur,
                 nomutilisateur: formData.nomutilisateur,
                 iconeuser: formData.iconeuser, // Inclure l'URL de l'icône
                 ...(changePassword && {

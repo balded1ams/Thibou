@@ -5,11 +5,12 @@ import {eq} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
-import {resetpasswordUuid, utilisateur} from "@/db/schema";
+import {resetpasswordUuid, utilisateur, utilisateurlogin} from "@/db/schema";
 import { verifyToken } from "@/../script/session";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
 import nodemailer from "nodemailer";
+import {NextResponse} from "next/server";
 
 const authSchemaSignIn = z.object({
   email: z.string().min(1),
@@ -29,6 +30,13 @@ const authSchemaResetPasword = z.object({
 const authSchemaModifyPasswordThroughtReset = z.object({
   uuid: z.string().min(1),
   newpassword: z.string().min(1),
+});
+
+const authSchemaUpdateUser = z.object({
+  nomutilisateur: z.string().min(1),
+  oldPassword: z.string().min(1),
+  newPassword: z.string().min(1),
+  iconeuser: z.string().nullable() ,
 });
 
 
@@ -64,10 +72,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
      isEmailTaken = true;
   }
 
-  console.log('ex1', isEmailTaken);
-
-  console.log('ex2', isUsernameTaken);
-
 
   if (isUsernameTaken && isEmailTaken) {
       return { username: 'KO', mail : 'KO'}
@@ -91,6 +95,19 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     // other columns not included here will use their default or NULL values if applicable
   }).returning();
 
+  const idUserCreated = await db
+      .select({idutilisateur: utilisateur.idutilisateur})
+      .from(utilisateur)
+      .where(eq(utilisateur.nomutilisateur, username))
+      .limit(1);
+
+  const idUser = idUserCreated[0].idutilisateur;
+
+  const [createdUserPassword] = await db.insert(utilisateurlogin).values({
+    idutilisateur: idUser,
+    password: passwordHash,
+  }).returning();
+
   if (!createdUser) {
     console.log("Failed to create signin. Please try again." );
     return { error: "Failed to create signin. Please try again." };
@@ -101,30 +118,33 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
 });
 
 export const signIn = validatedAction(authSchemaSignIn, async (data) => {
+
   const { email, password } = data;
 
   const user = await db
-    .select({
-        adressemail: utilisateur,
-    })
-    .from(utilisateur)
-    .where(eq(utilisateur.adressemail, email))
-    .limit(1);
+      .select({
+        idutilisateur: utilisateurlogin.idutilisateur,
+        password: utilisateurlogin.password,
+      })
+      .from(utilisateur)
+      .innerJoin(
+          utilisateurlogin,
+          eq(utilisateur.idutilisateur, utilisateurlogin.idutilisateur)
+      )
+      .where(eq(utilisateur.adressemail, email))
+      .limit(1);
 
   if (user.length === 0) {
     return false;
   }
 
-  const { adressemail: foundUser } = user[0];
-
-
   const isPasswordValid = await comparePasswords(
     password,
-    foundUser.password
+    user[0].password
   );
 
   if (isPasswordValid) {
-    await setSession(foundUser);
+    await setSession(user[0].idutilisateur);
     return true;
   } else {
     return false;
@@ -233,7 +253,7 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
 
   await db
-      .update(utilisateur)
+      .update(utilisateurlogin)
       .set({password: passwordHash })
       .where(eq(utilisateur.idutilisateur, idUser));
 
@@ -244,7 +264,114 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
   return true;
 });
 
+export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(data) => {
+  try {
+    const sessionCookie = (await cookies()).get("session");
 
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const idutilisateur = session.user.id;
+
+
+    const { nomutilisateur, oldPassword, newPassword, iconeuser } = data;
+
+
+    // Récupérer l'utilisateur avec tous ses champs
+    const [user] = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.idutilisateur, idutilisateur))
+        .limit(1);
+
+    if (!user) {
+      return ({ error: "Utilisateur non trouvé" , status : 400});
+    }
+
+    console.log(nomutilisateur);
+
+    // Préparer les données à mettre à jour
+    const updateData: any = {
+      nomutilisateur,
+    };
+
+
+    // Vérifier si l'utilisateur veut changer son mot de passe
+    if (oldPassword && newPassword) {
+      const [userPassword] = await db
+          .select()
+          .from(utilisateurlogin)
+          .where(eq(utilisateurlogin.idutilisateur, idutilisateur))
+          .limit(1);
+
+      const isPasswordValid = await comparePasswords(oldPassword, userPassword.password);
+
+      if (!isPasswordValid) {
+        return NextResponse.json({ error: "Ancien mot de passe incorrect" }, { status: 400 });
+      }
+
+
+      const newPasswordHash = await hashPassword(newPassword);
+
+
+      //Mettre à jour le mot de passe de l'utilisateur
+
+      await db
+          .update(utilisateurlogin)
+          .set({ password : newPasswordHash})
+          .where(eq(utilisateurlogin.idutilisateur, idutilisateur));
+    }
+
+    //On vérifie si le nom d'utilisateur existe déja
+    const existingNomUtilisateur = await db
+        .select({
+          nomutilisateur: utilisateur.nomutilisateur,
+        })
+        .from(utilisateur)
+        .where(eq(utilisateur.nomutilisateur, nomutilisateur))
+        .limit(1);
+
+
+    if (existingNomUtilisateur.length > 0) {
+      return { userNAME: "KO" };
+    } else {
+      updateData.nomutilisateur = nomutilisateur;
+    }
+
+
+
+    // Mettre à jour l'icône de l'utilisateur si une URL est fournie
+    if (iconeuser) {
+      updateData.iconeuser = iconeuser;
+    }
+
+    // Mettre à jour l'utilisateur dans la base de données
+    await db
+        .update(utilisateur)
+        .set(updateData)
+        .where(eq(utilisateur.idutilisateur, idutilisateur));
+
+
+
+    return ({ message: "Utilisateur mis à jour avec succès" });
+
+
+
+
+
+  } catch (error) {
+      return { error: "Erreur interne du serveur.", status: 500 };
+  }
+
+
+});
 
 export async function signOut() {
   // clear session
@@ -271,14 +398,24 @@ export async function deleteAccount() {
     const userId = session.user.id;
 
     // Supprimer l'utilisateur de la base de données
-    const deletedRows = await db
+    const deletedRowsTableUtilisateur = await db
         .delete(utilisateur)
         .where(eq(utilisateur.idutilisateur, userId))
         .returning();
 
-    if (deletedRows.length === 0) {
+    if (deletedRowsTableUtilisateur.length === 0) {
       return { error: "Erreur lors de la suppression du compte.", status: 500 };
     }
+
+    const deletedRowsTableUtilisateurLogin = await db
+        .delete(utilisateurlogin)
+        .where(eq(utilisateurlogin.idutilisateur, userId))
+        .returning();
+
+    if (deletedRowsTableUtilisateurLogin.length === 0) {
+      return { error: "Erreur lors de la suppression du compte.", status: 500 };
+    }
+
 
     // Supprimer le cookie de session
     (await cookies()).delete("session");
