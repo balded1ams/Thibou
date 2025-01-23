@@ -21,22 +21,23 @@ const SampleCarousel = () => {
             {
                 breakpoint: 768, // Pour les écrans de taille tablette et plus petits
                 settings: {
-                    centerPadding: '40px', // Réduisez l'espace entre les images
+                    centerPadding: '40px', // Réduis l'espace entre les images
                     slidesToShow: 1,
                 }
             },
             {
                 breakpoint: 480, // Pour les écrans de taille téléphone
                 settings: {
-                    centerPadding: '20px', // Réduisez encore plus l'espace entre les images
+                    centerPadding: '20px', // Réduis encore plus l'espace entre les images
                     slidesToShow: 1,
+                    arrows: false // Masque les flèches de navigation
                 }
             }
         ]
         
     };
 
-    const images = [map, map, map]; // Remplacez par vos images
+    const images = [map, map, map]; // Remplacez par les images
 
     return (
         <div

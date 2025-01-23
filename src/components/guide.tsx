@@ -10,7 +10,7 @@ const points = pathing2();
 const cooOeuvre = points[points.length - 1];
 
 
-const Guide = ({onSuivant}) => {
+const Guide = ({onSuivant, onPrev}) => {
   const [outputs, setOutputs] = useState<string[]>([]);
 
   useEffect(() => {
@@ -35,8 +35,9 @@ const Guide = ({onSuivant}) => {
               <p key={index}> {"->"} {output}</p>
             ))}
           </div>
-          <div className="align-bottom gap-2 flex flex-col">
-              <Button text="Suivant" onClick={onSuivant} />
+          <div className="align-bottom gap-2 flex">
+            <Button text="Précédent" onClick={onPrev} reverse={true} />
+            <Button text="Suivant" onClick={onSuivant} />
           </div>
         </div>
     );

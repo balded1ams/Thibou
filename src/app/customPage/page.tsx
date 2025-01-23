@@ -38,6 +38,7 @@ export default function Preferences() {
     mouvement: string;
     x: number;
     y: number;
+    image: string;
   };
 
   function transformOeuvre(typeRetour: typeRetour): Oeuvre {
@@ -48,8 +49,10 @@ export default function Preferences() {
       artiste: typeRetour.artiste,
       mouvement: typeRetour.mouvement,
       coordinate: [typeRetour.x, typeRetour.y],
+      image: typeRetour.image,
     };
   }
+
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,13 +63,13 @@ export default function Preferences() {
         "sculpture": itemStates[1],
       },
       "artiste": {
-        "michael ange": itemStates[2],
-        "leonard de vinci": itemStates[3],
+        "pisanello antonio": itemStates[2],
+        "vinci leonardo da": itemStates[3],
       },
       "mouvement": {
-        "maniérisme": itemStates[4],
-        "baroque": itemStates[5],
-        "romantisme": itemStates[6],
+        "Renaissance": itemStates[4],
+        "Baroque": itemStates[5],
+        "Romantisme": itemStates[6],
       },
     };
 
@@ -183,41 +186,41 @@ export default function Preferences() {
         <div>
           <Category title="Type d'œuvre">
             <Item
-              name="Peinture"
+              name="peinture"
               state={itemStates[0]}
               onStateChange={(newState) => updateItemState(0, newState)}
             />
             <Item
-              name="Sculpture"
+              name="sculpture"
               state={itemStates[1]}
               onStateChange={(newState) => updateItemState(1, newState)}
             />
           </Category>
           <Category title="Auteur">
             <Item
-              name="Michel-Ange"
+              name="pisanello antonio"
               state={itemStates[2]}
               onStateChange={(newState) => updateItemState(2, newState)}
             />
             <Item
-              name="Léonard de Vinci"
+              name="vinci leonardo da"
               state={itemStates[3]}
               onStateChange={(newState) => updateItemState(3, newState)}
             />
           </Category>
           <Category title="Mouvement">
             <Item
-              name="Le maniérisme"
+              name="Renaissance"
               state={itemStates[4]}
               onStateChange={(newState) => updateItemState(4, newState)}
             />
             <Item
-              name="Le baroque"
+              name="Baroque"
               state={itemStates[5]}
               onStateChange={(newState) => updateItemState(5, newState)}
             />
             <Item
-              name="Le romantisme"
+              name="Romantisme"
               state={itemStates[6]}
               onStateChange={(newState) => updateItemState(6, newState)}
             />

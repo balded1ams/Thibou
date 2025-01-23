@@ -7,10 +7,13 @@ import ThemeDropdown from "@/components/ThemeDropdown";
 import React, { useState, useEffect, useRef } from "react";
 import { utilisateurType } from "@/types/index";
 import { LogOut, Pencil, Trash2 } from "lucide-react";
+import Image from "next/image"
+import { StaticColors as colors } from "@/utils/index";
+
 
 interface HeaderProps {
     showAuthButtons?: boolean;
-    userConnected: utilisateurType;
+    userConnected?: utilisateurType;
 }
 
 const useAuth = (userConnected?: utilisateurType) => {
@@ -110,8 +113,17 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img className={"max-w-16"} src={"/thibou.png"} alt={"Thibou logo"} />
-                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>Thibou.</h1>
+                    <Image
+                        className={"max-w-16"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
+                        width={50}
+                        height={50}
+
+                    />
+                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
+                        Thibou.
+                    </h1>
                 </div>
 
                 {/* Menu burger pour mobile */}
@@ -128,13 +140,16 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     {estConnecte ? (
                         <div className="relative">
                             <div
-                                className="cursor-pointer border-2 rounded-full overflow-hidden"
-                                style={{ width: "48px" }}
+                                className="cursor-pointer h-10 w-10 border rounded-full overflow-hidden"
+                                style={{
+                                    borderColor: systemTheme.text.primary,
+                                    backgroundColor: systemTheme.background.secondary,
+                                }}
                                 onClick={() => setShowModal(!showModal)}
                             >
                                 <img
                                     className="w-full h-full object-cover rounded-full"
-                                    src={userAvatar || "/shrek.jpg"}
+                                    src={userAvatar || "/thibou.png"}
                                     alt="User Avatar"
                                 />
                             </div>
@@ -142,28 +157,40 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                             {showModal && (
                                 <div
                                     ref={modalRef} // Référence pour détecter les clics externes
-                                    className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-10"
-                                    style={{ backgroundColor: systemTheme.background.secondary }}
+                                    className="absolute right-0 mt-2 w-56 shadow-lg rounded-lg z-10 border flex flex-col"
+                                    style={{ 
+                                        backgroundColor: systemTheme.background.secondary,
+                                        borderColor: `${systemTheme.background.button}AA`,
+                                    }}
                                 >
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
                                         onClick={handleEditProfile}
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                        }}
                                     >
-                                        <Pencil className="mr-2" />
+                                        <Pencil />
                                         Modifier le profil
                                     </button>
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                                        onClick={handleLogout}
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                            color: colors.red,
+                                        }}
                                     >
-                                        <LogOut className="mr-2" />
+                                        <LogOut />
                                         Déconnexion
                                     </button>
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                        className="flex w-full text-left px-4 py-3 text-sm items-start gap-3 hover:opacity-80"
                                         onClick={handleDeleteAccount}
+                                        style={{
+                                            color: colors.red,
+                                        }}
                                     >
-                                        <Trash2 className="mr-2" />
+                                        <Trash2 />
                                         Supprimer le compte
                                     </button>
                                 </div>
