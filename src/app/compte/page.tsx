@@ -1,46 +1,24 @@
-"use client"
-import React, { useEffect, useState } from "react";
+import React from "react";
+import ViewUserComponent from "@/components/viewUser";
+import { headers } from "next/headers";
+import { getIdUserFromSession } from "../../../script/session";
+import { fetchUtilisateur } from "../../../script/slugify";
+import { utilisateurType } from "@/types";
 
-export default function Compte() {
-    const [sauvegarde, setSauvegarde] = useState(null);
-    const [loading, setLoading] = useState(true);
+const EditUser = async () => {
+    const headersList = headers();
+    const idUser = await getIdUserFromSession(await headersList);
+    let userConnected: utilisateurType | null = null;
+    
+    if (idUser) {
+        userConnected = await fetchUtilisateur(idUser);
+    }
 
-    useEffect(() => {
-        const fetchSauvegarde = async () => {
-            try {
-                const response = await fetch("/api/fetchSauvegarde", {
-                    method: "GET",
-                });
+    if (!userConnected) {
+        return <div>Chargement...</div>;
+    }
 
-                if (!response.ok) {
-                    throw new Error(`Erreur ${response.status}`);
-                }
+    return <ViewUserComponent userConnected={userConnected} />;
+};
 
-                const data = await response.json();
-                setSauvegarde(data); // Met à jour l'état avec les données récupérées
-            } catch (error) {
-                console.error("Erreur lors de la récupération des données :", error);
-            } finally {
-                setLoading(false); // Marque la fin du chargement
-            }
-        };
-
-        fetchSauvegarde();
-    }, []);
-
-    return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold">Mon Compte</h1>
-            {loading ? (
-                <p>Chargement des données...</p>
-            ) : sauvegarde ? (
-                <div className="mt-4">
-                    <h2 className="text-xl font-semibold">Sauvegarde trouvée :</h2>
-                    <pre className="bg-gray-100 p-2 rounded">{JSON.stringify(sauvegarde, null, 2)}</pre>
-                </div>
-            ) : (
-                <p>Aucune sauvegarde disponible pour cet utilisateur.</p>
-            )}
-        </div>
-    );
-}
+export default EditUser;

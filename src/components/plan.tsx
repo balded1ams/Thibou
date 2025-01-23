@@ -14,7 +14,7 @@ interface PlanProps {
     dataLoaded?: boolean;
 }
 
-const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = false }) => {
+const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = true }) => {
     const { systemTheme } = useThemeContext();
     const planRef = useRef<HTMLDivElement>(null);
 

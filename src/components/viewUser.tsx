@@ -5,6 +5,8 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { useThemeContext } from "@/hooks/useTheme";
 import { utilisateurType } from "@/types";
+import Button from "./button";
+import { useRouter } from "next/navigation";
 
 interface ViewUserProps {
     userConnected: utilisateurType;
@@ -12,6 +14,7 @@ interface ViewUserProps {
 
 const ViewUserComponent: React.FC<ViewUserProps> = ({ userConnected }) => {
     const { systemTheme } = useThemeContext();
+    const router = useRouter();
 
     return (
         <div style={{ backgroundColor: systemTheme.background.primary }}>
@@ -88,6 +91,9 @@ const ViewUserComponent: React.FC<ViewUserProps> = ({ userConnected }) => {
                                     {userConnected.iconeuser}
                                 </p>
                             </div>
+
+                            <Button text="Modifier le compte" onClick={() => (router.push("/editUser"))}/>
+
                         </div>
                     </div>
                 </div>
