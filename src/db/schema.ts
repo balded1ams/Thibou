@@ -133,7 +133,9 @@ export const oeuvres_musee = pgTable('oeuvres_musee', {
 	mouvement: text('mouvement').notNull(),
 	x: integer('x').notNull(),
 	y: integer('y').notNull(),
+	image: text('image'),
 });
+
 
 export const sauvegarde = pgTable("sauvegarde", {
 	idutilisateur: integer().primaryKey().notNull(),

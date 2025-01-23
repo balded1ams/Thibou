@@ -27,7 +27,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = true }) =>
     const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
     const [highlightedOeuvreIndex, setHighlightedOeuvreIndex] = useState<number | null>(0); // L'index de l'œuvre avec "Click me"
-
+    const [clickedOeuvres, setClickedOeuvres] = useState<number[]>([]);
 
     // Récupérer le chemin actuel en fonction de l'index actuel
     useEffect(() => {
@@ -51,11 +51,9 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = true }) =>
     // Gestion du clic sur une œuvre
     const handleOeuvreClick = (oeuvre: Oeuvre, index: number) => {
         setSelectedOeuvre(oeuvre);
-
-        // Désactiver définitivement le "Click me" après le clic
-        if (highlightedOeuvreIndex === index) {
-            setHighlightedOeuvreIndex(null);
-        }
+    
+        // Ajouter l'indice au tableau si ce n'est pas déjà fait
+        setClickedOeuvres((prev) => (prev.includes(index) ? prev : [...prev, index]));
     };
 
     // Mettre à jour la position du curseur relative au plan
@@ -228,17 +226,17 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = true }) =>
                         </svg>
 
                         {/* Texte "Click me" uniquement pour l'œuvre ciblée */}
-                        {highlightedOeuvreIndex === index && (
+                        {highlightedOeuvreIndex === index && !clickedOeuvres.includes(index) && (
                             <div
                                 className="absolute z-10 text-sm font-bold flex flex-col justify-center items-center"
                                 style={{
                                     left: `calc(${(oeuvre.coordinate[1] / cols) * 100}% + .24rem)`,
                                     top: `calc(${(oeuvre.coordinate[0] / rows) * 100}% + ${clickMeOffset}px + 1rem)`,
                                     transform: "translate(-50%, -50%)",
-                                    color: systemTheme.text.primary
+                                    color: systemTheme.text.primary,
                                 }}
                             >
-                                <Pointer className="animate-bounce"/> 
+                                <Pointer className="animate-bounce" />
                                 <div 
                                     className="rounded border shadow px-2 py-1 backdrop-blur-md min-w-24 text-center" 
                                     style={{

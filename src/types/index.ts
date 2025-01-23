@@ -27,6 +27,7 @@ export interface Oeuvre {
     artiste: string;
     mouvement: string;
     coordinate: [number, number];
+    image: string;
 }
 
 export interface Salle {
