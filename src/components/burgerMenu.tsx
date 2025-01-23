@@ -66,11 +66,12 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                 <div className="flex items-center gap-4"
                                      style={{backgroundColor: systemTheme.background.primary}}>
                                     <img
-                                        src={userConnected?.iconeuser || "/shrek.jpg"}
+                                        src={userConnected?.iconeuser || "/thibou.png"}
                                         alt="User Avatar"
                                         className="w-10 h-10 rounded-full object-cover border ml-3"
                                         style={{
                                             borderColor: systemTheme.background.button,
+                                            backgroundColor: systemTheme.background.secondary,
                                         }}
                                     />
                                     <span
@@ -79,8 +80,8 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                             color: systemTheme.text.primary,
                                         }}
                                     >
-                    {userConnected?.nomutilisateur || "Utilisateur"}
-                  </span>
+                                        {userConnected?.nomutilisateur || "Utilisateur"}
+                                    </span>
                                 </div>
 
                                 {/* Options de l'utilisateur */}
