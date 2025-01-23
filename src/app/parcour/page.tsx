@@ -71,8 +71,9 @@ export default function FracPage() {
     const fetchData = async () => {
       if (isConnected()) {
         const sauvegarde = await fetchSauvegarde();
-        if (sauvegarde && sauvegarde.trajet_restant?.length) {
-          setResult(sauvegarde.trajet_restant);
+        console.log(sauvegarde.result.data)
+        if (sauvegarde && sauvegarde.result.data?.length) {
+          setResult(sauvegarde.result.data);
         } else {
           const result = await pathing();
           setResult(result);

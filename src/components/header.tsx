@@ -10,7 +10,7 @@ import { LogOut, Pencil, Trash2 } from "lucide-react";
 
 interface HeaderProps {
     showAuthButtons?: boolean;
-    userConnected: utilisateurType;
+    userConnected?: utilisateurType;
 }
 
 const useAuth = (userConnected?: utilisateurType) => {

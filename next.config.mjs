@@ -12,7 +12,9 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
-
+    images: {
+        domains: ['www.unique-poster.com'],
+    },
 };
 
 export default nextConfig;

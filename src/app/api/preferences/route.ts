@@ -75,7 +75,8 @@ export async function POST(req: Request) {
                         artiste: item.artiste,
                         mouvement: item.mouvement,
                         x: item.x,
-                        y: item.y
+                        y: item.y,
+                        image: item.image
                     };
                     return acc;
                 }, {});

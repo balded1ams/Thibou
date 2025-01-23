@@ -38,6 +38,7 @@ export default function Preferences() {
     mouvement: string;
     x: number;
     y: number;
+    image: string;
   };
 
   function transformOeuvre(typeRetour: typeRetour): Oeuvre {
@@ -48,8 +49,10 @@ export default function Preferences() {
       artiste: typeRetour.artiste,
       mouvement: typeRetour.mouvement,
       coordinate: [typeRetour.x, typeRetour.y],
+      image: typeRetour.image,
     };
   }
+
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

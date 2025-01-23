@@ -77,7 +77,7 @@ export default function Page({ params: paramsPromise }) {
               <ChevronLeft />Retour
             </Link>
             <div className="mx-auto flex flex-col gap-4 xl:flex-row">
-              <ImageOeuvre />
+              <ImageOeuvre  source={currentOeuvre.image[0].toUpperCase() + currentOeuvre.image.slice(1)}/>
               <ArtworkDesc
                 author={currentOeuvre.artiste[0].toUpperCase() + currentOeuvre.artiste.slice(1)}
                 description={currentOeuvre.description[0].toUpperCase() + currentOeuvre.description.slice(1)}

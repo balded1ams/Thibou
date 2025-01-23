@@ -1,12 +1,17 @@
 import Image from "next/image";
 import React from "react";
+import {utilisateurType} from "@/types";
 
-const ImageOeuvre = () => {
+
+interface oeuvresProps {
+    source: string;
+}
+const ImageOeuvre: React.FC<oeuvresProps> = ({ source }) => {
   return (
     <>
       <Image
         className="rounded-lg shadow"
-        src={"/oeuvre.jpg"}
+        src={source}
         alt="Plan de musée"
         width={625}
         height={558}
