@@ -159,9 +159,17 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
 
   }).returning();
 
+    let mail_message_port;
+    if (process.env.WEBAPP_PROTOCOL == 'https' && process.env.WEBAPP_PORT == '443') {
+      mail_message_port = '';
+    } else if (process.env.WEBAPP_PROTOCOL == 'http' && process.env.WEBAPP_PORT == '80') {
+      mail_message_port = '';
+    } else {
+      mail_message_port = ":" + process.env.WEBAPP_PORT;
+    }
 
-  const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
+    const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou "+ process.env.WEBAPP_PROTOCOL + "://" +
+      process.env.WEBAPP_DOMAIN_NAME + mail_message_port + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
 
@@ -173,7 +181,7 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
