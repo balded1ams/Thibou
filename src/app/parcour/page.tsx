@@ -18,6 +18,12 @@ export default function FracPage() {
     fetchSauvegarde();
   };
 
+  const prevPoint = () => {
+    setCurrentIndex((prevIndex) => prevIndex - 1);
+    savePoint();
+    fetchSauvegarde();
+  };
+
   const fetchSauvegarde = async () => {
     try {
       const response = await fetch("/api/fetchSauvegarde", {
@@ -71,20 +77,15 @@ export default function FracPage() {
     const fetchData = async () => {
       if (isConnected()) {
         const sauvegarde = await fetchSauvegarde();
-        console.log(sauvegarde.result.data)
-        if (sauvegarde && sauvegarde.result.data?.length) {
-          setResult(sauvegarde.result.data);
-          setDataLoaded(true);
-
+        if (sauvegarde && sauvegarde.trajet_restant?.length) {
+          setResult(sauvegarde.trajet_restant);
         } else {
           const result = await pathing();
           setResult(result);
-          setDataLoaded(true);
         }
       } else {
         const result = await pathing();
         setResult(result);
-        setDataLoaded(true);
       }
       setDataLoaded(true);
     };
@@ -109,7 +110,7 @@ export default function FracPage() {
           <Header />
           <div className="flex flex-col gap-4 xl:flex-row">
             <Plan currentIndex={currentIndex} path={result} />
-            <Guide onSuivant={advancePoint} />
+            <Guide onSuivant={advancePoint} onPrev={prevPoint} />
           </div>
         </main>
         <Footer />

@@ -7,6 +7,7 @@ import ThemeDropdown from "@/components/ThemeDropdown";
 import React, { useState, useEffect, useRef } from "react";
 import { utilisateurType } from "@/types/index";
 import { LogOut, Pencil, Trash2 } from "lucide-react";
+import Image from "next/image"
 
 interface HeaderProps {
     showAuthButtons?: boolean;
@@ -110,8 +111,17 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     }}
                     onClick={() => router.push("/")}
                 >
-                    <img className={"max-w-16"} src={"/thibou.png"} alt={"Thibou logo"} />
-                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>Thibou.</h1>
+                    <Image
+                        className={"max-w-16"}
+                        src={"/thibou.png"}
+                        alt={"Thibou logo"}
+                        width={50}
+                        height={50}
+
+                    />
+                    <h1 className={`text-2xl font-bold hover:underline lg:text-3xl`}>
+                        Thibou.
+                    </h1>
                 </div>
 
                 {/* Menu burger pour mobile */}
@@ -128,13 +138,16 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                     {estConnecte ? (
                         <div className="relative">
                             <div
-                                className="cursor-pointer border-2 rounded-full overflow-hidden"
-                                style={{ width: "48px" }}
+                                className="cursor-pointer h-10 w-10 border rounded-full overflow-hidden"
+                                style={{
+                                    borderColor: systemTheme.text.primary,
+                                    backgroundColor: systemTheme.background.secondary,
+                                }}
                                 onClick={() => setShowModal(!showModal)}
                             >
                                 <img
                                     className="w-full h-full object-cover rounded-full"
-                                    src={userAvatar || "/shrek.jpg"}
+                                    src={userAvatar || "/thibou.png"}
                                     alt="User Avatar"
                                 />
                             </div>
