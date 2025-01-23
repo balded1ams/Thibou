@@ -175,6 +175,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                                     </button>
                                     <button
                                         className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
+                                        onClick={handleLogout}
                                         style={{
                                             borderColor: `${systemTheme.background.button}AA`,
                                             color: colors.red,

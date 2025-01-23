@@ -88,7 +88,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                 <button
                                     className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm hover:opacity-90"
                                     style={{
-
+                                        backgroundColor: systemTheme.background.primary,
                                     }}
                                     onClick={handleEditProfile}
                                 >
@@ -98,7 +98,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                 <button
                                     className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm hover:opacity-90"
                                     style={{
-
+                                        backgroundColor: systemTheme.background.primary,
                                     }}
                                     onClick={handleLogout}
                                 >
@@ -110,7 +110,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                     style={{
                                         backgroundColor: systemTheme.background.primary,
                                     }}
-                                    onClick={handleDeleteAccount}
+                                    onClick={handleLogout}
                                 >
                                     <Trash2 className="mr-2" />
                                     Supprimer le compte
