@@ -1,8 +1,8 @@
 {
-  "name": "typing-game",
+  "name": "thibou",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://estifanos12.github.io/opentype",
+  "homepage": "https://github.com/balded1ams/Thibou",
   "type": "module",
   "scripts": {
     "predeploy": "yarn build",
