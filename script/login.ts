@@ -214,14 +214,13 @@ export const askResetPassword = validatedAction(authSchemaResetPasword, async (d
         to: email,
         subject: 'Réinitailisation mot de passe Thibou',
         html: mail_message,
-        // text: message,
       };
 
       await transporter.sendMail(mailOption);
 
 
     } catch (error) {
-      return {error : 'KO' , status : 500}
+      console.log(error);
     }
 
 
