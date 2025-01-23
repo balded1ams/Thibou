@@ -1,7 +1,20 @@
-import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, json, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, unique, integer, varchar, timestamp, serial, check, date, json, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
+
+export const resetpasswordUuid = pgTable("resetpassword_uuid", {
+	idutilisateur: integer().notNull(),
+	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
+	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "new_table_idutilisateur_fkey"
+		}),
+	unique("unique_uuidvalue").on(table.uuidValue),
+]);
 
 export const auteur = pgTable("auteur", {
 	idauteur: serial().primaryKey().notNull(),
@@ -25,19 +38,6 @@ export const utilisateur = pgTable("utilisateur", {
 	check("utilisateur_dateinscription_check", sql`dateinscription <= CURRENT_DATE`),
 ]);
 
-export const resetpasswordUuid = pgTable("resetpassword_uuid", {
-	idutilisateur: integer().notNull(),
-	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
-	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`).notNull(),
-}, (table) => [
-	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "new_table_idutilisateur_fkey"
-	}),
-	unique("unique_uuidvalue").on(table.uuidValue),
-]);
-
 export const emplacement = pgTable("emplacement", {
 	idemplacement: varchar({ length: 255 }).primaryKey().notNull(),
 	abscisse: integer(),
@@ -50,10 +50,10 @@ export const sauvegarde = pgTable("sauvegarde", {
 	restant: json().notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "fk_utilisateur"
-	}),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}),
 ]);
 
 export const utilisateurPreferences = pgTable("utilisateur_preferences", {
@@ -64,15 +64,15 @@ export const utilisateurPreferences = pgTable("utilisateur_preferences", {
 	typeOeuvre: varchar("type_oeuvre", { length: 255 }),
 }, (table) => [
 	foreignKey({
-		columns: [table.nomauteur],
-		foreignColumns: [auteur.nomauteur],
-		name: "utilisateur_preferences_nomauteur_fkey"
-	}),
+			columns: [table.nomauteur],
+			foreignColumns: [auteur.nomauteur],
+			name: "utilisateur_preferences_nomauteur_fkey"
+		}),
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "utilisateur_preferences_idutilisateur_fkey"
-	}),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "utilisateur_preferences_idutilisateur_fkey"
+		}),
 ]);
 
 export const oeuvre = pgTable("oeuvre", {
@@ -103,10 +103,10 @@ export const oeuvresMusee = pgTable("oeuvres_musee", {
 	y: integer(),
 }, (table) => [
 	foreignKey({
-		columns: [table.artiste],
-		foreignColumns: [auteur.nomauteur],
-		name: "fk_oeuvres_musee_artiste"
-	}).onUpdate("cascade").onDelete("set null"),
+			columns: [table.artiste],
+			foreignColumns: [auteur.nomauteur],
+			name: "fk_oeuvres_musee_artiste"
+		}).onUpdate("cascade").onDelete("set null"),
 ]);
 
 export const utilisateurlogin = pgTable("utilisateurlogin", {
@@ -114,10 +114,10 @@ export const utilisateurlogin = pgTable("utilisateurlogin", {
 	password: varchar({ length: 255 }).notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "fk_utilisateur"
-	}).onDelete("cascade"),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}).onDelete("cascade"),
 ]);
 
 export const utilisateursession = pgTable("utilisateursession", {
@@ -126,10 +126,10 @@ export const utilisateursession = pgTable("utilisateursession", {
 	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "fk_utilisateur"
-	}).onDelete("cascade"),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}).onDelete("cascade"),
 ]);
 
 export const parcours = pgTable("parcours", {
@@ -138,15 +138,15 @@ export const parcours = pgTable("parcours", {
 	idoeuvre: integer(),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "parcours_idutilisateur_fkey"
-	}),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "parcours_idutilisateur_fkey"
+		}),
 	foreignKey({
-		columns: [table.idoeuvre],
-		foreignColumns: [oeuvre.idoeuvre],
-		name: "parcours_idoeuvre_fkey"
-	}),
+			columns: [table.idoeuvre],
+			foreignColumns: [oeuvre.idoeuvre],
+			name: "parcours_idoeuvre_fkey"
+		}),
 	primaryKey({ columns: [table.datecreation, table.idutilisateur], name: "parcours_pkey"}),
 	check("parcours_datecreation_check", sql`datecreation <= CURRENT_DATE`),
 ]);
@@ -157,20 +157,20 @@ export const emplacementParcours = pgTable("emplacement_parcours", {
 	idemplacement: varchar({ length: 255 }).notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.idutilisateur],
-		foreignColumns: [utilisateur.idutilisateur],
-		name: "emplacement_parcours_idutilisateur_fkey"
-	}),
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "emplacement_parcours_idutilisateur_fkey"
+		}),
 	foreignKey({
-		columns: [table.idemplacement],
-		foreignColumns: [emplacement.idemplacement],
-		name: "emplacement_parcours_idemplacement_fkey"
-	}),
+			columns: [table.idemplacement],
+			foreignColumns: [emplacement.idemplacement],
+			name: "emplacement_parcours_idemplacement_fkey"
+		}),
 	foreignKey({
-		columns: [table.idutilisateur, table.datecreationparcours],
-		foreignColumns: [parcours.datecreation, parcours.idutilisateur],
-		name: "emplacement_parcours_datecreationparcours_idutilisateur_fkey"
-	}),
+			columns: [table.idutilisateur, table.datecreationparcours],
+			foreignColumns: [parcours.datecreation, parcours.idutilisateur],
+			name: "emplacement_parcours_datecreationparcours_idutilisateur_fkey"
+		}),
 	primaryKey({ columns: [table.idutilisateur, table.idemplacement], name: "emplacement_parcours_pkey"}),
 	check("emplacement_parcours_datecreationparcours_check", sql`datecreationparcours <= CURRENT_DATE`),
 ]);
