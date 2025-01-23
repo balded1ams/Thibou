@@ -34,6 +34,11 @@ const authSchemaModifyPasswordThroughtReset = z.object({
 
 const authSchemaUpdateUser = z.object({
   nomutilisateur: z.string().min(1),
+  iconeuser: z.string().nullable() ,
+});
+
+const authSchemaUpdateUserAndPassword = z.object({
+  nomutilisateur: z.string().min(1),
   oldPassword: z.string().min(1),
   newPassword: z.string().min(1),
   iconeuser: z.string().nullable() ,
@@ -112,7 +117,7 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     console.log("Failed to create signin. Please try again." );
     return { error: "Failed to create signin. Please try again." };
   }
-  await setSession(createdUser);
+  await setSession(idUser);
 
   return {success : 'OK'};
 });
@@ -152,7 +157,7 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
 });
 
 
-export const resetPassword = validatedAction(authSchemaResetPasword, async (data) => {
+export const askResetPassword = validatedAction(authSchemaResetPasword, async (data) => {
   const { email } = data;
 
   const myuuid = uuidv4();
@@ -192,28 +197,35 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
       process.env.WEBAPP_DOMAIN_NAME + mail_message_port + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
+    console.log(mail_message);
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: 587,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      const mailOption = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Réinitailisation mot de passe Thibou',
+        html: mail_message,
+        // text: message,
+      };
+
+      await transporter.sendMail(mailOption);
 
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: process.env.EMAIL_HOST,
-      port: 587,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+    } catch (error) {
+      return {error : 'KO' , status : 500}
+    }
 
-    const mailOption = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Réinitailisation mot de passe Thibou',
-      html: mail_message,
-      // text: message,
-    };
 
-    await transporter.sendMail(mailOption);
+
 
     return true;
 
@@ -266,6 +278,7 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
 export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(data) => {
   try {
+
     const sessionCookie = (await cookies()).get("session");
 
     if (!sessionCookie) {
@@ -279,6 +292,91 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
     }
 
     const idutilisateur = session.user.id;
+    console.log(idutilisateur);
+
+
+
+    const { nomutilisateur, iconeuser } = data;
+
+
+    // Récupérer l'utilisateur avec tous ses champs
+    const [user] = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.idutilisateur, idutilisateur))
+        .limit(1);
+
+    console.log('test3');
+
+
+    if (!user) {
+      return ({ error: "Utilisateur non trouvé" , status : 400});
+    }
+
+    //On vérifie si le nom d'utilisateur existe déja
+    const existingNomUtilisateur = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.nomutilisateur, nomutilisateur))
+        .limit(1);
+
+
+    console.log('test5');
+
+    if (existingNomUtilisateur.length > 0 && (existingNomUtilisateur[0].idutilisateur !== idutilisateur)) {
+      return { userNAME: "KO"};
+    } else {
+      console.log('test54');
+      await db
+          .update(utilisateur)
+          .set({ nomutilisateur : nomutilisateur})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+    console.log(iconeuser);
+
+    // Mettre à jour l'icône de l'utilisateur si une URL est fournie
+    if (iconeuser) {
+      await db
+          .update(utilisateur)
+          .set({ iconeuser : iconeuser})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+    return ({ message: "Utilisateur mis à jour avec succès" });
+
+
+
+
+
+  } catch (error) {
+      return { error: "Erreur interne du serveur.", status: 500 };
+  }
+
+
+});
+
+export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUserAndPassword, async(data) => {
+
+  try {
+
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const idutilisateur = session.user.id;
+    console.log(idutilisateur);
+
 
 
     const { nomutilisateur, oldPassword, newPassword, iconeuser } = data;
@@ -291,20 +389,26 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
         .where(eq(utilisateur.idutilisateur, idutilisateur))
         .limit(1);
 
+    console.log('test3');
+
+
     if (!user) {
       return ({ error: "Utilisateur non trouvé" , status : 400});
     }
 
-    console.log(nomutilisateur);
 
-    // Préparer les données à mettre à jour
-    const updateData: any = {
-      nomutilisateur,
-    };
 
 
     // Vérifier si l'utilisateur veut changer son mot de passe
-    if (oldPassword && newPassword) {
+    let isUpdatePassword = (/[a-zA-Z]/.test(oldPassword));
+
+    isUpdatePassword = (isUpdatePassword && (/[a-zA-Z]/.test(newPassword)));
+
+
+
+    if (isUpdatePassword) {
+
+
       const [userPassword] = await db
           .select()
           .from(utilisateurlogin)
@@ -322,42 +426,40 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
 
 
       //Mettre à jour le mot de passe de l'utilisateur
-
       await db
           .update(utilisateurlogin)
           .set({ password : newPasswordHash})
           .where(eq(utilisateurlogin.idutilisateur, idutilisateur));
+
     }
 
     //On vérifie si le nom d'utilisateur existe déja
     const existingNomUtilisateur = await db
-        .select({
-          nomutilisateur: utilisateur.nomutilisateur,
-        })
+        .select()
         .from(utilisateur)
         .where(eq(utilisateur.nomutilisateur, nomutilisateur))
         .limit(1);
 
 
-    if (existingNomUtilisateur.length > 0) {
+
+    if (existingNomUtilisateur.length > 0 && (existingNomUtilisateur[0].idutilisateur !== idutilisateur)) {
       return { userNAME: "KO" };
     } else {
-      updateData.nomutilisateur = nomutilisateur;
+      await db
+          .update(utilisateur)
+          .set({ nomutilisateur : nomutilisateur})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
     }
 
 
 
     // Mettre à jour l'icône de l'utilisateur si une URL est fournie
     if (iconeuser) {
-      updateData.iconeuser = iconeuser;
+      await db
+          .update(utilisateur)
+          .set({ iconeuser : iconeuser})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
     }
-
-    // Mettre à jour l'utilisateur dans la base de données
-    await db
-        .update(utilisateur)
-        .set(updateData)
-        .where(eq(utilisateur.idutilisateur, idutilisateur));
-
 
 
     return ({ message: "Utilisateur mis à jour avec succès" });
@@ -367,11 +469,12 @@ export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(dat
 
 
   } catch (error) {
-      return { error: "Erreur interne du serveur.", status: 500 };
+    return { error: "Erreur interne du serveur.", status: 500 };
   }
 
 
 });
+
 
 export async function signOut() {
   // clear session

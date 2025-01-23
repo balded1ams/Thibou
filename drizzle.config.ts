@@ -6,7 +6,7 @@ export default defineConfig({
     breakpoints: true,            // Enable migration breakpoints
     dialect: "postgresql",        // Replace with your database dialect (e.g., 'mysql', 'sqlite', etc.)
     dbCredentials: {
-        host: "192.168.14.123",
+        host: "localhost",
         port: 5432,
         user: "majd",
         password: "UserMajd",
