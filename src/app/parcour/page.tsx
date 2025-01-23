@@ -18,18 +18,13 @@ export default function FracPage() {
     setCurrentIndex(prevIndex => prevIndex + 1);
     //addOutput(`oeuvre: ${currentIndex}`)
     savePoint();
+    fetchHistorique()
   };
 
   const fetchHistorique = async () => {
     try {
       const response = await fetch('/api/fetchSauvegarde', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          trajet_restant: result,
-        }),
+        method: 'GET',
       });
 
       if (!response.ok) {

@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useThemeContext } from '@/hooks/useTheme';
 import Link from "next/link";
 import { CircleX } from 'lucide-react';
-import { addOutput } from "@/hooks/useConsole";
 import { Pointer } from 'lucide-react';
 
 interface PlanProps {

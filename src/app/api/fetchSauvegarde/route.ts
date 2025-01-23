@@ -5,9 +5,7 @@ import {db} from "@/db/db";
 import {sauvegarde} from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-type TrajetRestant = string | null;
-
-export async function getData(userId: number): Promise<TrajetRestant | null> {
+export async function getData(userId: number){
     try {
         const result = await db
             .select({ trajetRestant: sauvegarde.restant })
@@ -20,7 +18,7 @@ export async function getData(userId: number): Promise<TrajetRestant | null> {
         }
 
         // Retourne uniquement le champ `trajetRestant`
-        return result[0].trajetRestant as string | null;
+        return result[0].trajetRestant;
     } catch (error) {
         console.error("Erreur lors de la requête avec Drizzle :", error);
         throw new Error("Erreur interne lors de l'accès à la base de données.");
@@ -47,10 +45,8 @@ export async function getSauvegarde() {
             return { error: "Aucune donnée trouvée pour cet utilisateur." };
         }
 
-        // Nettoyer les données avant de les renvoyer si nécessaire
-        const parsedData = JSON.parse(userData);
 
-        return { success: true, data: parsedData };
+        return { success: true, data: userData };
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
         return { error: "Erreur interne lors de la récupération des données.", status: 500 };
