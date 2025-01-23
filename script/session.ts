@@ -61,42 +61,25 @@ export async function setSession(user) {
 }
 
 
-/*
-export async function getIdUserFromSession(
 
-    headersList: Headers & {
-    append(...args: any[]): void;
-    set(...args: any[]): void;
-    delete(...args: any[]): void;
-  }
-): Promise<number | null> {
-  const cookieHeader = headersList.get("cookie");
-*/
 
-export async function getIdUserFromSession(headersList: Headers): Promise<number | null>  {
-  const cookieHeader = headersList.get("cookie");
+export async function getIdUserFromSession(): Promise<number | null>  {
+  const sessionCookie = (await cookies()).get("session");
 
-  // Parse cookies from the header
-  const cookies = cookieHeader
-    ? Object.fromEntries(
-        cookieHeader.split("; ").map((cookie) => cookie.split("="))
-      )
-    : {};
 
-  const sessionToken = cookies["session"];
-
-  // Ensure the token is a string
-  if (typeof sessionToken !== "string") {
+  // Vérifie que le cookie est une chaine de caractères
+  if (typeof sessionCookie?.value !== "string") {
     console.warn("Session token is not found or is not a valid string.");
     return null;
   }
 
-  if (!sessionToken) {
-    return null; // No session token, user is not authenticated
+  // Si il n'y  a pas de cookie de session, l'utilisateur n'est pas authentifié
+  if (!sessionCookie) {
+    return null;
   }
 
   try {
-    const session = await verifyToken(sessionToken);
+    const session = await verifyToken(sessionCookie.value);
     return session.user.id; // Return the user data
   } catch {
     return null; // Invalid or expired token
