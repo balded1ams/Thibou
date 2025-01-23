@@ -5,7 +5,13 @@ import {eq} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
-import {resetpasswordUuid, utilisateur, utilisateurlogin} from "@/db/schema";
+import {
+  emplacementParcours,
+  parcours,
+  resetpasswordUuid, sauvegarde,
+  utilisateur,
+  utilisateurlogin, utilisateurPreferences,
+} from "@/db/schema";
 import { verifyToken } from "@/../script/session";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
@@ -498,23 +504,54 @@ export async function deleteAccount() {
     const userId = session.user.id;
 
     // Supprimer l'utilisateur de la base de données
-    const deletedRowsTableUtilisateur = await db
-        .delete(utilisateur)
-        .where(eq(utilisateur.idutilisateur, userId))
+
+    await db
+        .delete(emplacementParcours)
+        .where(eq(emplacementParcours.idutilisateur, userId))
         .returning();
 
-    if (deletedRowsTableUtilisateur.length === 0) {
-      return { error: "Erreur lors de la suppression du compte.", status: 500 };
-    }
 
-    const deletedRowsTableUtilisateurLogin = await db
+
+
+    await db
+        .delete(parcours)
+        .where(eq(parcours.idutilisateur, userId))
+        .returning();
+
+
+
+     await db
+        .delete(resetpasswordUuid)
+        .where(eq(resetpasswordUuid.idutilisateur, userId))
+        .returning();
+
+
+
+    await db
+        .delete(sauvegarde)
+        .where(eq(sauvegarde.idutilisateur, userId))
+        .returning();
+
+
+    await db
+        .delete(utilisateurPreferences)
+        .where(eq(utilisateurPreferences.idutilisateur, userId))
+        .returning();
+
+
+
+    await db
         .delete(utilisateurlogin)
         .where(eq(utilisateurlogin.idutilisateur, userId))
         .returning();
 
-    if (deletedRowsTableUtilisateurLogin.length === 0) {
-      return { error: "Erreur lors de la suppression du compte.", status: 500 };
-    }
+
+
+    await db
+        .delete(utilisateur)
+        .where(eq(utilisateur.idutilisateur, userId))
+        .returning();
+
 
 
     // Supprimer le cookie de session

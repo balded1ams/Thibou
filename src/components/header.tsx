@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 
             if (response.ok) {
                 alert("Votre compte a été supprimé avec succès.");
-                router.push("/"); // Redirige vers la page d'accueil
+                window.location.reload();
             } else {
                 const data = await response.json();
                 alert(data.error || "Erreur lors de la suppression du compte.");
