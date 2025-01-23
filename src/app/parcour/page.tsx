@@ -20,6 +20,29 @@ export default function FracPage() {
     savePoint();
   };
 
+  const fetchHistorique = async () => {
+    try {
+      const response = await fetch('/api/fetchSauvegarde', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          trajet_restant: result,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
+  };
+
   const savePoint = async () => {
     try {
       const response = await fetch('/api/sauvegarde', {

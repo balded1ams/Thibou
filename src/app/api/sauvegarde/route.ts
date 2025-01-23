@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import {updateSauvegarde} from "../../../../script/slugify";
-
-
+import {updateSauvegarde} from "@/../../script/slugify";
 
 // API POST pour insérer ou mettre à jour les données
 export async function POST(req) {
@@ -10,7 +8,6 @@ export async function POST(req) {
     const { trajet_restant } = body;
 
     const result = await updateSauvegarde(trajet_restant);
-
 
     if (result) {
         return NextResponse.json({ success: "OK" });
