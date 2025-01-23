@@ -81,7 +81,6 @@ export async function POST(req: Request) {
             }, {});
 
             return NextResponse.json(formattedResult);
-           // return NextResponse.json(dbResult);
 
         } catch (error) {
             console.error("Erreur lors de la requête :", error);

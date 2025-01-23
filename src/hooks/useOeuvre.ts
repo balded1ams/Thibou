@@ -7,7 +7,6 @@ export function findOeuvres(name: string): Oeuvre {
   for (let i = 0; i < oeuvres.length; i++) {
     const normalizedName = oeuvres[i].name.trim().toLowerCase();
     if (normalizedName === decodedName) {
-      console.log(oeuvres);
        return oeuvres[i];
     }
   }
