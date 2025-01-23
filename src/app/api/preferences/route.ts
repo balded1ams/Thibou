@@ -64,12 +64,13 @@ export async function POST(req: Request) {
                   .limit(25);
             }
 
+
             // Formatage des résultats
             const formattedResult = dbResult.reduce((acc, item) => {
                 acc[item.id] = {
                     nom: item.nom,
                     description: item.description,
-                    type_oeuvre: item.type_oeuvre,
+                    type_oeuvre: item.typeOeuvre,
                     artiste: item.artiste,
                     mouvement: item.mouvement,
                     x: item.x,
@@ -80,6 +81,8 @@ export async function POST(req: Request) {
             }, {});
 
             return NextResponse.json(formattedResult);
+           // return NextResponse.json(dbResult);
+
         } catch (error) {
             console.error("Erreur lors de la requête :", error);
             return NextResponse.json({ error: 'Erreur interne lors de la requête.' }, { status: 500 });

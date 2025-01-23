@@ -6,7 +6,7 @@ interface ArtworkDescProps {
   year: string;
   author: string;
   movement: string;
-  //technique: string;
+  technique: string;
   description: string;
 }
 
@@ -15,7 +15,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
   year,
   author,
   movement,
-  //technique,
+  technique,
   description,
 }) => {
   const { systemTheme } = useThemeContext();
@@ -44,6 +44,7 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
         <p className="font-bold">Mouvement</p>
         <p>{movement}</p>
         <p className="font-bold">Technique</p>
+        <p>{technique}</p>
       </div>
 
       {/* Description */}

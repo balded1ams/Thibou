@@ -83,7 +83,7 @@ export default function Page({ params: paramsPromise }) {
                 author={currentOeuvre.artiste[0].toUpperCase() + currentOeuvre.artiste.slice(1)}
                 description={currentOeuvre.description[0].toUpperCase() + currentOeuvre.description.slice(1)}
                 movement={currentOeuvre.mouvement[0].toUpperCase() + currentOeuvre.mouvement.slice(1)}
-                //type_oeuvre={currentOeuvre.type_oeuvre[0].toUpperCase() + currentOeuvre.type_oeuvre.slice(1)}
+                technique={currentOeuvre.type_oeuvre[0].toUpperCase() + currentOeuvre.type_oeuvre.slice(1)}
                 title={currentOeuvre.name[0].toUpperCase() + currentOeuvre.name.slice(1)}
                 year={"[PL/AC/EHOL]"}
               />
