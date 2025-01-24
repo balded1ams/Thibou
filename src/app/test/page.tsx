@@ -1,4 +1,3 @@
-import { headers} from "next/headers";
 import {fetchUtilisateur} from "../../../script/slugify";
 import {getIdUserFromSession} from "../../../script/session";
 
@@ -9,8 +8,6 @@ import {getIdUserFromSession} from "../../../script/session";
  */
 //export default 
         async function ProfilePage() {
-    const headersList = await headers();
-
     const idUser = await getIdUserFromSession();
 
     // Si l'utilisateur n'est pas connecté
