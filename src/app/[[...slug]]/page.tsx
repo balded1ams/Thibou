@@ -1,7 +1,6 @@
 import '@/index.css'
 import { ClientOnly } from './client'
 import { getIdUserFromSession } from "../../../script/session";
-import { headers } from "next/headers";
 import { fetchUtilisateur } from "../../../script/slugify";
 import { utilisateurType } from "@/types";
 import { notFound } from 'next/navigation';
