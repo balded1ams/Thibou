@@ -7,7 +7,7 @@ import Plan from "@/components/plan";
 import Guide from "@/components/guide";
 
 import { useThemeContext } from "@/hooks/useTheme";
-import {pathing, toVector} from "@/hooks/useBFS";
+import {pathing} from "@/hooks/useBFS";
 import { addOutput } from "@/hooks/useConsole";
 
 export default function FracPage() {
@@ -16,29 +16,43 @@ export default function FracPage() {
   const generateInstructions = (path) => {
     if (!path || path.length < 2) {
       console.log("Pas assez de points pour générer des instructions.");
+      return [];
     }
-    for (let i = 0; i < path.length - 1; i++) {
-      path[i] = toVector(path[i], path[i+1]);
-    }
+
+    let currentDirection = "";
+    let stepCount = 0;
+
     for (let i = 0; i < path.length - 1; i++) {
       const [x1, y1] = path[i];
       const [x2, y2] = path[i + 1];
 
+      // Calcul de la direction actuelle
+      let direction = "";
       if (x1 === x2) {
-        if (y2 > y1) {
-          addOutput("Aller tout droit.");
-        } else if (y2 < y1) {
-          addOutput("Revenir en arrière (tout droit vers le bas).");
-        }
+        direction = y2 > y1 ? "tout droit" : "en arrière";
       } else if (y1 === y2) {
-        if (x2 > x1) {
-          addOutput("Tourner à droite.");
-        } else if (x2 < x1) {
-          addOutput("Tourner à gauche.");
-        }
+        direction = x2 > x1 ? "à droite" : "à gauche";
       } else {
-        addOutput("Déplacement diagonal, suivez le chemin.");
+        direction = "diagonal";
       }
+
+      // Si la direction change, ajoutez les instructions actuelles
+      if (direction !== currentDirection) {
+        if (currentDirection) {
+          addOutput(
+              `Aller ${currentDirection} sur ${stepCount} segment(s).`
+          );
+        }
+        currentDirection = direction;
+        stepCount = 1;
+      } else {
+        stepCount++;
+      }
+    }
+
+    // Ajoutez la dernière instruction
+    if (currentDirection) {
+      addOutput(`Aller ${currentDirection} sur ${stepCount} segment(s).`);
     }
   };
 
