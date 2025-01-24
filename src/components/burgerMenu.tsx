@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import { utilisateurType } from "@/types/index";
-import { LogOut, Pencil, Trash2 } from "lucide-react";
+import { LogOut, Pencil, Trash2, Play } from "lucide-react";
 
 interface BurgerMenuProps {
     userConnected?: utilisateurType;
@@ -94,6 +94,16 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({
                                 >
                                     <Pencil className="mr-2" />
                                     Modifier le profil
+                                </button>
+                                <button
+                                    className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm hover:opacity-90"
+                                    style={{
+                                        backgroundColor: systemTheme.background.primary,
+                                    }}
+                                    onClick={() => (router.push('/parcour'))}
+                                >
+                                    <Play className="mr-2" />
+                                    Reprendre un parcour
                                 </button>
                                 <button
                                     className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm hover:opacity-90"
