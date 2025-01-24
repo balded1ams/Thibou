@@ -10,9 +10,8 @@ Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
 ## Installation et exécution en local  
 1.  Remplir le fichier .env présent à la racine du répertoire en suivant les instructions indiqués.
 
-     ```bash
-     WEBAPP_PORT, WEBAPP_PROTOCOL et WEBAPP_PROTOCOL correspondent aux informations de connexions que l'utilisateur final utilisera pour se connecter.  
-     ```
+<span style="color:red;">ATTENTION : WEBAPP_PORT, WEBAPP_PROTOCOL et WEBAPP_PROTOCOL du .env correspondent aux informations de connexions que l'utilisateur final utilisera pour se connecter.   </span>  
+
 
   
 
