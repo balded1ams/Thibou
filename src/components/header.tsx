@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import React, { useState, useEffect, useRef } from "react";
 import { utilisateurType } from "@/types/index";
-import { LogOut, Pencil, Trash2 } from "lucide-react";
+import { LogOut, Pencil, Trash2, Play } from "lucide-react";
 import Image from "next/image"
 import { StaticColors as colors } from "@/utils/index";
 
@@ -172,6 +172,16 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                                     >
                                         <Pencil />
                                         Modifier le profil
+                                    </button>
+                                    <button
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
+                                        onClick={() => (router.push('/parcour'))}
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                        }}
+                                    >
+                                        <Play/>
+                                        Reprendre un parcour
                                     </button>
                                     <button
                                         className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
