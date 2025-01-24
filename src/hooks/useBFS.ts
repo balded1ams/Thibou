@@ -133,19 +133,6 @@ function reconstructPath(
     return path;
 }
 
-export async function transformOeuvres(): Promise<Oeuvre[]> {
-    const rawOeuvres = await fetchAllOeuvres();
-
-    return rawOeuvres.map((oeuvre) => ({
-        name: oeuvre.titreOeuvre || "Titre inconnu",
-        description: oeuvre.description || "Aucune description disponible",
-        type_oeuvre: oeuvre.typeOeuvre || "Type inconnu",
-        artiste: oeuvre.nomauteur || "Artiste inconnu",
-        mouvement: oeuvre.nommouvement || "Mouvement inconnu",
-        coordinate: [oeuvre.x ?? 0, oeuvre.y ?? 0],
-    }));
-}
-
 export async function pathing() {
     const oeuvresSort: Oeuvre[] = [];
     const oeuvresTemp = [...oeuvres];
@@ -212,7 +199,7 @@ function dist(pos1: [number, number], pos2: [number, number]): number {
     );
 }
 
-function toVector(point1, point2): number[] {
+export function toVector(point1, point2): number[] {
     if (!Array.isArray(point1) || !Array.isArray(point2) || point1.length !== 2 || point2.length !== 2) {
         throw new Error("Les points doivent être des tableaux de deux nombres.");
     }

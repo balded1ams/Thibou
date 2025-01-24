@@ -26,7 +26,7 @@ const Plan: React.FC<PlanProps> = ({ currentIndex, path, dataLoaded = true }) =>
     const [oeuvrePositions, setOeuvrePositions] = useState<Oeuvre[]>([]);
     const [cursorPosition, setCursorPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [selectedOeuvre, setSelectedOeuvre] = useState<Oeuvre | null>(null);
-    const [highlightedOeuvreIndex, setHighlightedOeuvreIndex] = useState<number | null>(0); // L'index de l'œuvre avec "Click me"
+    const [highlightedOeuvreIndex, setHighlightedOeuvreIndex] = useState<number | null>(0);
     const [clickedOeuvres, setClickedOeuvres] = useState<number[]>([]);
 
     // Récupérer le chemin actuel en fonction de l'index actuel
