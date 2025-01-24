@@ -22,17 +22,17 @@ const ArtworkDesc: React.FC<ArtworkDescProps> = ({
 
 
   return (
-    <div 
+    <div
       className="max-w-md bg-beige rounded-lg flex flex-col gap-4"
       style={{
         color: systemTheme.text.primary,
-      }}  
+      }}
     >
 
       <div className="flex flex-col g">
         {/* Titre de l'œuvre et l'année */}
         <h1 className="text-2xl font-bold pb-0 mb-0">
-          {title} – {year}
+          {title}
         </h1>
 
         {/* Auteur */}

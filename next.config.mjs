@@ -13,7 +13,7 @@ const nextConfig = {
         ignoreDuringBuilds: true,
     },
     images: {
-        domains: ['www.unique-poster.com'],
+        domains: ['www.unique-poster.com', 'https://musees-reims.fr/', 'https://webmuseo.com', 'arts-graphiques.louvre.fr', 'http://collections.mba-lyon.fr/', 'https://collections.domaine-de-sceaux.hauts-de-seine.fr/']
     },
 };
 

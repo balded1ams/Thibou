@@ -1,5 +1,5 @@
 import {NextResponse} from "next/server";
-import {modifyPasswordwithReset, resetPassword, signIn} from "../../../../script/login";
+import {modifyPasswordwithReset, askResetPassword, signIn} from "../../../../script/login";
 
 export async function POST(request: Request) {
 

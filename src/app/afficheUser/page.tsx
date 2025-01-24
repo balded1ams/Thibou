@@ -1,14 +1,13 @@
-
 import React from "react";
-import EditUserComponent from "./editUser";
+import ViewUserComponent from "@/components/viewUser";
 import { getIdUserFromSession } from "../../../script/session";
 import { fetchUtilisateur } from "../../../script/slugify";
 import { utilisateurType } from "@/types";
 
 const EditUser = async () => {
-    const idUser = await getIdUserFromSession();
+    const idUser = await getIdUserFromSession(await headersList);
     let userConnected: utilisateurType | null = null;
-
+    
     if (idUser) {
         userConnected = await fetchUtilisateur(idUser);
     }
@@ -17,7 +16,7 @@ const EditUser = async () => {
         return <div>Chargement...</div>;
     }
 
-    return <EditUserComponent userConnected={userConnected} />;
+    return <ViewUserComponent userConnected={userConnected} />;
 };
 
 export default EditUser;

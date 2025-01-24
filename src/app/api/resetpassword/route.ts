@@ -1,5 +1,5 @@
 import {NextResponse} from "next/server";
-import {resetPassword} from "../../../../script/login";
+import {askResetPassword} from "../../../../script/login";
 
 export async function POST(request: Request) {
 
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     // Call the signIn function with the form data
 
-    const result = await resetPassword(actionState, formData);
+    const result = await askResetPassword(actionState, formData);
 
     if (result) {
         return NextResponse.json({ success: "OK" });

@@ -16,6 +16,7 @@ const ImageOeuvre: React.FC<oeuvresProps> = ({ source }) => {
         width={625}
         height={558}
         priority={false}
+        unoptimized
       />
     </>
   );

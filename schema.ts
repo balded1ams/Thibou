@@ -1,7 +1,20 @@
-import { pgTable, unique, serial, varchar, check, date, foreignKey, integer, timestamp, text, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, unique, integer, varchar, timestamp, serial, check, date, json, text, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
+
+export const resetpasswordUuid = pgTable("resetpassword_uuid", {
+	idutilisateur: integer().notNull(),
+	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
+	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "new_table_idutilisateur_fkey"
+		}),
+	unique("unique_uuidvalue").on(table.uuidValue),
+]);
 
 export const auteur = pgTable("auteur", {
 	idauteur: serial().primaryKey().notNull(),
@@ -17,24 +30,12 @@ export const utilisateur = pgTable("utilisateur", {
 	nomutilisateur: varchar({ length: 255 }).notNull(),
 	adressemail: varchar({ length: 255 }).notNull(),
 	password: varchar({ length: 255 }).notNull(),
-	dateinscription: date(),
+	dateinscription: date().notNull(),
 	iconeuser: varchar({ length: 255 }),
 }, (table) => [
 	unique("utilisateur_adressemail_key").on(table.adressemail),
 	unique("utilisateur_password_key").on(table.password),
 	check("utilisateur_dateinscription_check", sql`dateinscription <= CURRENT_DATE`),
-]);
-
-export const resetpasswordUuid = pgTable("resetpassword_uuid", {
-	idutilisateur: integer().notNull(),
-	uuidValue: varchar("UUIDValue", { length: 255 }).notNull(),
-	expirationdate: timestamp({ mode: 'string' }).default(sql`(now() + '24:00:00'::interval)`),
-}, (table) => [
-	foreignKey({
-			columns: [table.idutilisateur],
-			foreignColumns: [utilisateur.idutilisateur],
-			name: "new_table_idutilisateur_fkey"
-		}),
 ]);
 
 export const emplacement = pgTable("emplacement", {
@@ -43,6 +44,17 @@ export const emplacement = pgTable("emplacement", {
 	ordonnee: integer(),
 	etage: integer(),
 });
+
+export const sauvegarde = pgTable("sauvegarde", {
+	idutilisateur: integer().primaryKey().notNull(),
+	restant: json().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}),
+]);
 
 export const utilisateurPreferences = pgTable("utilisateur_preferences", {
 	idpreference: serial().primaryKey().notNull(),
@@ -75,12 +87,37 @@ export const oeuvre = pgTable("oeuvre", {
 	image: varchar({ length: 255 }),
 	x: integer(),
 	y: integer(),
+});
+
+export const oeuvresMusee = pgTable("oeuvres_musee", {
+	id: serial().primaryKey().notNull(),
+	nom: text().notNull(),
+	typeOeuvre: text("type_oeuvre").notNull(),
+	mouvement: text().notNull(),
+	periodeCreation: varchar("periode_creation", { length: 255 }),
+	materiauxTechniques: varchar("materiaux_techniques", { length: 255 }),
+	description: text().notNull(),
+	artiste: text().notNull(),
+	image: varchar({ length: 255 }),
+	x: integer(),
+	y: integer(),
 }, (table) => [
 	foreignKey({
-			columns: [table.nomauteur],
+			columns: [table.artiste],
 			foreignColumns: [auteur.nomauteur],
-			name: "oeuvre_nomauteur_fkey"
-		}),
+			name: "fk_oeuvres_musee_artiste"
+		}).onUpdate("cascade").onDelete("set null"),
+]);
+
+export const utilisateurlogin = pgTable("utilisateurlogin", {
+	idutilisateur: integer().primaryKey().notNull(),
+	password: varchar({ length: 255 }).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.idutilisateur],
+			foreignColumns: [utilisateur.idutilisateur],
+			name: "fk_utilisateur"
+		}).onDelete("cascade"),
 ]);
 
 export const parcours = pgTable("parcours", {

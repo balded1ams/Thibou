@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import ThemeDropdown from "@/components/ThemeDropdown";
 import React, { useState, useEffect, useRef } from "react";
 import { utilisateurType } from "@/types/index";
-import { LogOut, Pencil, Trash2 } from "lucide-react";
+import { LogOut, Pencil, Trash2, Play } from "lucide-react";
 import Image from "next/image"
+import { StaticColors as colors } from "@/utils/index";
+
 
 interface HeaderProps {
     showAuthButtons?: boolean;
@@ -45,7 +47,6 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
             });
 
             if (response.ok) {
-                console.log("Déconnexion réussie");
                 window.location.reload();
             } else {
                 console.error("Erreur lors de la déconnexion");
@@ -66,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
 
             if (response.ok) {
                 alert("Votre compte a été supprimé avec succès.");
-                router.push("/"); // Redirige vers la page d'accueil
+                window.location.reload();
             } else {
                 const data = await response.json();
                 alert(data.error || "Erreur lors de la suppression du compte.");
@@ -155,28 +156,51 @@ const Header: React.FC<HeaderProps> = ({ showAuthButtons = false, userConnected 
                             {showModal && (
                                 <div
                                     ref={modalRef} // Référence pour détecter les clics externes
-                                    className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2 z-10"
-                                    style={{ backgroundColor: systemTheme.background.secondary }}
+                                    className="absolute right-0 mt-2 w-56 shadow-lg rounded-lg z-10 border flex flex-col"
+                                    style={{ 
+                                        backgroundColor: systemTheme.background.secondary,
+                                        borderColor: `${systemTheme.background.button}AA`,
+                                    }}
                                 >
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
                                         onClick={handleEditProfile}
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                        }}
                                     >
-                                        <Pencil className="mr-2" />
+                                        <Pencil />
                                         Modifier le profil
                                     </button>
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                                        onClick={handleLogout}
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
+                                        onClick={() => (router.push('/parcour'))}
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                        }}
                                     >
-                                        <LogOut className="mr-2" />
+                                        <Play/>
+                                        Reprendre un parcour
+                                    </button>
+                                    <button
+                                        className="flex w-full text-left px-4 py-3 text-sm border-b items-center gap-3"
+                                        onClick={handleLogout}
+                                        style={{
+                                            borderColor: `${systemTheme.background.button}AA`,
+                                            color: colors.red,
+                                        }}
+                                    >
+                                        <LogOut />
                                         Déconnexion
                                     </button>
                                     <button
-                                        className="flex w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                        className="flex w-full text-left px-4 py-3 text-sm items-start gap-3 hover:opacity-80"
                                         onClick={handleDeleteAccount}
+                                        style={{
+                                            color: colors.red,
+                                        }}
                                     >
-                                        <Trash2 className="mr-2" />
+                                        <Trash2 />
                                         Supprimer le compte
                                     </button>
                                 </div>

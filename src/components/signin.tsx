@@ -40,7 +40,6 @@ const Login: React.FC = () => {
             if (respData.authentification === 'OK') {
                 router.push('/');
             } else {
-                console.log(respData.authentification);
                 setMessage(
                 <>
                       Adresse mail ou mot de passe invalide<br />

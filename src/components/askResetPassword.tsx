@@ -38,7 +38,7 @@ const Login: React.FC = () => {
                         Si un compte existe avec l'adresse email que vous avez fournie, un lien de réinitialisation de mot de passe vous a été envoyé.<br />
                         Merci de suivre les instructions dans cet email pour réinitialiser votre mot de passe.<br />
                         <br/>
-                        <em>Si vous ne recevez pas d'email dans les prochaines minutes, pensez à vérifier vos courriers indésirables (spams).</em>
+                        <em>Si vous ne recevez pas d'email dans les prochaines minutes, pensez à vérifier vos courriers indésirables (spams) et renvoyez le mail.</em>
                     </>
                 );
             } else {
@@ -107,16 +107,29 @@ const Login: React.FC = () => {
 
 
 
-                    <button
-                        type="submit"
-                        className="w-full rounded-lg py-3 text-lg font-bold transition-all"
-                        style={{
-                            backgroundColor: systemTheme.background.button,
-                            color: systemTheme.text.secondary,
-                        }}
-                    >
-                        Réinitialiser le mot de passe
-                    </button>
+                    {message ? (<button
+                            type="submit"
+                            className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                            style={{
+                                backgroundColor: systemTheme.background.button,
+                                color: systemTheme.text.secondary,
+                            }}
+                        >
+                            Renvoyer le mail
+                        </button> ) :
+                        (<button
+                            type="submit"
+                            className="w-full rounded-lg py-3 text-lg font-bold transition-all"
+                            style={{
+                                backgroundColor: systemTheme.background.button,
+                                color: systemTheme.text.secondary,
+                            }}
+                        >
+                            Réinitialiser le mot de passe
+                        </button> )
+
+                    }
+
                 </form>
 
                 {message && (

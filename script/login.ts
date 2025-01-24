@@ -5,11 +5,18 @@ import {eq} from "drizzle-orm";
 import { cookies } from "next/headers";
 import { validatedAction } from "./middleware";
 import { db } from "@/db/db";
-import {resetpasswordUuid, utilisateur} from "@/db/schema";
+import {
+  emplacementParcours,
+  parcours,
+  resetpasswordUuid, sauvegarde,
+  utilisateur,
+  utilisateurlogin, utilisateurPreferences,
+} from "@/db/schema";
 import { verifyToken } from "@/../script/session";
 import { comparePasswords, hashPassword, setSession } from "./session";
 import {v4 as uuidv4} from 'uuid';
 import nodemailer from "nodemailer";
+import {NextResponse} from "next/server";
 
 const authSchemaSignIn = z.object({
   email: z.string().min(1),
@@ -29,6 +36,18 @@ const authSchemaResetPasword = z.object({
 const authSchemaModifyPasswordThroughtReset = z.object({
   uuid: z.string().min(1),
   newpassword: z.string().min(1),
+});
+
+const authSchemaUpdateUser = z.object({
+  nomutilisateur: z.string().min(1),
+  iconeuser: z.string().nullable() ,
+});
+
+const authSchemaUpdateUserAndPassword = z.object({
+  nomutilisateur: z.string().min(1),
+  oldPassword: z.string().min(1),
+  newPassword: z.string().min(1),
+  iconeuser: z.string().nullable() ,
 });
 
 
@@ -64,10 +83,6 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
      isEmailTaken = true;
   }
 
-  console.log('ex1', isEmailTaken);
-
-  console.log('ex2', isUsernameTaken);
-
 
   if (isUsernameTaken && isEmailTaken) {
       return { username: 'KO', mail : 'KO'}
@@ -91,40 +106,56 @@ export const signUp = validatedAction(authSchemaSignUp, async (data) => {
     // other columns not included here will use their default or NULL values if applicable
   }).returning();
 
+  const idUserCreated = await db
+      .select({idutilisateur: utilisateur.idutilisateur})
+      .from(utilisateur)
+      .where(eq(utilisateur.nomutilisateur, username))
+      .limit(1);
+
+  const idUser = idUserCreated[0].idutilisateur;
+
+  const [createdUserPassword] = await db.insert(utilisateurlogin).values({
+    idutilisateur: idUser,
+    password: passwordHash,
+  }).returning();
+
   if (!createdUser) {
-    console.log("Failed to create signin. Please try again." );
+
     return { error: "Failed to create signin. Please try again." };
   }
-  await setSession(createdUser);
+  await setSession(idUser);
 
   return {success : 'OK'};
 });
 
 export const signIn = validatedAction(authSchemaSignIn, async (data) => {
+
   const { email, password } = data;
 
   const user = await db
-    .select({
-        adressemail: utilisateur,
-    })
-    .from(utilisateur)
-    .where(eq(utilisateur.adressemail, email))
-    .limit(1);
+      .select({
+        idutilisateur: utilisateurlogin.idutilisateur,
+        password: utilisateurlogin.password,
+      })
+      .from(utilisateur)
+      .innerJoin(
+          utilisateurlogin,
+          eq(utilisateur.idutilisateur, utilisateurlogin.idutilisateur)
+      )
+      .where(eq(utilisateur.adressemail, email))
+      .limit(1);
 
   if (user.length === 0) {
     return false;
   }
 
-  const { adressemail: foundUser } = user[0];
-
-
   const isPasswordValid = await comparePasswords(
     password,
-    foundUser.password
+    user[0].password
   );
 
   if (isPasswordValid) {
-    await setSession(foundUser);
+    await setSession(user[0].idutilisateur);
     return true;
   } else {
     return false;
@@ -132,7 +163,7 @@ export const signIn = validatedAction(authSchemaSignIn, async (data) => {
 });
 
 
-export const resetPassword = validatedAction(authSchemaResetPasword, async (data) => {
+export const askResetPassword = validatedAction(authSchemaResetPasword, async (data) => {
   const { email } = data;
 
   const myuuid = uuidv4();
@@ -153,39 +184,51 @@ export const resetPassword = validatedAction(authSchemaResetPasword, async (data
   const { idutilisateur: foundUser } = user[0];
 
 
-  const [createdResetPasswordUUID] = await db.insert(resetpasswordUuid).values({
+  await db.insert(resetpasswordUuid).values({
     idutilisateur: foundUser.idutilisateur,
     uuidValue : myuuid
+  });
 
-  }).returning();
+    let mail_message_port;
+    if (process.env.WEBAPP_PROTOCOL == 'https' && process.env.WEBAPP_PORT == '443') {
+      mail_message_port = '';
+    } else if (process.env.WEBAPP_PROTOCOL == 'http' && process.env.WEBAPP_PORT == '80') {
+      mail_message_port = '';
+    } else {
+      mail_message_port = ":" + process.env.WEBAPP_PORT;
+    }
+
+    const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou "+ process.env.WEBAPP_PROTOCOL + "://" +
+      process.env.WEBAPP_DOMAIN_NAME + mail_message_port + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
 
 
-  const mail_message : string = "<p>Veuillez cliquer sur ce lien pour réinitialiser le mot de passe de votre compte Thibou https://" +
-      process.env.WEBAPP_DOMAIN_NAME + "/resetPassword?t=" + myuuid + "</p> <br> <br> <i> Ce lien s'expirera dans 24 heures.</i>";
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: process.env.EMAIL_SECURE,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      const mailOption = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Réinitailisation mot de passe Thibou',
+        html: mail_message,
+      };
+
+      await transporter.sendMail(mailOption);
+
+
+    } catch (error) {
+        console.log(error);
+    }
 
 
 
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: process.env.EMAIL_HOST,
-      port: 587,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mailOption = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Réinitailisation mot de passe Thibou',
-      html: mail_message,
-      // text: message,
-    };
-
-    await transporter.sendMail(mailOption);
 
     return true;
 
@@ -223,11 +266,10 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
 
   const passwordHash = await hashPassword(newpassword);
 
-
   await db
-      .update(utilisateur)
+      .update(utilisateurlogin)
       .set({password: passwordHash })
-      .where(eq(utilisateur.idutilisateur, idUser));
+      .where(eq(utilisateurlogin.idutilisateur, idUser));
 
   await db
       .delete(resetpasswordUuid)
@@ -236,6 +278,195 @@ export const modifyPasswordwithReset = validatedAction(authSchemaModifyPasswordT
   return true;
 });
 
+export const utilisateurUpdate = validatedAction(authSchemaUpdateUser, async(data) => {
+  try {
+
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const idutilisateur = session.user.id;
+
+
+
+    const { nomutilisateur, iconeuser } = data;
+
+
+    // Récupérer l'utilisateur avec tous ses champs
+    const [user] = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.idutilisateur, idutilisateur))
+        .limit(1);
+
+
+
+    if (!user) {
+      return ({ error: "Utilisateur non trouvé" , status : 400});
+    }
+
+    //On vérifie si le nom d'utilisateur existe déja
+    const existingNomUtilisateur = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.nomutilisateur, nomutilisateur))
+        .limit(1);
+
+
+
+    if (existingNomUtilisateur.length > 0 && (existingNomUtilisateur[0].idutilisateur !== idutilisateur)) {
+      return { userNAME: "KO"};
+    } else {
+      await db
+          .update(utilisateur)
+          .set({ nomutilisateur : nomutilisateur})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+
+    // Mettre à jour l'icône de l'utilisateur si une URL est fournie
+    if (iconeuser) {
+      await db
+          .update(utilisateur)
+          .set({ iconeuser : iconeuser})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+    return ({ message: "Utilisateur mis à jour avec succès" });
+
+
+
+
+
+  } catch (error) {
+      return { error: "Erreur interne du serveur.", status: 500 };
+  }
+
+
+});
+
+export const utilisateurUpdateWithPassword = validatedAction(authSchemaUpdateUserAndPassword, async(data) => {
+
+  try {
+    const sessionCookie = (await cookies()).get("session");
+
+    if (!sessionCookie) {
+      return { error: "Utilisateur non authentifié.", status: 401 };
+    }
+
+    const session = await verifyToken(sessionCookie.value);
+
+    if (!session || !session.user) {
+      return { error: "Session invalide ou expirée.", status: 401 };
+    }
+
+    const idutilisateur = session.user.id;
+
+
+
+    const { nomutilisateur, oldPassword, newPassword, iconeuser } = data;
+
+
+    // Récupérer l'utilisateur avec tous ses champs
+    const [user] = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.idutilisateur, idutilisateur))
+        .limit(1);
+
+
+
+    if (!user) {
+      return ({ error: "Utilisateur non trouvé" , status : 400});
+    }
+
+
+
+
+    // Vérifier si l'utilisateur veut changer son mot de passe
+    let isUpdatePassword = (/[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/.test(oldPassword));
+
+    isUpdatePassword = isUpdatePassword && (/[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/.test(newPassword));
+
+
+
+    if (isUpdatePassword) {
+
+
+      const [userPassword] = await db
+          .select()
+          .from(utilisateurlogin)
+          .where(eq(utilisateurlogin.idutilisateur, idutilisateur))
+          .limit(1);
+
+      const isPasswordValid = await comparePasswords(oldPassword, userPassword.password);
+
+      if (!isPasswordValid) {
+        return NextResponse.json({ error: "Ancien mot de passe incorrect" }, { status: 400 });
+      }
+
+
+      const newPasswordHash = await hashPassword(newPassword);
+
+
+      //Mettre à jour le mot de passe de l'utilisateur
+      await db
+          .update(utilisateurlogin)
+          .set({ password : newPasswordHash})
+          .where(eq(utilisateurlogin.idutilisateur, idutilisateur));
+    }
+
+    //On vérifie si le nom d'utilisateur existe déja
+    const existingNomUtilisateur = await db
+        .select()
+        .from(utilisateur)
+        .where(eq(utilisateur.nomutilisateur, nomutilisateur))
+        .limit(1);
+
+
+
+    if (existingNomUtilisateur.length > 0 && (existingNomUtilisateur[0].idutilisateur !== idutilisateur)) {
+      return { userNAME: "KO" };
+    } else {
+      await db
+          .update(utilisateur)
+          .set({ nomutilisateur : nomutilisateur})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+
+    // Mettre à jour l'icône de l'utilisateur si une URL est fournie
+    if (iconeuser) {
+      await db
+          .update(utilisateur)
+          .set({ iconeuser : iconeuser})
+          .where(eq(utilisateur.idutilisateur, idutilisateur));
+    }
+
+
+    return ({ message: "Utilisateur mis à jour avec succès" });
+
+
+
+
+
+  } catch (error) {
+    return { error: "Erreur interne du serveur.", status: 500 };
+  }
+
+
+});
 
 
 export async function signOut() {
@@ -263,21 +494,61 @@ export async function deleteAccount() {
     const userId = session.user.id;
 
     // Supprimer l'utilisateur de la base de données
-    const deletedRows = await db
+
+    await db
+        .delete(emplacementParcours)
+        .where(eq(emplacementParcours.idutilisateur, userId))
+        .returning();
+
+
+
+
+    await db
+        .delete(parcours)
+        .where(eq(parcours.idutilisateur, userId))
+        .returning();
+
+
+
+     await db
+        .delete(resetpasswordUuid)
+        .where(eq(resetpasswordUuid.idutilisateur, userId))
+        .returning();
+
+
+
+    await db
+        .delete(sauvegarde)
+        .where(eq(sauvegarde.idutilisateur, userId))
+        .returning();
+
+
+    await db
+        .delete(utilisateurPreferences)
+        .where(eq(utilisateurPreferences.idutilisateur, userId))
+        .returning();
+
+
+
+    await db
+        .delete(utilisateurlogin)
+        .where(eq(utilisateurlogin.idutilisateur, userId))
+        .returning();
+
+
+
+    await db
         .delete(utilisateur)
         .where(eq(utilisateur.idutilisateur, userId))
         .returning();
 
-    if (deletedRows.length === 0) {
-      return { error: "Erreur lors de la suppression du compte.", status: 500 };
-    }
+
 
     // Supprimer le cookie de session
     (await cookies()).delete("session");
 
     return { message: "Compte supprimé avec succès.", status: 200 };
   } catch (error) {
-    console.error("Erreur lors de la suppression du compte :", error);
     return { error: "Erreur interne du serveur.", status: 500 };
   }
 }
