@@ -206,7 +206,7 @@ export const askResetPassword = validatedAction(authSchemaResetPasword, async (d
       const transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         port: process.env.EMAIL_PORT,
-        secure: process.env.EMAIL_SECURE,
+        secure: true //true si TLS est utilisé sinon
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASSWORD,
