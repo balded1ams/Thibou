@@ -10,12 +10,15 @@ Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
   ```
 
 ## Installation et exécution en local  
-1. Installer les dépendances :  
+1.  Remplir le fichier .env présent à la racine du répertoire en suivant les instructions indiqués.
+     
+
+2. Installer les dépendances :  
    ```bash
    npm install
-   ```  
+   ```
 
-2. Lancer le serveur en mode développement :  
+3. Lancer le serveur en mode développement :  
    ```bash
    npm run dev
    ```  

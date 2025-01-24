@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/db/db";
 import { oeuvre, sauvegarde, utilisateur } from "@/db/schema";
-import {and, eq, inArray, InferModel, like, not, or, sql} from "drizzle-orm";
+import {and, eq, inArray, like, not, or, sql} from "drizzle-orm";
 import { utilisateurType, oeuvreType} from "@/types";
 import { cookies } from "next/headers";
 import { verifyToken } from "./session";
@@ -32,14 +32,12 @@ async function upsertData(idUtilisateur, trajet_restant) {
                 .set({ restant: trajet_restant })
                 .where(eq(sauvegarde.idutilisateur, idUtilisateur));
 
-            console.log(`Mise à jour réussie pour l'utilisateur : `, idUtilisateur);
         } else {
             // Insertion d'une nouvelle entrée
             await db.insert(sauvegarde).values({
                 idutilisateur: idUtilisateur,
                 restant: trajet_restant,
             });
-            console.log(`Nouvelle entrée insérée pour l'utilisateur : `, idUtilisateur);
         }
     } catch (error) {
         console.error('Erreur lors de l’insertion ou de la mise à jour :', error);
@@ -172,9 +170,8 @@ export async function fetchOeuvres(nbmax : number, typeOeuvreAcceptee : string[]
                 .limit(nbmax - currentCount);
 
 
-            const finalOeuvres = [...initialOeuvres, ...additionalOeuvres];
+            return  [...initialOeuvres, ...additionalOeuvres];
 
-            return finalOeuvres;
 
         } else {
             return initialOeuvres;

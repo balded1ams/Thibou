@@ -73,7 +73,6 @@ function bfs(
     end: [number, number],
     matrix: number[][]
 ): [number, number][] {
-    console.log(`Début du BFS de ${start} à ${end}`);
 
     const rows = matrix.length;
     const cols = matrix[0].length;
@@ -96,7 +95,6 @@ function bfs(
         const current = queue.shift()!;
 
         if (current[0] === end[0] && current[1] === end[1]) {
-            console.log("Chemin trouvé !");
             return reconstructPath(cameFrom, current);
         }
 

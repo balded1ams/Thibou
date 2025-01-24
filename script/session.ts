@@ -16,11 +16,8 @@ export async function comparePasswords(
   hashedPassword: string,
 ) {
   try {
-    const result = await compare(plainTextPassword, hashedPassword);
-    console.log("Résultat de la comparaison:", result);
-    return result;
+    return compare(plainTextPassword, hashedPassword);
   } catch (error) {
-    console.error("Erreur lors de la comparaison des mots de passe:", error);
     return false;
   }
 }
@@ -69,7 +66,6 @@ export async function getIdUserFromSession(): Promise<number | null>  {
 
   // Vérifie que le cookie est une chaine de caractères
   if (typeof sessionCookie?.value !== "string") {
-    console.warn("Session token is not found or is not a valid string.");
     return null;
   }
 
