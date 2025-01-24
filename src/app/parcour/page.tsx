@@ -52,7 +52,7 @@ export default function FracPage() {
 
     // Ajoutez la dernière instruction
     if (currentDirection) {
-      addOutput(`Aller ${currentDirection} sur ${stepCount} segment(s).`);
+      addOutput(`Aller ${currentDirection} sur ${stepCount} métre(s).`);
     }
   };
 
