@@ -1,6 +1,7 @@
 ---
 # Thibou  
 Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
+[**thibou**]((https://thibou.ddns.net/))  
 
 ## Prérequis  
 - **Node.js** installé.
