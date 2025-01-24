@@ -4,7 +4,7 @@ Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
 
 ## Prérequis  
 - **Node.js** installé.
-- Accèes à une base de données PostgreSQL avec les droits d'administration .
+- Accèes à une serveur de base de données PostgreSQL avec les droits d'administrations.
 - Compte mail avec accès **SMTP**
 
 # Configuration de la base de données PostgreSQL 
@@ -12,8 +12,21 @@ Un projet universitaire pour optimiser le parcours des visiteurs dans un musée.
 ## Prérequis
 Assurez-vous d'avoir une base de données PostgreSQL avec un utilisateur possédant un rôle `SUPERUSER`. Vous devrez également disposer des droits administratifs (`root`) sur le système.
 
+## Création d'un rôle
+Connectez-vous à PostgreSQL en tant qu'administrateur : 
+`psql -U postgres` 
+
+Puis créer un rôle avec un mot de passe pour l'utilisateur : 
+`CREATE ROLE votre_nom_login WITH LOGIN PASSWORD votre_mot_de_passe_securise;` 
+
+## Attribuez les privilèges
+Attribuez des privilèges spécifiques à ce rôle pour qu'il puisse accéder à une base de données ou exécuter des requêtes. C'est à dire donner les droits de connexion et les droits sur les tables :
+`GRANT CONNECT ON DATABASE votre_nouvelle_base TO votre_nom_login;`
+`GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO votre_nom_login;`
+
+
 ## Installation de `pg_cron`
-`pg_cron` est utilisé pour exécuter des actions planifiées sur la base de données, comme la suppression quotidienne des e-mails envoyés aux utilisateurs pour la modification de leur mot de passe.
+`pg_cron` est utilisé pour exécuter des actions planifiées sur la base de données, comme la suppression quotidienne des UUID expirées associés  aux demandes de réinitialisation de mot de passe.
 
 Pour installer `pg_cron`, exécutez la commande suivante :  
 `apt install postgresql-15-cron`
@@ -40,21 +53,21 @@ Pour vérifier que `pg_cron` est bien chargé :
 Si l'extension est disponible, chargez-la dans votre base de données avec la commande suivante :  
 `CREATE EXTENSION IF NOT EXISTS pg_cron;`
 
-## Restauration de la base de données
-Lors de la restauration de la base de données, certains triggers peuvent poser problème si les tables référencées ne sont pas complètement restaurées. Pour éviter cela, utilisez la commande suivante :  
-`pg_restore -U nom_utilisateur -d nouvelle_base --disable-triggers lastDataBase_Thibou.sql`
+## Importation de la base de données
+Lors de l'importation de la base de données, certains triggers peuvent poser problème si les tables référencées ne sont pas complètement importées. Pour éviter cela, utilisez la commande suivante :  
+`pg_restore -U votre_nom_login -d votre_nouvelle_base --disable-triggers lastDataBase_Thibou.sql`
 
 ## Réactivation des triggers
-Une fois la base restaurée, réactivez les triggers désactivés :
+Une fois la base importée, réactivez les triggers désactivés :
 1. Connectez-vous à PostgreSQL avec la commande suivante :  
-   `psql -U nom_utilisateur -d nouvelle_base`
+   `psql -U votre_nom_login -d votre_nouvelle_base`
 
 2. À l'intérieur de PostgreSQL, exécutez cette commande pour chaque table concernée :  
    `ALTER TABLE nom_de_table ENABLE TRIGGER ALL;`
 
 ## Importation des tâches planifiées
-Une fois les triggers activés et la base correctement restaurée, importez les tâches planifiées dans la base cible en exécutant :  
-`psql -U nom_utilisateur -d nouvelle_base -f cron_job.sql`
+Une fois les triggers activés et la base correctement importée, importez les tâches planifiées dans la base cible en exécutant :  
+`psql -U votre_nom_login -d votre_nouvelle_base -f cron_job.sql`
 
 
 # Installation et exécution en local  
