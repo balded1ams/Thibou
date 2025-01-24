@@ -1,7 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
 import Image from 'next/image';
-import map from '/public/map.jpg';
+import ex1 from '/public/ex1.png';
+import ex2 from '/public/ex2.png';
+import ex3 from '/public/ex3.png';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import { useThemeContext } from '@/hooks/useTheme';
@@ -37,7 +39,7 @@ const SampleCarousel = () => {
         
     };
 
-    const images = [map, map, map]; // Remplacez par les images
+    const images = [ex1, ex2, ex3];
 
     return (
         <div
